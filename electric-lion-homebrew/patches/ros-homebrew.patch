@@ -430,7 +430,7 @@ Index: rosdep.yaml
    gentoo: dev-util/pkgconfig
    cygwin: pkg-config
    freebsd: pkg-config
-@@ -248,6 +274,10 @@
+@@ -248,6 +274,11 @@
    opensuse: gtest-devel 
    fedora: gtest-devel
    macports: google-test
