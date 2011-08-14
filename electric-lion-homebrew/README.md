@@ -119,3 +119,4 @@ The following stacks are known to work:
 * ros_comm
 * common_msgs
 * geometry
+* pluginlib
