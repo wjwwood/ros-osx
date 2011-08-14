@@ -436,8 +436,9 @@ Index: rosdep.yaml
    macports: google-test
 +  osx:
 +    lion:
-+      homebrew:
-+        packages: gtest
++      source:
++        uri: https://github.com/wjwwood/ros-osx/raw/master/electric-lion-homebrew/sourcedeps/gtest.rdmanifest
++        md5sum: c3895d9888097394eb28dac5a9982380
    gentoo: dev-util/gtest
    freebsd: googletest
  autoconf:
