@@ -133,3 +133,4 @@ Index: tools/rosconsole/src/rosconsole/rosconsole.cpp
  }
  
  void print(FilterBase* filter, log4cxx::Logger* logger, Level level,
+   
