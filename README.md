@@ -10,15 +10,15 @@ You can install Xcode 4 from the app store in lion, it is free, but a large down
 
 ## Setup Homebrew
 
-1. Install Homebrew
+Install Homebrew
 
     /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
 
-2. Make /Library directories writable in Lion (optional but recommended. Prevents you from needing sudo in the future):
+Make /Library directories writable in Lion (optional but recommended. Prevents you from needing sudo in the future):
 
     sudo chown -R $USER /Library/Ruby /Library/Perl /Library/Python
 
-3. Make Ruby gems install executables to /usr/local/bin:
+Make Ruby gems install executables to /usr/local/bin:
 
     ruby -C$HOME -ryaml -e "
     gemrc = YAML::load_file('.gemrc') rescue {}
