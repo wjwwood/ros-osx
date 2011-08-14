@@ -1,20 +1,5 @@
-From febce9a84cdb9009afffe7bd5bb2fd55ec326a15 Mon Sep 17 00:00:00 2001
-From: William Woodall <wjwwood@gmail.com>
-Date: Sun, 14 Aug 2011 12:45:49 -0500
-Subject: [PATCH 3/3] Removed the call for FindEigen2, it doesn't seem to be
- needed anymore.  Also, added a call to find the
- PythonLibs and add the resulting PYTHON_INCLUDE_DIRS to
- the include_dirs for the project, otherwise it couldn't
- find Python.h on OS X using homebrew.
-
----
- python_orocos_kdl/CMakeLists.txt |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/python_orocos_kdl/CMakeLists.txt b/python_orocos_kdl/CMakeLists.txt
-index eddac31..da2d98e 100644
---- a/python_orocos_kdl/CMakeLists.txt
-+++ b/python_orocos_kdl/CMakeLists.txt
+Index: python_orocos_kdl/CMakeLists.txt
+===================================================================
 @@ -21,16 +21,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
  #uncomment if you have defined services
  #rosbuild_gensrv()
@@ -36,6 +21,4 @@ index eddac31..da2d98e 100644
  
  file(GLOB SIP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.sip")
  set(SIP_INCLUDES ${SIP_FILES})
--- 
-1.7.6
 

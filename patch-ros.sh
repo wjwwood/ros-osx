@@ -12,7 +12,7 @@ patch -p0 < $_CWD/patches/ros_comm-homebrew.patch
 patch -p0 < $_CWD/patches/ros_comm-rosconsole-llvmsegfault-fix.patch
 
 cd ../bullet
-patch -p0 < $_CWD/patches/bullet-hombrew.patch
+patch -p0 < $_CWD/patches/bullet-homebrew.patch
 
 cd ../common_rosdeps
 patch -p0 < $_CWD/patches/common_rosdeps-homebrew.patch

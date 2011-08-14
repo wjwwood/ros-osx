@@ -111,10 +111,11 @@ Build the core ros stack, ros communications stack, and the common messages stac
 
 You can build additional stacks and packages with this form of command
 
-    rosmake --rosdep-install <stack or package name>
+    rosmake --rosdep-install <stacks and/or packages name>
 
 The following stacks are known to work:
 
 * ros
 * ros_comm
 * common_msgs
+* geometry
