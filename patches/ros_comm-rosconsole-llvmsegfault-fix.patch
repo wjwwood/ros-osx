@@ -1,0 +1,135 @@
+Index: tools/rosconsole/src/rosconsole/rosconsole.cpp
+===================================================================
+--- tools/rosconsole/src/rosconsole/rosconsole.cpp	(revision 14667)
++++ tools/rosconsole/src/rosconsole/rosconsole.cpp	(working copy)
+@@ -539,68 +539,68 @@
+ void print(FilterBase* filter, log4cxx::Logger* logger, Level level, 
+ 	   const char* file, int line, const char* function, const char* fmt, ...)
+ {
+-  if (g_shutting_down)
+-    return;
+-
+-  if (g_printing_thread_id == boost::this_thread::get_id())
+-  {
+-    fprintf(stderr, "Warning: recursive print statement has occurred.  Throwing out recursive print.\n");
+-    return;
+-  }
+-
+-  boost::mutex::scoped_lock lock(g_print_mutex);
+-
+-  g_printing_thread_id = boost::this_thread::get_id();
+-
+-  va_list args;
+-  va_start(args, fmt);
+-
+-  vformatToBuffer(g_print_buffer, g_print_buffer_size, fmt, args);
+-
+-  va_end(args);
+-
+-  log4cxx::LoggerPtr logger_ptr(logger);
+-  bool enabled = true;
+-
+-  if (filter)
+-  {
+-    FilterParams params;
+-    params.file = file;
+-    params.function = function;
+-    params.line = line;
+-    params.level = level;
+-    params.logger = logger_ptr;
+-    params.message = g_print_buffer.get();
+-    enabled = filter->isEnabled(params);
+-    logger_ptr = params.logger;
+-    level = params.level;
+-
+-    if (!params.out_message.empty())
+-    {
+-      size_t msg_size = params.out_message.size();
+-      if (g_print_buffer_size <= msg_size)
+-      {
+-        g_print_buffer_size = msg_size + 1;
+-        g_print_buffer.reset(new char[g_print_buffer_size]);
+-      }
+-
+-      memcpy(g_print_buffer.get(), params.out_message.c_str(), msg_size + 1);
+-    }
+-  }
+-
+-  if (enabled)
+-  {
+-    try
+-    {
+-      logger_ptr->forcedLog(g_level_lookup[level], g_print_buffer.get(), log4cxx::spi::LocationInfo(file, function, line));
+-    }
+-    catch (std::exception& e)
+-    {
+-      fprintf(stderr, "Caught exception while logging: [%s]\n", e.what());
+-    }
+-  }
+-
+-  g_printing_thread_id = boost::thread::id();
++  // if (g_shutting_down)
++  //     return;
++  // 
++  //   if (g_printing_thread_id == boost::this_thread::get_id())
++  //   {
++  //     fprintf(stderr, "Warning: recursive print statement has occurred.  Throwing out recursive print.\n");
++  //     return;
++  //   }
++  // 
++  //   boost::mutex::scoped_lock lock(g_print_mutex);
++  // 
++  //   g_printing_thread_id = boost::this_thread::get_id();
++  // 
++  //   va_list args;
++  //   va_start(args, fmt);
++  // 
++  //   vformatToBuffer(g_print_buffer, g_print_buffer_size, fmt, args);
++  // 
++  //   va_end(args);
++  // 
++  //   log4cxx::LoggerPtr logger_ptr(logger);
++  //   bool enabled = true;
++  // 
++  //   if (filter)
++  //   {
++  //     FilterParams params;
++  //     params.file = file;
++  //     params.function = function;
++  //     params.line = line;
++  //     params.level = level;
++  //     params.logger = logger_ptr;
++  //     params.message = g_print_buffer.get();
++  //     enabled = filter->isEnabled(params);
++  //     logger_ptr = params.logger;
++  //     level = params.level;
++  // 
++  //     if (!params.out_message.empty())
++  //     {
++  //       size_t msg_size = params.out_message.size();
++  //       if (g_print_buffer_size <= msg_size)
++  //       {
++  //         g_print_buffer_size = msg_size + 1;
++  //         g_print_buffer.reset(new char[g_print_buffer_size]);
++  //       }
++  // 
++  //       memcpy(g_print_buffer.get(), params.out_message.c_str(), msg_size + 1);
++  //     }
++  //   }
++  // 
++  //   if (enabled)
++  //   {
++  //     try
++  //     {
++  //       logger_ptr->forcedLog(g_level_lookup[level], g_print_buffer.get(), log4cxx::spi::LocationInfo(file, function, line));
++  //     }
++  //     catch (std::exception& e)
++  //     {
++  //       fprintf(stderr, "Caught exception while logging: [%s]\n", e.what());
++  //     }
++  //   }
++  // 
++  //   g_printing_thread_id = boost::thread::id();
+ }
+ 
+ void print(FilterBase* filter, log4cxx::Logger* logger, Level level,

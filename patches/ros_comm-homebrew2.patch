@@ -1,0 +1,88 @@
+Index: stack.xml
+===================================================================
+--- stack.xml	(revision 14667)
++++ stack.xml	(working copy)
+@@ -5,5 +5,6 @@
+   <review status="doc reviewed" notes="REP 100"/>
+   <url>http://ros.org/wiki/ros_comm</url>
+   <depend stack="ros" /> <!-- rosclean, roslang, roslib, rosunit -->
++  <rosdep name="gfortran" />
+ 
+ </stack>
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 14667)
++++ rosdep.yaml	(working copy)
+@@ -6,6 +6,10 @@
+   fedora: apr-devel apr-util
+   rhel: apr-devel apr-util
+   macports: apr apr-util
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: dev-libs/apr dev-libs/apr-util
+   cygwin: libapr1 libaprutil1
+   freebsd: builtin # i.e. ignore, only needed to manually build log4cxx on other OSes
+@@ -52,8 +56,27 @@
+   rhel: python-imaging
+   arch: python-imaging
+   macports: py26-pil
++  osx:
++    lion:
++      homebrew:
++        packages: pil
+   gentoo: dev-python/imaging
+   freebsd: py27-imaging
++gfortran:
++  ubuntu: |
++  debian: |
++  arch: |
++  opensuse: |
++  fedora: |
++  rhel: |
++  macports: |
++  osx:
++    lion:
++      homebrew: 
++        packages: gfortran
++  gentoo: |
++  cygwin: |
++  freebsd: |
+ python-numpy:
+   ubuntu: python-numpy
+   debian: python-numpy
+@@ -62,6 +85,10 @@
+   rhel: python-numpy
+   arch: python2-numpy
+   macports: py26-numpy
++  osx:
++    lion:
++      pip:
++        packages: numpy
+   gentoo: dev-python/numpy
+   freebsd: py-numpy
+ python-matplotlib:
+@@ -69,6 +96,10 @@
+   arch: python-matplotlib
+   debian: python-matplotlib
+   macports: py26-matplotlib
++  osx:
++    lion:
++      pip:
++        packages: matplotlib
+   opensuse: python-matplotlib
+   fedora: python-matplotlib
+   rhel: python-matplotlib
+@@ -80,6 +111,10 @@
+   opensuse: python-paramiko 
+   fedora: python-paramiko
+   macports: py26-paramiko
++  osx:
++    lion:
++      pip:
++        packages: paramiko
+   gentoo: dev-python/paramiko
+   freebsd: py27-paramiko
+   arch: python-paramiko 
+\ No newline at end of file
