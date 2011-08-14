@@ -35,6 +35,7 @@ Update you environment to use Homebrew kegs (packages) as the default by adding 
 
     export PATH="/usr/local/share/python:/usr/local/bin:$PATH"
     export PKG_CONFIG_PATH="/usr/local/share/pkgconfig:$PKG_CONFIG_PATH"
+    export PYTHONPATH="/usr/local/lib/python:$PYTHONPATH"
 
 And make it so by closing and opening your terminal or with this line
 

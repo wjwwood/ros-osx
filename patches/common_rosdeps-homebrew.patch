@@ -1,0 +1,45 @@
+Index: rosdep.yaml
+===================================================================
+@@ -29,6 +29,9 @@
+     source:
+       uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/eigen/eigen-3.0.1-1.rdmanifest'
+       md5sum: 941db2fbb09d80c28426d335022fad95
++    lion:
++      homebrew:
++        packages: eigen
+ yaml-cpp:
+   ubuntu: 
+     apt: 
+@@ -75,6 +78,10 @@
+   rhel: cppunit-devel
+   arch: cppunit
+   macports: cppunit
++  osx:
++    lion:
++      homebrew:
++        packages: cppunit
+   gentoo: dev-util/cppunit
+   freebsd: cppunit
+ scons:
+@@ -93,6 +100,10 @@
+   fedora: libXext-devel
+   rhel: libXext-devel
+   macports: xorg-libXext
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   arch: libxext
+   gentoo: x11-libs/libXext
+   freebsd: libXext
+@@ -147,6 +158,10 @@
+   ubuntu: python-sip4-dev sip4
+   debian: python-sip4-dev sip4
+   macports: py25-sip
++  osx:
++    lion:
++      homebrew:
++        packages: sip
+   gentoo: dev-python/sip
+   arch: sip
+ festival:

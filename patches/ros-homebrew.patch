@@ -408,7 +408,18 @@ Index: rosdep.yaml
    gentoo: dev-libs/boost
    cygwin: libboost-devel libboost1.40
    freebsd: boost-python-libs
-@@ -168,6 +186,10 @@
+@@ -127,6 +145,10 @@
+   rhel: graphviz
+   arch: graphviz
+   macports: graphviz
++  osx:
++    lion:
++      homebrew:
++        packages: graphviz
+   gentoo: media-gfx/graphviz
+   freebsd: graphviz
+ wxwidgets:
+@@ -168,6 +190,10 @@
    rhel: pkgconfig
    arch: pkg-config
    macports: pkgconfig
@@ -419,7 +430,7 @@ Index: rosdep.yaml
    gentoo: dev-util/pkgconfig
    cygwin: pkg-config
    freebsd: pkg-config
-@@ -248,6 +270,10 @@
+@@ -248,6 +274,10 @@
    opensuse: gtest-devel 
    fedora: gtest-devel
    macports: google-test

@@ -1,0 +1,24 @@
+From 00869a75698eeb45de5a2b458c8604b5989b7791 Mon Sep 17 00:00:00 2001
+From: William Woodall <wjwwood@gmail.com>
+Date: Sun, 14 Aug 2011 12:44:19 -0500
+Subject: [PATCH 2/3] Updates the FindEigen3.cmake file in orocos_kdl to also
+ look in /usr/local... directories as that is where
+ homebrew installs things.
+
+---
+ orocos_kdl/config/FindEigen3.cmake |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/orocos_kdl/config/FindEigen3.cmake b/orocos_kdl/config/FindEigen3.cmake
+index 8d9cc5f..8d368b8 100644
+--- a/orocos_kdl/config/FindEigen3.cmake
++++ b/orocos_kdl/config/FindEigen3.cmake
+@@ -1,4 +1,4 @@
+-FIND_PATH(EIGEN3_INCLUDE_DIR Eigen/Core /usr/include /usr/include/eigen3)
++FIND_PATH(EIGEN3_INCLUDE_DIR Eigen/Core /usr/include /usr/include/eigen3 /usr/local/include /usr/local/include/eigen3)
+ IF ( EIGEN3_INCLUDE_DIR )
+     MESSAGE(STATUS "-- Looking for Eigen3 - found")
+     SET(KDL_CFLAGS "${KDL_CFLAGS} -I${EIGEN3_INCLUDE_DIR}" CACHE INTERNAL "")
+-- 
+1.7.6
+

@@ -1,0 +1,12 @@
+Index: rosdep.yaml
+===================================================================
+@@ -4,4 +4,8 @@
+   fedora: freeglut-devel
+   arch: freeglut
+   gentoo: freeglut
+-  osx: mesa
++  macports: mesa
++  osx:
++    lion:
++      homebrew:
++        packages: |
