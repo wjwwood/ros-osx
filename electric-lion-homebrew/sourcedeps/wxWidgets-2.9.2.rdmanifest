@@ -43,5 +43,5 @@ check-presence-script: |
     false
   fi
 
-exec-path: gtest-1.5.0
+exec-path: wxWidgets-2.9.2
 # depends: [checkinstall ]

@@ -1,4 +1,4 @@
-uri: ''
+uri: 'file:///Users/william/Downloads/wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg'
 md5sum: 7e27f5f3b79dd1ce9092e159cdbd0635
 install-script: |
   #!/usr/bin/env bash
