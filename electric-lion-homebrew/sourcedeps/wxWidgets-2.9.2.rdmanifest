@@ -1,0 +1,47 @@
+uri: 'file:///Users/william/Downloads/wxWidgets-2.9.2.tar.bz2'
+md5sum: d6cec5bd331ba90b74c1e2fcb0563620
+install-script: |
+  #!/usr/bin/env bash
+  set -o errexit
+  export install='true'
+  PREFIX=/usr/local
+  if [ -e $PREFIX/include/wxwidgets ]; then
+    if [ -f $PREFIX/include/wxwidgets/wxwidgets-version.installed ]; then
+      echo "Found an older version of wxWidgets-2.9.2 that got installed by rosdep"
+      echo "Deleting old version of wxWidgets-2.9.2 before installing new version"
+      mkdir -p build
+      cd build
+      ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6
+      make uninstall
+      rm -rf /usr/local/bin/wx-config
+      rm -rf /usr/local/bin/wxrc
+      rm -rf /usr/local/bin/wxrc-2.9
+      rm -rf /usr/local/include/wx-2.9
+      rm -rf /usr/local/lib/wx
+    else
+      echo "A version of gtest that is not managed by rosdep is already installed in $PREFIX/include/wxwidgets"
+      export install='false'
+    fi
+  fi
+  if [ $install == 'true' ]; then
+    echo "Installing wxwidgets"
+    ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6
+    make install
+    bash -c "echo d6cec5bd331ba90b74c1e2fcb0563620 > $PREFIX/include/wxwidgets/wxwidgets-version.installed"
+  else
+    echo "Failed to install gtest"
+    false
+  fi
+
+
+check-presence-script: |
+  #!/bin/bash
+  export PREFIX=/usr/local
+  if [ -f $PREFIX/include/wxwidgets/wxwidgets-version.installed ]; then
+    [ d6cec5bd331ba90b74c1e2fcb0563620 = `cat $PREFIX/include/gtest/gtest-version.installed` ]
+  else
+    false
+  fi
+
+exec-path: gtest-1.5.0
+# depends: [checkinstall ]

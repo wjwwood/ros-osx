@@ -1,0 +1,18 @@
+uri: ''
+md5sum: 7e27f5f3b79dd1ce9092e159cdbd0635
+install-script: |
+  #!/usr/bin/env bash
+  false
+
+check-presence-script: |
+  #!/bin/bash
+  export PREFIX=/usr/local/
+  INSTALLED_FILE=$PREFIX/include/gtest/gtest-version.installed
+  if [ -f INSTALLED_FILE ]; then
+    [ 7e27f5f3b79dd1ce9092e159cdbd0635 = `cat INSTALLED_FILE` ]
+  else
+    false
+  fi
+
+exec-path: wxpython
+depends: [ wxwidgets ]
