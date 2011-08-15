@@ -1,5 +1,5 @@
 uri: 'http://arepa/~william/wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg'
-md5sum: df957f2b4173db8e394336fa1efff87b
+md5sum: c7b4690c8c46625ef0f328cd7a24a0a3
 install-script: |
   #!/usr/bin/env bash
   hdiutil mount ./wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg
@@ -8,14 +8,14 @@ install-script: |
   cd ~
   hdiutil unmount /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7
   mkdir $PREFIX/include/wxpython
-  bash -c "echo df957f2b4173db8e394336fa1efff87b > $PREFIX/include/wxpython/wxpython-version.installed"
+  bash -c "echo c7b4690c8c46625ef0f328cd7a24a0a3 > $PREFIX/include/wxpython/wxpython-version.installed"
 
 check-presence-script: |
   #!/bin/bash
   export PREFIX=/usr/local/
   INSTALLED_FILE=$PREFIX/include/wxpython/wxpython-version.installed
   if [ -f INSTALLED_FILE ]; then
-    [ df957f2b4173db8e394336fa1efff87b = `cat INSTALLED_FILE` ]
+    [ c7b4690c8c46625ef0f328cd7a24a0a3 = `cat INSTALLED_FILE` ]
   else
     false
   fi
