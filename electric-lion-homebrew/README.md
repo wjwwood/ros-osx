@@ -4,6 +4,20 @@
 
 First, this guide assumes you have a clean lion install, meaning no macports or homebrew previously setup.  In fact best results would come from a fresh format and install.  If you have macports (for something else) then make sure any macports specific references are commented out in your bashrc or bash_profile.  Then for good measure I recommend `sudo mv /opt /_opt` to make sure there is no cross talk.
 
+### If you are updating your setup
+
+If you are updating your setup from the first post, you will want to uninstall some things
+
+    brew uninstall pil sip python
+
+You will also want to take note of the changes in the ~/.bashrc lines you are supposed to use.
+
+You will want to also make sure you are using the correct version of pip.  If not remove it and reinstall it.  You will need to also re-install pyyaml.
+
+Additionally, the patches have been update to patch to the latest rosinstall url results (1.6.1).  So you will probably want to blow away your ros folder and do rosinstall from scratch so that the patches will apply cleanly.
+
+There is also a Patching Homebrew section now, because I have several brew Formula patches that haven't quite made it up stream yet.
+
 ## Install Xcode 4
 
 You can install Xcode 4 from the app store in lion, it is free, but a large download.  It is required before moving forward.
@@ -25,17 +39,37 @@ Make Ruby gems install executables to /usr/local/bin:
     gemrc['gem'] = '-n/usr/local/bin'
     YAML::dump(gemrc, File.new('.gemrc', 'w'))"
 
+## Patch Homebrew (Temporary)
+
+Because I have several homebrew patches waiting to be merged up stream, you will need to checkout my fork's updated Formulas.
+
+    cd `brew --prefix`
+
+If you don't already have a git repo here.
+
+    git init
+
+Add remotes if they don't already exist and switch to my all_universal branch.
+
+    git remote add origin https://github.com/mxcl/homebrew.git
+    git remote add wjwwood https://github.com/wjwwood/homebrew.git
+    git fetch origin
+    git fetch wjwwood
+    git checkout all_universal
+
+Note: This is kind of work in progress, I would appreciate any tops on how to handle this better.
+
 ## Pre-ROS Setup
 
 Install some necessary tools.
 
-    brew install git wget cmake subversion python
+    brew install git wget cmake subversion
 
 Update you environment to use Homebrew kegs (packages) as the default by adding these lines to your ~/.bashrc
 
-    export PATH="/usr/local/share/python:/usr/local/bin:$PATH"
+    export PATH="/usr/local/bin:$PATH"
     export PKG_CONFIG_PATH="/usr/local/share/pkgconfig:$PKG_CONFIG_PATH"
-    export PYTHONPATH="/usr/local/lib/python:$PYTHONPATH"
+    export PYTHONPATH="/usr/local/lib/python:/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
 
 And make it so by closing and opening your terminal or with this line
 
