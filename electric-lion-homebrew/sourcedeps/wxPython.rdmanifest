@@ -10,7 +10,7 @@ install-script: |
   fi
   sudo installer -pkg /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7/wxPython2.9-osx-cocoa-py2.7.pkg -target / -lang en
   hdiutil unmount /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7
-  mkdir $PREFIX/include/wxpython
+  mkdir -p $PREFIX/share/ros
   bash -c "echo df957f2b4173db8e394336fa1efff87b > $PREFIX/share/ros/wxpython-version.installed"
 
 check-presence-script: |

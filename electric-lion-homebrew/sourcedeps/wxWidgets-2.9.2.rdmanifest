@@ -5,7 +5,7 @@ install-script: |
   set -o errexit
   export install='true'
   PREFIX=/usr/local
-  if [ -e $PREFIX/include/wxwidgets ]; then
+  if [ -e $PREFIX/include/wx-2.9 ]; then
     if [ -f $PREFIX/share/ros/wxwidgets-version.installed ]; then
       echo "Found an older version of wxWidgets-2.9.2 that got installed by rosdep"
       echo "Deleting old version of wxWidgets-2.9.2 before installing new version"
@@ -19,7 +19,7 @@ install-script: |
       rm -rf /usr/local/include/wx-2.9
       rm -rf /usr/local/lib/wx
     else
-      echo "A version of gtest that is not managed by rosdep is already installed in $PREFIX/include/wxwidgets"
+      echo "A version of wxWidgets that is not managed by rosdep is already installed in $PREFIX/include/wx-2.9"
       export install='false'
     fi
   fi
@@ -30,7 +30,7 @@ install-script: |
     mkdir -p $PREFIX/share/ros
     bash -c "echo d6cec5bd331ba90b74c1e2fcb0563620 > $PREFIX/share/ros/wxwidgets-version.installed"
   else
-    echo "Failed to install gtest"
+    echo "Failed to install wxWidgets"
     false
   fi
 

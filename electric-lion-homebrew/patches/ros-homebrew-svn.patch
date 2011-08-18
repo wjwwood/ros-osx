@@ -535,7 +535,7 @@ Index: rosdep.yaml
 +    lion:
 +      source:
 +        uri: http://www.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
-+        md5sum: 156eaa39005c13ef71621913c3f933ce
++        md5sum: 152a8f15f3233b0df3194b5327bfaeef
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
@@ -547,7 +547,7 @@ Index: rosdep.yaml
 +    lion:
 +      source:
 +        uri: http://www.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
-+        md5sum: 7f0fc06e96afb16bcc23b01bfa80db62
++        md5sum: 2d63a0c9b89c42d97d0ccafcbbc38c65
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
