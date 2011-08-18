@@ -1,0 +1,18 @@
+Index: dynamic_reconfigure/scripts/reconfigure_gui
+===================================================================
+--- dynamic_reconfigure/scripts/reconfigure_gui	(revision 37811)
++++ dynamic_reconfigure/scripts/reconfigure_gui	(working copy)
+@@ -39,11 +39,12 @@
+ import roslib; roslib.load_manifest('dynamic_reconfigure')
+ import rospy
+ 
+-WXVER = '2.8'
++WXVER = ['2.8', '2.9']
+ import wxversion
+ if wxversion.checkInstalled(WXVER):
+     wxversion.select(WXVER)
+ else:
++    import sys
+     print >> sys.stderr, 'This application requires wxPython version %s' % (WXVER)
+     sys.exit(1)
+ 

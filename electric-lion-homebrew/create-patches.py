@@ -29,17 +29,23 @@ for item in copy(folders):
         logger.debug("Ignoring {0}".format(item))
         folders.remove(item)
 
+def generate_stack_version(name):
+    """docstring for generate_stack_version"""
+    import subprocess
+    temp = subprocess.check_output([os.path.join(path, "ros/bin/rosversion"), name]).strip()
+    return temp
+
 def svn_generate_patch(name):
     """docstring for svn_generate_patch"""
-    os.system("svn diff > {0}/{1}-homebrew-svn.patch".format(output_path, name))
+    os.system("svn diff > {0}/{1}-{2}-homebrew-svn.patch".format(output_path, name, generate_stack_version(name)))
 
 def git_generate_patch(name):
     """docstring for git_generate_patch"""
-    os.system("git diff > {0}/{1}-homebrew-git.patch".format(output_path, name))
+    os.system("git diff > {0}/{1}-{2}-homebrew-git.patch".format(output_path, name, generate_stack_version(name)))
 
 def hg_generate_patch(name):
     """docstring for hg_generate_patch"""
-    os.system("hg diff > {0}/{1}-homebrew-hg.patch".format(output_path, name))
+    os.system("hg diff > {0}/{1}-{2}-homebrew-hg.patch".format(output_path, name, generate_stack_version(name)))
 
 os.chdir(path)
 for folder in folders:

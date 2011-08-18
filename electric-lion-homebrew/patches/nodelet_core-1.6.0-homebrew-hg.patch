@@ -1,0 +1,11 @@
+diff -r 1d15085ca52c nodelet/CMakeLists.txt
+--- a/nodelet/CMakeLists.txt	Mon Aug 08 09:46:09 2011 -0700
++++ b/nodelet/CMakeLists.txt	Thu Aug 18 13:01:15 2011 -0500
+@@ -29,4 +29,7 @@
+ 
+ rosbuild_add_library(nodeletlib src/nodelet_class.cpp src/loader.cpp src/callback_queue.cpp src/callback_queue_manager.cpp)
+ rosbuild_link_boost(nodeletlib thread)
++if(APPLE)
++  set_target_properties(nodeletlib PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
++endif(APPLE)
+ target_link_libraries (nodeletlib)

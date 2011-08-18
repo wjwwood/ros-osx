@@ -9,15 +9,14 @@ install-script: |
     if [ -f $PREFIX/share/ros/wxwidgets-version.installed ]; then
       echo "Found an older version of wxWidgets-2.9.2 that got installed by rosdep"
       echo "Deleting old version of wxWidgets-2.9.2 before installing new version"
-      mkdir -p build
-      cd build
-      ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6
+      ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6 --disable-dependency-tracking
       make uninstall
       rm -rf /usr/local/bin/wx-config
       rm -rf /usr/local/bin/wxrc
       rm -rf /usr/local/bin/wxrc-2.9
       rm -rf /usr/local/include/wx-2.9
       rm -rf /usr/local/lib/wx
+      make clean
     else
       echo "A version of wxWidgets that is not managed by rosdep is already installed in $PREFIX/include/wx-2.9"
       export install='false'
@@ -25,7 +24,10 @@ install-script: |
   fi
   if [ $install == 'true' ]; then
     echo "Installing wxwidgets"
-    ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6
+    export CFLAGS="$CFLAGS -arch i386 -arch x86_64 "
+    export CXXFLAGS="$CXXFLAGS -arch i386 -arch x86_64 "
+    export LDFLAGS="$LDFLAGS -arch i386 -arch x86_64 "
+    ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6 --disable-dependency-tracking
     make install
     mkdir -p $PREFIX/share/ros
     bash -c "echo d6cec5bd331ba90b74c1e2fcb0563620 > $PREFIX/share/ros/wxwidgets-version.installed"

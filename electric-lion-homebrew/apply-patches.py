@@ -7,18 +7,19 @@ import logging; logger = logging.getLogger()
 
 FORMAT = '%(levelname)-7s: %(message)s'
 logging.basicConfig(format=FORMAT)
-# logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+# logger.setLevel(logging.DEBUG)
 
 original_dir = os.getcwd()
 
-# if not len(sys.argv) > 2:
-#     logger.error("Usage: python apply-patches.py <path to patches> <path to ros>")
-# path_to_patches = sys.argv[1]
-# path_to_ros = sys.argv[2]
-path_to_ros = "/Users/william/devel/ros"
+if not len(sys.argv) > 2:
+    logger.error("Usage: python apply-patches.py <path to patches> <path to ros>")
+    sys.exit(-1)
+path_to_patches = os.path.abspath(sys.argv[1])
+path_to_ros = os.path.abspath(sys.argv[2])
+# path_to_ros = "/Users/william/devel/ros"
 # path_to_patches = "/Users/william/devel/osx-ros/electric-lion-homebrew/patches"
-path_to_patches = "/tmp/patch_output-1.6.1"
+# path_to_patches = "/tmp/patch_output-1.6.1"
 
 logger.info("Using patches path: {0}".format(path_to_patches))
 logger.info("Using ROS path: {0}".format(path_to_ros))
@@ -33,6 +34,12 @@ for item in copy(patches):
     if not os.path.isfile(item):
         logger.debug("Ignoring {0}".format(item))
         patches.remove(item)
+
+def generate_stack_version(name):
+    """docstring for generate_stack_version"""
+    import subprocess
+    temp = subprocess.check_output([os.path.join(path_to_ros, "ros/bin/rosversion"), name]).strip()
+    return temp
 
 def svn_apply_patch(patch):
     """docstring for svn_generate_patch"""
@@ -54,12 +61,15 @@ except OSError as err:
 for patch in patches:
     os.chdir(path_to_ros)
     patch_info = patch.split('-')
-    if len(patch_info) != 3 and patch_info[1] != "homebrew" and patch_info[2].split('.')[0] not in ["svn", "git", "hg"]:
-        logger.error("Patch {0} is malformed, must conform to: <stack name>-homebrew-<vcs name>.patch".format(patch))
+    if len(patch_info) != 4 and patch_info[2] != "homebrew" and patch_info[3].split('.')[0] not in ["svn", "git", "hg"]:
+        logger.error("Patch {0} is malformed, must conform to: <stack name>-<stack version>-homebrew-<vcs name>.patch".format(patch))
         continue
     
     stack_name = patch_info[0]
-    vcs_type = patch_info[2].split('.')[0]
+    stack_version = patch_info[1]
+    if stack_version != generate_stack_version(stack_name):
+        logger.warning("Patch for stack {0} is for version {1} but the stack is of version {2}".format(stack_name, stack_version, generate_stack_version(stack_name)))
+    vcs_type = patch_info[3].split('.')[0]
     
     try:
         os.chdir(stack_name)
