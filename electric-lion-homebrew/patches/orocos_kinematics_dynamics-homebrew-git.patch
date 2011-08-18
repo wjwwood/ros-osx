@@ -1,0 +1,62 @@
+diff --git a/orocos_kdl/Makefile b/orocos_kdl/Makefile
+index 078e724..0ef3886 100644
+--- a/orocos_kdl/Makefile
++++ b/orocos_kdl/Makefile
+@@ -2,6 +2,7 @@ ifdef ROS_ROOT
+ INSTALL_PREFIX=${PWD}/install_dir
+ EXTRA_CMAKE_FLAGS=-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+ 		-DBUILD_MODELS=ON \
++		-DCMAKE_OSX_ARCHITECTURES="i386;x86_64" \
+ 		-DCMAKE_BUILD_TYPE="Release"\
+ 		-DENABLE_TESTS=ON
+ 
+diff --git a/orocos_kdl/config/FindEigen3.cmake b/orocos_kdl/config/FindEigen3.cmake
+index 8d9cc5f..8d368b8 100644
+--- a/orocos_kdl/config/FindEigen3.cmake
++++ b/orocos_kdl/config/FindEigen3.cmake
+@@ -1,4 +1,4 @@
+-FIND_PATH(EIGEN3_INCLUDE_DIR Eigen/Core /usr/include /usr/include/eigen3)
++FIND_PATH(EIGEN3_INCLUDE_DIR Eigen/Core /usr/include /usr/include/eigen3 /usr/local/include /usr/local/include/eigen3)
+ IF ( EIGEN3_INCLUDE_DIR )
+     MESSAGE(STATUS "-- Looking for Eigen3 - found")
+     SET(KDL_CFLAGS "${KDL_CFLAGS} -I${EIGEN3_INCLUDE_DIR}" CACHE INTERNAL "")
+diff --git a/python_orocos_kdl/CMakeLists.txt b/python_orocos_kdl/CMakeLists.txt
+index eddac31..da2d98e 100644
+--- a/python_orocos_kdl/CMakeLists.txt
++++ b/python_orocos_kdl/CMakeLists.txt
+@@ -21,16 +21,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+ #uncomment if you have defined services
+ #rosbuild_gensrv()
+ 
+-include(${CMAKE_SOURCE_DIR}/cmake/FindEigen2.cmake)
+-include_directories(${EIGEN2_INCLUDE_DIR})
+-
++# include(${CMAKE_SOURCE_DIR}/cmake/FindEigen2.cmake)
++# include_directories(${EIGEN2_INCLUDE_DIR})
+ 
+ find_package(PythonInterp REQUIRED)
++find_package(PythonLibs REQUIRED)
+ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+ find_package(SIP REQUIRED)
+ include(SIPMacros)
+ 
+-include_directories(${SIP_INCLUDE_DIR})
++include_directories(${SIP_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
+ 
+ file(GLOB SIP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.sip")
+ set(SIP_INCLUDES ${SIP_FILES})
+diff --git a/rosdep.yaml b/rosdep.yaml
+index 2258de0..eb3681a 100644
+--- a/rosdep.yaml
++++ b/rosdep.yaml
+@@ -3,6 +3,10 @@ python-sip:
+   debian: python-sip4-dev sip4
+   fedora: sip-devel
+   macports: py26-sip
++  osx:
++    lion:
++      homebrew:
++        packages: [ sip ]
+   gentoo: dev-python/sip
+   arch: sip
+   freebsd: py26-sip

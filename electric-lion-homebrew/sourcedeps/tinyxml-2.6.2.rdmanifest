@@ -1,0 +1,41 @@
+uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/tinyxml/tinyxml_2_6_2_stl_enabled.tar.gz'
+md5sum: 35efe59f25b7980a6f3ec0118908cc11
+install-script: |
+  #!/bin/bash
+  set -o errexit
+  export install='true'
+  if [ -e /usr/local/include/tinyxml.h ]; then
+    if [ -f /usr/local/share/ros/tinyxml-version.installed ]; then
+      echo "Found an older version of TinyXML that got installed by rosdep"
+      echo "Deleting old version of TinyXML before installing new version"
+      sudo rm -f /usr/local/lib/libtinyxml.a /usr/local/lib/libtinyxml.so* /usr/local/lib/libtinyxml*dylib
+      sudo rm -f /usr/local/include/tinyxml.h
+    else
+      echo "A version of TinyXML that is not managed by rosdep is already installed in /usr/local/include"
+      export install='false'
+    fi
+  fi
+  if [ $install == 'true' ]; then
+    echo "Installing TinyXML"
+    mkdir -p build
+    cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_OSX_ARCHITECTURES="i386;x86_64"
+    make
+    sudo make install
+
+    sudo mkdir -p /usr/local/share/ros
+    sudo bash -c "echo 35efe59f25b7980a6f3ec0118908cc11 > /usr/local/share/ros/tinyxml-version.installed"
+  else
+    echo "Failed to install TinyXML"
+    false
+  fi
+
+check-presence-script: |
+  #!/bin/bash
+  if [ -f /usr/local/share/ros/tinyxml-version.installed ]; then
+    [ 35efe59f25b7980a6f3ec0118908cc11 = `cat /usr/local/share/ros/tinyxml-version.installed` ]
+  else
+    false
+  fi
+exec-path: tinyxml
+depends: [ checkinstall ]

@@ -1,0 +1,46 @@
+uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp--2.0.863-sdk.tar'
+md5sum: 2ed0b9954bcb2572c0dade8f849b9260
+install-script: |
+  #!/bin/bash
+  set -o errexit
+  export install='true'
+  export PREFIX=/usr/local/
+  if [ -e $PREFIX/include/assimp ]; then
+    if [ -f $PREFIX/share/ros/assimp-version.installed ]; then
+      echo "Found an older version of Assimp2 that got installed by rosdep"
+      echo "Deleting old version of Assimp2 before installing new version"
+      sudo rm -rf $PREFIX/include/assimp
+      sudo rm -f $PREFIX/lib/libassimp.so* $PREFIX/lib/libassimp*dylib
+      sudo rm -f $PREFIX/bin/assimp
+    else
+      echo "A version of Assimp2 that is not managed by rosdep is already installed in $PREFIX/include/assimp"
+      export install='false'
+    fi
+  fi
+  if [ $install == 'true' ]; then
+    echo "Installing Assimp2"
+    mkdir -p build
+    cd build
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_OSX_ARCHITECTURES="i386;x86_64"
+    make
+    make install
+    mkdir -p $PREFIX/share/ros
+    bash -c "echo 2ed0b9954bcb2572c0dade8f849b9260 > $PREFIX/share/ros/assimp-version.installed"
+  else
+    echo "Failed to install Assimp2"
+    false
+  fi
+
+
+check-presence-script: |
+  #!/bin/bash
+  export PREFIX=/usr/local/
+  export INSTALLED_FILE=$PREFIX/share/ros/assimp-version.installed
+  if [ -f $INSTALLED_FILE ]; then
+    [ 2ed0b9954bcb2572c0dade8f849b9260 = `cat $INSTALLED_FILE` ]
+  else
+    false
+  fi
+
+exec-path: assimp--2.0.863-sdk
+depends: [checkinstall ]

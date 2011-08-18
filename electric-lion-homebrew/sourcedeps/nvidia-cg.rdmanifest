@@ -1,0 +1,36 @@
+uri: 'http://developer.download.nvidia.com/cg/Cg_3.0/Cg-3.0_February2011.dmg'
+md5sum: 3ae29a7841433efe12442ea1ea36ae39
+install-script: |
+  #!/usr/bin/env bash
+  export PREFIX=/usr/local
+  hdiutil mount ./Cg-3.0_February2011.dmg
+  if [ ! -d /Volumes/Cg-3.0.0016/ ]; then
+    echo "Error installing nVidia-Cg, dmg failed to mount!"
+    false
+  fi
+  sudo cp "/Volumes/Cg-3.0.0016/Cg-3.0.0016.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" /
+  sudo sh "/Volumes/Cg-3.0.0016/Cg-3.0.0016.app/Contents/Resources/Installer Items/install.sh" /
+  hdiutil unmount "/Volumes/Cg-3.0.0016"
+  mkdir -p $PREFIX/share/ros
+  bash -c "echo 3ae29a7841433efe12442ea1ea36ae39 > $PREFIX/share/ros/nvidia-cg-version.installed"
+
+check-presence-script: |
+  #!/bin/bash
+  export PREFIX=/usr/local/
+  export INSTALLED_FILE=$PREFIX/share/ros/nvidia-cg-version.installed
+  if [ -f $INSTALLED_FILE ]; then
+    [ 3ae29a7841433efe12442ea1ea36ae39 = `cat $INSTALLED_FILE` ]
+  else
+    false
+  fi
+
+dmg_file_name: Cg-3.0_February2011.dmg
+
+# Uninstall "script"
+# sudo rm -rf /Library/Frameworks/Cg.framework/
+# sudo rm -rf /Developer/NVIDIA/
+# sudo rm -rf /usr/share/man/manCg*
+# sudo rm -rf /usr/share/man/man3/cg*
+# sudo rm -rf /usr/share/man/man1/cg*
+# sudo rm -rf /usr/bin/cg*
+# rm /usr/local/share/ros/nvidia-cg-version.installed

@@ -1,0 +1,36 @@
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 37811)
++++ rosdep.yaml	(working copy)
+@@ -2,18 +2,31 @@
+   ubuntu: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
+   debian: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
+   macports: ffmpeg
++  osx:
++    lion:
++      homebrew:
++        packages: [ ffmpeg ]
+   arch: ffmpeg
+   gentoo: ffmpeg
+ graphicsmagick:
+   ubuntu: libgraphicsmagick++1-dev
+   debian: libgraphicsmagick++1-dev
+   macports: GraphicsMagick
++  osx:
++    lion:
++      homebrew:
++        packages: [ graphicsmagick ]
+   arch: graphicsmagick
+   gentoo: imagemagick
+ jasper:
+   ubuntu: libjasper-dev
+   debian: libjasper-dev
+   macports: jasper
++  osx:
++    lion:
++      homebrew:
++        packages: [ jasper ]
++        args: [ --universal ]
+   arch: jasper
+   gentoo: jasper
+ opencv2.3:

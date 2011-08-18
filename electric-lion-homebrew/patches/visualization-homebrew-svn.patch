@@ -1,0 +1,17 @@
+Index: wxpropgrid/Makefile
+===================================================================
+--- wxpropgrid/Makefile	(revision 37811)
++++ wxpropgrid/Makefile	(working copy)
+@@ -13,9 +13,9 @@
+ 
+ installed: $(SOURCE_DIR)/unpacked
+ 	cd $(SOURCE_DIR) && \
+-		export CFLAGS='-g -D__NOTWXPYTHON__ -g' && \
+-		export CXXFLAGS='-g -D__NOTWXPYTHON__ -g' && \
+-		./configure --prefix=$(WXPROPGRID_ROOT)/propgrid_install && \
++		export CFLAGS='-g -D__NOTWXPYTHON__ -g -arch i386 -arch x86_64' && \
++		export CXXFLAGS='-g -D__NOTWXPYTHON__ -g -arch i386 -arch x86_64' && \
++		./configure --prefix=$(WXPROPGRID_ROOT)/propgrid_install --disable-dependency-tracking && \
+ 		make && \
+ 		make install
+ 	touch installed

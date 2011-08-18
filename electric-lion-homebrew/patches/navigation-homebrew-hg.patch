@@ -1,0 +1,13 @@
+diff -r 1e86bffa8193 rosdep.yaml
+--- a/rosdep.yaml	Thu Aug 11 15:18:49 2011 -0700
++++ b/rosdep.yaml	Wed Aug 17 22:08:24 2011 -0500
+@@ -3,5 +3,9 @@
+   debian: libnetpbm10-dev
+   arch: netpbm
+   macports: netpbm
++  osx:
++    lion:
++      homebrew:
++        packages: [ netpbm ]
+   fedora: netpbm
+   gentoo: netpbm

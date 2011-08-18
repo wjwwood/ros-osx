@@ -1,0 +1,47 @@
+Index: ogre/Makefile
+===================================================================
+--- ogre/Makefile	(revision 37811)
++++ ogre/Makefile	(working copy)
+@@ -22,6 +22,7 @@
+ 
+ CMAKE = cmake
+ CMAKE_ARGS = -D CMAKE_INSTALL_PREFIX=$(OGREROOT)\
++						 -D CMAKE_OSX_ARCHITECTURES="i386;x86_64"\
+ 						 -D OGRE_BUILD_SAMPLES="off"\
+ 						 -D OGRE_BUILD_TESTS="off"\
+ 						 -D CMAKE_BUILD_TYPE="RelWithDebInfo" \
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 37811)
++++ rosdep.yaml	(working copy)
+@@ -1,6 +1,10 @@
+ freeimage:
+   ubuntu: libfreeimage-dev
+   macports: freeimage
++  osx:
++    lion:
++      homebrew:
++        packages: [ freeimage ]
+   debian: libfreeimage-dev
+   arch: freeimage
+   gentoo: freeimage
+@@ -13,10 +17,19 @@
+     if ! pacman -Q nvidia-cg-toolkit ; then yaourt -S nvidia-cg-toolkit; fi
+   gentoo: nvidia-cg-toolkit
+   debian: nvidia-cg-toolkit
++  osx:
++    lion:
++      source:
++        uri: 'http://www.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
++        md5sum: 5877923536b171586bab4e17b25e276f
+ libxrandr:
+   ubuntu: libxrandr-dev
+   debian: libxrandr-dev
+   arch: libxrandr
+   gentoo: x11-libs/libXrandr
+   macports: xorg-libXrandr
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   fedora: libXrandr-devel

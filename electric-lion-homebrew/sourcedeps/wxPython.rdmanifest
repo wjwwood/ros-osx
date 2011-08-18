@@ -1,24 +1,28 @@
-uri: 'http://arepa/~william/wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg'
-md5sum: c7b4690c8c46625ef0f328cd7a24a0a3
+uri: 'http://www.ausparc.com/ros/sources/wxPython2.9-osx-2.9.2.1-cocoa-py2.7-1.dmg'
+md5sum: df957f2b4173db8e394336fa1efff87b
 install-script: |
   #!/usr/bin/env bash
+  export PREFIX=/usr/local
   hdiutil mount ./wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg
-  cd /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7
-  sudo installer -pkg wxPython2.9-osx-2.9.2.1-cocoa-py2.7.pkg -target / -lang en
-  cd ~
+  if [ ! -d /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7/wxPython2.9-osx-cocoa-py2.7.pkg ]; then
+    echo "Error installing wxPython, install pkg not found!"
+    false
+  fi
+  sudo installer -pkg /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7/wxPython2.9-osx-cocoa-py2.7.pkg -target / -lang en
   hdiutil unmount /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7
   mkdir $PREFIX/include/wxpython
-  bash -c "echo c7b4690c8c46625ef0f328cd7a24a0a3 > $PREFIX/include/wxpython/wxpython-version.installed"
+  bash -c "echo df957f2b4173db8e394336fa1efff87b > $PREFIX/share/ros/wxpython-version.installed"
 
 check-presence-script: |
   #!/bin/bash
   export PREFIX=/usr/local/
-  INSTALLED_FILE=$PREFIX/include/wxpython/wxpython-version.installed
-  if [ -f INSTALLED_FILE ]; then
-    [ c7b4690c8c46625ef0f328cd7a24a0a3 = `cat INSTALLED_FILE` ]
+  export INSTALLED_FILE=$PREFIX/share/ros/wxpython-version.installed
+  if [ -f $INSTALLED_FILE ]; then
+    [ df957f2b4173db8e394336fa1efff87b = `cat $INSTALLED_FILE` ]
   else
     false
   fi
 
+dmg_file_name: wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg
 # exec-path: wxpython
 # depends: [ wxwidgets ]

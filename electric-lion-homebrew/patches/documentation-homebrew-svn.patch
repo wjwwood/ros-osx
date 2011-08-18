@@ -1,0 +1,33 @@
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 14716)
++++ rosdep.yaml	(working copy)
+@@ -5,6 +5,10 @@
+   arch: doxygen
+   debian: doxygen
+   macports: doxygen
++  osx:
++    lion:
++      homebrew:
++        packages: [ doxygen ]
+   gentoo: app-doc/doxygen
+   freebsd: doxygen
+ epydoc:
+@@ -12,9 +16,17 @@
+   debian: python-epydoc
+   fedora: epydoc
+   macports: py26-epydoc
++  osx:
++    lion:
++      pip:
++        packages: [ epydoc ]
+   gentoo: dev-python/epydoc
+   freebsd: epydoc
+ python-sphinx:
+   ubuntu: python-sphinx
+   macports: py26-sphinx
++  osx:
++    lion:
++      pip:
++        packages: [ Sphinx ]
+   debian: python-sphinx

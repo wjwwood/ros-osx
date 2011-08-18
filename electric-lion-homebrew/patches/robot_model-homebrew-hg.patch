@@ -1,0 +1,11 @@
+diff -r 72f4d9d33097 rosdep.yaml
+--- a/rosdep.yaml	Wed Aug 10 14:00:49 2011 -0700
++++ b/rosdep.yaml	Wed Aug 17 22:08:25 2011 -0500
+@@ -2,3 +2,7 @@
+   ubuntu: libpcre3-dev
+   fedora: pcre-devel
+   debian: libpcre3-dev
++  osx:
++    lion:
++      homebrew:
++        packages: |

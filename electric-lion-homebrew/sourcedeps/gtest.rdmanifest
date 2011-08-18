@@ -6,7 +6,7 @@ install-script: |
   export install='true'
   PREFIX=/usr/local
   if [ -e $PREFIX/include/gtest ]; then
-    if [ -f $PREFIX/include/gtest/gtest-version.installed ]; then
+    if [ -f $PREFIX/share/ros/gtest-version.installed ]; then
       echo "Found an older version of gtest that got installed by rosdep"
       echo "Deleting old version of gtest before installing new version"
       mkdir -p build
@@ -20,9 +20,12 @@ install-script: |
   fi
   if [ $install == 'true' ]; then
     echo "Installing gtest"
+    export CFLAGS=" -arch i386 -arch x86_64 "
+    export CXXFLAGS=" -arch i386 -arch x86_64 "
+    export LDFLAGS=" -arch i386 -arch x86_64 "
     ./configure --disable-debug --disable-dependency-tracking
     make install
-    bash -c "echo 7e27f5f3b79dd1ce9092e159cdbd0635 > $PREFIX/include/gtest/gtest-version.installed"
+    bash -c "echo 7e27f5f3b79dd1ce9092e159cdbd0635 > $PREFIX/share/ros/gtest-version.installed"
   else
     echo "Failed to install gtest"
     false
@@ -32,8 +35,8 @@ install-script: |
 check-presence-script: |
   #!/bin/bash
   export PREFIX=/usr/local
-  if [ -f $PREFIX/include/gtest/gtest-version.installed ]; then
-    [ 7e27f5f3b79dd1ce9092e159cdbd0635 = `cat $PREFIX/include/gtest/gtest-version.installed` ]
+  if [ -f $PREFIX/share/ros/gtest-version.installed ]; then
+    [ 7e27f5f3b79dd1ce9092e159cdbd0635 = `cat $PREFIX/share/ros/gtest-version.installed` ]
   else
     false
   fi
