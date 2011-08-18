@@ -156,7 +156,7 @@ The following stacks are known to build:
 * common_rosdeps
 * diagnostics
 * driver_common
-** dynamic_reconfigure has been tested and works (after patch)
+    * dynamic_reconfigure has been tested and works (after patch)
 * eigen
 * executive_smach
 * filters
@@ -174,63 +174,64 @@ The following are known not to build, and why:
 
 * common_tutorials &
 * ros_tutorials
-** turtlesim
-*** Fails on a linking error with wx, wx isn't building universal atm.
+    * turtlesim
+        * Fails on a linking error with wx, wx isn't building universal atm.
 * diagnostics_monitors
-** wx
+    * wx
 * executive_smach
-** wx
+    * wx
 * image_common
-** camera calibration parsers
-*** libyaml-cpp is not built as a universal atm, needs a homebrew patch
+    * camera calibration parsers
+        * libyaml-cpp is not built as a universal atm, needs a homebrew patch
 * image_pipeline
-** rosdep opencv2.3 not satisfied (brew has opencv2.2, need to patch for 2.3)
+    * rosdep opencv2.3 not satisfied (brew has opencv2.2, need to patch for 2.3)
 * image transport plugins
-** rosdep opencv2.3 not satisfied
+    * rosdep opencv2.3 not satisfied
 * navigation
-** rosdep's failed to install: netpbm and fltk
+    * rosdep's failed to install: netpbm and fltk
 * perception_pcl
-** Errors with PCL (I will report these asap)
+    * Errors with PCL (I will report these asap)
 * physics_ode
-** opende fails with `/usr/bin/gm4:configure.in:373: bad expression in eval (bad input): 30 > libccd@:>@`
+    * opende fails with `/usr/bin/gm4:configure.in:373: bad expression in eval (bad input): 30 > libccd@:>@`
 * robot_model
-** collada_parser fails with linking error, more details asap
+    * collada_parser fails with linking error, more details asap
 * rx
-** rosdeps wxwidgets, python-gtk not satisfied
+    * rosdeps wxwidgets, python-gtk not satisfied
 * simulator_gazebo
-** wx
+    * wx
 * simulator_stage
-** fltk
+    * fltk
 * slam_gmapping
-** netpbm and fltk
+    * netpbm and fltk
 * stage
-** fltk
+    * fltk
 * vision_opencv
-** opencv2.3 rosdep
+    * opencv2.3 rosdep
 
 Other known dependency issues:
+
 * libxml2
-** is not built universal, not a problem yet, but may need to be patched
+    * is not built universal, not a problem yet, but may need to be patched
 * libogg
-** is not built universal
+    * is not built universal
 * theora
-** is not built universal
+    * is not built universal
 * vtk
-** is not built universal
+    * is not built universal
 * tbb
-** is not built universal
+    * is not built universal
 * hdf5
-** is not built universal
+    * is not built universal
 * qhull
-** is not built universal
+    * is not built universal
 * graphviz
-** is not built universal
+    * is not built universal
 * fltk
-** doesn't build
+    * doesn't build
 * ffmpeg
-** is not built universal
+    * is not built universal
 * graphicsmagick
-** Fails
+    * Fails
 
 
 
