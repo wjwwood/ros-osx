@@ -6,7 +6,7 @@ Index: tools/rospack/CMakeLists.txt
  cmake_minimum_required(VERSION 2.4.6)
  set(CMAKE_BUILD_TYPE Release)
  
-+set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
++set(CMAKE_OSX_ARCHITECTURES "x86_64")
 +
  set(CMAKE_INSTALL_PREFIX /tmp/rospack)
  #set(CMAKE_INSTALL_RPATH_USE_LINK_RPATH true)
@@ -381,7 +381,7 @@ Index: core/rosbuild/rosbuild.cmake
    endif(POLICY CMP0011)
  endif(COMMAND cmake_policy)
  
-+set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
++set(CMAKE_OSX_ARCHITECTURES "x86_64")
 +
  ##############################################################################
  # First things first: we must have rospack.
@@ -535,8 +535,8 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: http://www.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
-+        md5sum: 7cf4e09a682460658017e38997f1132a
++        uri: http://127.0.0.1/~william/wxWidgets-2.9.2.rdmanifest
++        #md5sum: 7cf4e09a682460658017e38997f1132a
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2

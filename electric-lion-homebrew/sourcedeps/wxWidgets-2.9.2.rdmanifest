@@ -24,10 +24,11 @@ install-script: |
   fi
   if [ $install == 'true' ]; then
     echo "Installing wxwidgets"
-    export CFLAGS="$CFLAGS -arch i386 -arch x86_64 "
-    export CXXFLAGS="$CXXFLAGS -arch i386 -arch x86_64 "
-    export LDFLAGS="$LDFLAGS -arch i386 -arch x86_64 "
-    ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6 --disable-dependency-tracking
+    # export CFLAGS="$CFLAGS -arch i386 -arch x86_64 "
+    # export CXXFLAGS="$CXXFLAGS -arch i386 -arch x86_64 "
+    # export LDFLAGS="$LDFLAGS -arch i386 -arch x86_64 "
+    # ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6 --disable-dependency-tracking
+    ./configure --with-libjpeg --with-libtiff --with-libpng --with-zlib --with-opengl --with-cocoa --without-sdl --disable-sdltest --enable-unicode --enable-display --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-macosx-version-min=10.6
     make install
     mkdir -p $PREFIX/share/ros
     bash -c "echo d6cec5bd331ba90b74c1e2fcb0563620 > $PREFIX/share/ros/wxwidgets-version.installed"

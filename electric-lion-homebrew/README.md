@@ -154,6 +154,7 @@ The following stacks are known to build:
 * bullet
 * common_msgs
 * common_rosdeps
+* common_tutorials
 * diagnostics
 * driver_common
     * dynamic_reconfigure has been tested and works (after patch)
@@ -162,27 +163,22 @@ The following stacks are known to build:
 * filters
 * geometry
 * geometry_experimental
+* image_common
 * laser_pipeline
 * nodelet_core
 * orocos kinematics dynamics
 * pluginlib
 * ros
 * ros_comm
+* ros_tutorials
 * xacro
 
 The following are known not to build, and why:
 
-* common_tutorials &
-* ros_tutorials
-    * turtlesim
-        * Fails on a linking error with wx, wx isn't building universal atm.
 * diagnostics_monitors
-    * wx
-* executive_smach
-    * wx
-* image_common
-    * camera calibration parsers
-        * libyaml-cpp is not built as a universal atm, needs a homebrew patch
+    * rxtools fails
+* executive\_smach_visualization
+    * rxtools
 * image_pipeline
     * rosdep opencv2.3 not satisfied (brew has opencv2.2, need to patch for 2.3)
 * image transport plugins
@@ -198,7 +194,7 @@ The following are known not to build, and why:
 * rx
     * rosdeps wxwidgets, python-gtk not satisfied
 * simulator_gazebo
-    * wx
+    * fltk
 * simulator_stage
     * fltk
 * slam_gmapping
