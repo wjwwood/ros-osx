@@ -1,6 +1,6 @@
 Index: wxswig/Makefile
 ===================================================================
---- wxswig/Makefile	(revision 14716)
+--- wxswig/Makefile	(revision 14758)
 +++ wxswig/Makefile	(working copy)
 @@ -14,9 +14,9 @@
  

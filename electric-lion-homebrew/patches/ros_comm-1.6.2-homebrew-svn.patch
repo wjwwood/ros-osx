@@ -1,0 +1,220 @@
+Index: tools/rosconsole/src/rosconsole/rosconsole.cpp
+===================================================================
+--- tools/rosconsole/src/rosconsole/rosconsole.cpp	(revision 14758)
++++ tools/rosconsole/src/rosconsole/rosconsole.cpp	(working copy)
+@@ -539,68 +539,68 @@
+ void print(FilterBase* filter, log4cxx::Logger* logger, Level level, 
+ 	   const char* file, int line, const char* function, const char* fmt, ...)
+ {
+-  if (g_shutting_down)
+-    return;
+-
+-  if (g_printing_thread_id == boost::this_thread::get_id())
+-  {
+-    fprintf(stderr, "Warning: recursive print statement has occurred.  Throwing out recursive print.\n");
+-    return;
+-  }
+-
+-  boost::mutex::scoped_lock lock(g_print_mutex);
+-
+-  g_printing_thread_id = boost::this_thread::get_id();
+-
+-  va_list args;
+-  va_start(args, fmt);
+-
+-  vformatToBuffer(g_print_buffer, g_print_buffer_size, fmt, args);
+-
+-  va_end(args);
+-
+-  log4cxx::LoggerPtr logger_ptr(logger);
+-  bool enabled = true;
+-
+-  if (filter)
+-  {
+-    FilterParams params;
+-    params.file = file;
+-    params.function = function;
+-    params.line = line;
+-    params.level = level;
+-    params.logger = logger_ptr;
+-    params.message = g_print_buffer.get();
+-    enabled = filter->isEnabled(params);
+-    logger_ptr = params.logger;
+-    level = params.level;
+-
+-    if (!params.out_message.empty())
+-    {
+-      size_t msg_size = params.out_message.size();
+-      if (g_print_buffer_size <= msg_size)
+-      {
+-        g_print_buffer_size = msg_size + 1;
+-        g_print_buffer.reset(new char[g_print_buffer_size]);
+-      }
+-
+-      memcpy(g_print_buffer.get(), params.out_message.c_str(), msg_size + 1);
+-    }
+-  }
+-
+-  if (enabled)
+-  {
+-    try
+-    {
+-      logger_ptr->forcedLog(g_level_lookup[level], g_print_buffer.get(), log4cxx::spi::LocationInfo(file, function, line));
+-    }
+-    catch (std::exception& e)
+-    {
+-      fprintf(stderr, "Caught exception while logging: [%s]\n", e.what());
+-    }
+-  }
+-
+-  g_printing_thread_id = boost::thread::id();
++  // if (g_shutting_down)
++  //     return;
++  // 
++  //   if (g_printing_thread_id == boost::this_thread::get_id())
++  //   {
++  //     fprintf(stderr, "Warning: recursive print statement has occurred.  Throwing out recursive print.\n");
++  //     return;
++  //   }
++  // 
++  //   boost::mutex::scoped_lock lock(g_print_mutex);
++  // 
++  //   g_printing_thread_id = boost::this_thread::get_id();
++  // 
++  //   va_list args;
++  //   va_start(args, fmt);
++  // 
++  //   vformatToBuffer(g_print_buffer, g_print_buffer_size, fmt, args);
++  // 
++  //   va_end(args);
++  // 
++  //   log4cxx::LoggerPtr logger_ptr(logger);
++  //   bool enabled = true;
++  // 
++  //   if (filter)
++  //   {
++  //     FilterParams params;
++  //     params.file = file;
++  //     params.function = function;
++  //     params.line = line;
++  //     params.level = level;
++  //     params.logger = logger_ptr;
++  //     params.message = g_print_buffer.get();
++  //     enabled = filter->isEnabled(params);
++  //     logger_ptr = params.logger;
++  //     level = params.level;
++  // 
++  //     if (!params.out_message.empty())
++  //     {
++  //       size_t msg_size = params.out_message.size();
++  //       if (g_print_buffer_size <= msg_size)
++  //       {
++  //         g_print_buffer_size = msg_size + 1;
++  //         g_print_buffer.reset(new char[g_print_buffer_size]);
++  //       }
++  // 
++  //       memcpy(g_print_buffer.get(), params.out_message.c_str(), msg_size + 1);
++  //     }
++  //   }
++  // 
++  //   if (enabled)
++  //   {
++  //     try
++  //     {
++  //       logger_ptr->forcedLog(g_level_lookup[level], g_print_buffer.get(), log4cxx::spi::LocationInfo(file, function, line));
++  //     }
++  //     catch (std::exception& e)
++  //     {
++  //       fprintf(stderr, "Caught exception while logging: [%s]\n", e.what());
++  //     }
++  //   }
++  // 
++  //   g_printing_thread_id = boost::thread::id();
+ }
+ 
+ void print(FilterBase* filter, log4cxx::Logger* logger, Level level, 
+Index: stack.xml
+===================================================================
+--- stack.xml	(revision 14758)
++++ stack.xml	(working copy)
+@@ -5,5 +5,6 @@
+   <review status="doc reviewed" notes="REP 100"/>
+   <url>http://ros.org/wiki/ros_comm</url>
+   <depend stack="ros" /> <!-- rosclean, roslang, roslib, rosunit -->
++  <rosdep name="gfortran" />
+ 
+ </stack>
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 14758)
++++ rosdep.yaml	(working copy)
+@@ -6,6 +6,10 @@
+   fedora: apr-devel apr-util
+   rhel: apr-devel apr-util
+   macports: apr apr-util
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: dev-libs/apr dev-libs/apr-util
+   cygwin: libapr1 libaprutil1
+   freebsd: builtin # i.e. ignore, only needed to manually build log4cxx on other OSes
+@@ -41,6 +45,11 @@
+   arch: |
+     if ! pacman -Q log4cxx; then yaourt -S log4cxx; fi
+   macports: log4cxx
++  osx:
++    lion:
++      homebrew:
++        packages: [ log4cxx ]
++        args: [ --universal ]
+   gentoo: dev-libs/log4cxx
+   cygwin: liblog4cxx-devel
+   freebsd: log4cxx
+@@ -52,6 +61,10 @@
+   rhel: python-imaging
+   arch: python-imaging
+   macports: py26-pil
++  osx:
++    lion:
++      homebrew:
++        packages: [ pil ]
+   gentoo: dev-python/imaging
+   freebsd: py27-imaging
+ python-numpy:
+@@ -62,6 +75,10 @@
+   rhel: python-numpy
+   arch: python2-numpy
+   macports: py26-numpy
++  osx:
++    lion:
++      pip:
++        packages: [ numpy ]
+   gentoo: dev-python/numpy
+   freebsd: py-numpy
+ python-matplotlib:
+@@ -69,6 +86,11 @@
+   arch: python-matplotlib
+   debian: python-matplotlib
+   macports: py26-matplotlib
++  osx:
++    lion:
++      pip:
++        packages: [ matplotlib ]
++        alt_install_cmd: '-e git+https://github.com/matplotlib/matplotlib#egg=matplotlib-dev'
+   opensuse: python-matplotlib
+   fedora: python-matplotlib
+   rhel: python-matplotlib
+@@ -80,6 +102,10 @@
+   opensuse: python-paramiko 
+   fedora: python-paramiko
+   macports: py26-paramiko
++  osx:
++    lion:
++      pip:
++        packages: [ paramiko ]
+   gentoo: dev-python/paramiko
+   freebsd: py27-paramiko
+-  arch: python-paramiko 
+\ No newline at end of file
++  arch: python-paramiko

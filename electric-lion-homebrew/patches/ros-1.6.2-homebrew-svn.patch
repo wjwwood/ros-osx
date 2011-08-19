@@ -1,0 +1,701 @@
+Index: tools/rospack/CMakeLists.txt
+===================================================================
+--- tools/rospack/CMakeLists.txt	(revision 14758)
++++ tools/rospack/CMakeLists.txt	(working copy)
+@@ -7,6 +7,8 @@
+ cmake_minimum_required(VERSION 2.4.6)
+ set(CMAKE_BUILD_TYPE Release)
+ 
++set(CMAKE_OSX_ARCHITECTURES "x86_64")
++
+ set(CMAKE_INSTALL_PREFIX /tmp/rospack)
+ #set(CMAKE_INSTALL_RPATH_USE_LINK_RPATH true)
+ #set(CMAKE_SKIP_BUILD_RPATH true)
+Index: tools/rosdep/src/rosdep/core.py
+===================================================================
+--- tools/rosdep/src/rosdep/core.py	(revision 14758)
++++ tools/rosdep/src/rosdep/core.py	(working copy)
+@@ -107,7 +107,7 @@
+         """ Get the rosdeps for the active os"""
+         if path in self._expanded_rosdeps:
+             return self._expanded_rosdeps[path]
+-
++            
+         yaml_dict = self.get_yaml(path)
+         expanded_rosdeps = {}
+         if not yaml_dict: # prevent exception below if rosdep.yaml file was empty #2762
+@@ -119,7 +119,7 @@
+             expanded_rosdeps[key] = rosdep_entry
+         self._expanded_rosdeps[path] = expanded_rosdeps
+         return expanded_rosdeps
+-
++    
+     def get_os_from_yaml(self, rosdep_name, yaml_map, source_path): #source_path is for debugging where errors come from
+         """
+         @return The os (and version specific if required ) local package name
+@@ -133,8 +133,7 @@
+             
+         else:
+             return False
+-
+-
++    
+     def get_version_from_yaml(self, rosdep_name, os_specific, source_path):
+         """
+         Helper function for get_os_from_yaml to parse if version is required.  
+@@ -144,7 +143,7 @@
+         # This is a map to provide backwards compatability for rep111 changes.  
+         # See http://www.ros.org/reps/rep-0111.html for more info. 
+         rep111version_map = {'lucid':'10.04', 'maverick':'10.10', 'natty':'11.04'}
+-
++        
+         if type(os_specific) == type("String"): # It's just a single string 
+             return os_specific
+         if self.os_version in os_specific: # if it is a version key, just return it
+@@ -345,13 +344,11 @@
+         rp = roslib.packages.ROSPackages()
+         self.rosdeps = rp.rosdeps(packages)
+         self.robust = robust
+-        
+-
++    
+     def get_rosdep0(self, package):
+         m = roslib.manifest.load_manifest(package)
+         return [d.name for d in m.rosdeps]
+-            
+-
++    
+     def get_rosdeps(self, packages):
+         """
+         @return: dictionary mapping rosdep names to list of packages
+@@ -447,7 +444,7 @@
+                 rdlp = RosdepLookupPackage(self.osi.get_name(), self.osi.get_version(), p, self.yc)
+                 rdlp_cache[p] = rdlp
+             if not self.install_rosdep(r, rdlp, default_yes=False, execute=False, display=display):
+-                failed_rosdeps.append(r)
++                failed_rosdeps.append(r.encode('utf-8'))
+ 
+         return failed_rosdeps
+ 
+Index: tools/rosdep/src/rosdep/osx.py
+===================================================================
+--- tools/rosdep/src/rosdep/osx.py	(revision 14758)
++++ tools/rosdep/src/rosdep/osx.py	(working copy)
+@@ -46,16 +46,19 @@
+     def __init__(self):
+         self.installers = {}
+         self.installers['pip'] = rosdep.installers.PipInstaller
+-        self.installers['macports'] = rosdep.installers.MacportsInstaller
+-        self.installers['default'] = rosdep.installers.MacportsInstaller
++        # self.installers['macports'] = rosdep.installers.MacportsInstaller
++        # self.installers['default'] = rosdep.installers.MacportsInstaller
++        self.installers['homebrew'] = rosdep.installers.HomebrewInstaller
++        self.installers['default'] = rosdep.installers.HomebrewInstaller
+         self.installers['source'] = rosdep.installers.SourceInstaller
+-
++    
+     def strip_detected_packages(self, packages):
+         return [p for p in packages if not port_detect(p)] 
+-
+-    def generate_package_install_command(self, packages, default_yes):        
++    
++    def generate_package_install_command(self, packages, default_yes):
+         if len(packages) < 1:
+             return "#No packages to install"
+         return "#Packages\nsudo port install " + ' '.join(packages)
++    
+ 
+ ###### END Osx SPECIALIZATION ########################
+Index: tools/rosdep/src/rosdep/installers.py
+===================================================================
+--- tools/rosdep/src/rosdep/installers.py	(revision 14758)
++++ tools/rosdep/src/rosdep/installers.py	(working copy)
+@@ -28,6 +28,8 @@
+ 
+ # Author Tully Foote/tfoote@willowgarage.com
+ 
++from __future__ import print_function
++
+ import subprocess
+ import roslib.os_detect
+ import os 
+@@ -113,7 +115,7 @@
+ 
+         #TODO add md5sum verification
+         if "ROSDEP_DEBUG" in os.environ:
+-            print "Downloading manifest %s"%self.url
++            print("Downloading manifest %s"%self.url)
+ 
+         error = ''
+ 
+@@ -123,7 +125,7 @@
+             contents = fetch_file(self.url, self.md5sum)
+         except rosdep.core.RosdepException as ex:
+             if "ROSDEP_DEBUG" in os.environ:
+-                print "Failed to fetch file %s for reason %s"%(self.url, ex)
++                print("Failed to fetch file %s for reason %s"%(self.url, ex))
+ 
+         if not contents: # try the backup url
+             if not self.alt_url:
+@@ -132,7 +134,7 @@
+                 contents = fetch_file(self.alt_url, self.md5sum)
+             except rosdep.core.RosdepException as ex:
+                 if "ROSDEP_DEBUG" in os.environ:
+-                    print "Failed to fetch file %s for reason %s"%(self.alt_url, ex)
++                    print("Failed to fetch file %s for reason %s"%(self.alt_url, ex))
+ 
+         if not contents:
+             raise rosdep.core.RosdepException("Failed to load a rdmanifest from either %s or %s"%(self.url, self.alt_url))
+@@ -143,12 +145,14 @@
+             raise rosdep.core.RosdepException("Failed to parse yaml in %s:  Error: %s"%(contents, ex))
+                 
+         if "ROSDEP_DEBUG" in os.environ:
+-            print "Downloaded manifest:\n{{{%s\n}}}\n"%self.manifest
++            print("Downloaded manifest:\n{{{%s\n}}}\n"%self.manifest)
+         
+         self.install_command = self.manifest.get("install-script", "#!/bin/bash\n#no install-script specificd")
+         self.check_presence_command = self.manifest.get("check-presence-script", "#!/bin/bash\n#no check-presence-script\nfalse")
+ 
+         self.exec_path = self.manifest.get("exec-path", ".")
++        
++        self.dmg_file_name = self.manifest.get("dmg_file_name", None)
+ 
+         self.depends = self.manifest.get("depends", [])
+ 
+@@ -168,7 +172,7 @@
+         success = False
+ 
+         if "ROSDEP_DEBUG" in os.environ:
+-            print "Fetching %s"%self.tarball
++            print("Fetching %s"%self.tarball)
+         f = urllib.urlretrieve(self.tarball)
+         filename = f[0]
+         if self.tarball_md5sum:
+@@ -186,18 +190,23 @@
+             
+         else:
+             if "ROSDEP_DEBUG" in os.environ:
+-                print "No md5sum defined for tarball, not checking."
++                print("No md5sum defined for tarball, not checking.")
+             
+         try:
+-            tarf = tarfile.open(filename)
+-            tarf.extractall(tempdir)
+-
++            if filename[-3:] == "dmg":
++                if self.dmg_file_name == None:
++                    raise rosdep.core.RosdepException("File downloaded is a .dmg, but no dmg_file_name was specified.")
++                shutil.copyfile(filename, os.path.join(tempdir, os.path.basename(self.dmg_file_name)))
++            else:
++                tarf = tarfile.open(filename)
++                tarf.extractall(tempdir)
++            
+             if execute:
+                 if "ROSDEP_DEBUG" in os.environ:
+-                    print "Running installation script"
++                    print("Running installation script")
+                 success = rosdep.core.create_tempfile_from_string_and_execute(self.install_command, os.path.join(tempdir, self.exec_path))
+             elif display:
+-                print "Would have executed\n{{{%s\n}}}"%self.install_command
++                print("Would have executed\n{{{%s\n}}}"%self.install_command)
+             
+         finally:
+             shutil.rmtree(tempdir)
+@@ -205,7 +214,7 @@
+ 
+         if success:
+             if "ROSDEP_DEBUG" in os.environ:
+-                print "successfully executed script"
++                print("successfully executed script")
+             return True
+         return False
+ 
+@@ -243,14 +252,14 @@
+         if not packages_to_install:
+             script =  "#!/bin/bash\n#No Packages to install"
+         if default_yes:
+-            script = "#!/bin/bash\n#Packages %s\nsudo apt-get install -y "%packages_to_install + ' '.join(packages_to_install)        
++            script = "#!/bin/bash\n#Packages %s\nsudo apt-get install -y "%packages_to_install + ' '.join(packages_to_install)
+         else:
+             script =  "#!/bin/bash\n#Packages %s\nsudo apt-get install "%packages_to_install + ' '.join(packages_to_install)
+ 
+         if execute:
+             return rosdep.core.create_tempfile_from_string_and_execute(script)
+         elif display:
+-            print "To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script)
++            print("To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script))
+         return False
+ 
+ 
+@@ -293,6 +302,7 @@
+             packages = packages.split()
+ 
+         self.depends = arg_dict.get("depends", [])
++        self.alt_install_cmd = arg_dict.get("alt_install_cmd", None)
+         self.packages = packages
+ 
+     def get_packages_to_install(self):
+@@ -310,15 +320,15 @@
+         script = '!#/bin/bash\n#no script'
+         if not packages_to_install:
+             script =  "#!/bin/bash\n#No PIP Packages to install"
+-        #if default_yes:
+-        #    script = "#!/bin/bash\n#Packages %s\nsudo apt-get install -U "%packages_to_install + ' '.join(packages_to_install)        
+-        #else:
+-        script =  "#!/bin/bash\n#Packages %s\nsudo pip install -U "%packages_to_install + ' '.join(packages_to_install)
++        if self.alt_install_cmd:
++            script = "#!/bin/bash\n#Packages %s\npip install -U "%packages_to_install + ' ' + self.alt_install_cmd
++        else:
++            script = "#!/bin/bash\n#Packages %s\npip install -U "%packages_to_install + ' '.join(packages_to_install)
+ 
+         if execute:
+             return rosdep.core.create_tempfile_from_string_and_execute(script)
+         elif display:
+-            print "To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script)
++            print("To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script))
+         return False
+ 
+     def pip_detect(self, pkgs):
+@@ -332,10 +342,11 @@
+         pkg_list = std_out.split('\n')
+         for pkg in pkg_list:
+             pkg_row = pkg.split("==")
+-            print pkg_row
++            # print(pkg_row)
+             if pkg_row[0] in pkgs:
+                 ret_list.append( pkg_row[0])
+         return ret_list
++    
+ 
+ class MacportsInstaller(InstallerAPI):
+     """ 
+@@ -345,28 +356,35 @@
+         packages = arg_dict.get("packages", "")
+         if type(packages) == type("string"):
+             packages = packages.split()
+-
++        
++        try:
++            pop = subprocess.Popen(['port'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++        except OSError:
++            import traceback; traceback.print_exc()
++            print("There was an error running macports, make sure it is installed properly.", file=sys.stderr)
++            sys.exit(-1)
++        
+         self.packages = packages
+-
++    
+     def get_packages_to_install(self):
+-         return list(set(self.packages) - set(self.port_detect(self.packages)))
+-
++        return list(set(self.packages) - set(self.port_detect(self.packages)))
++    
+     def check_presence(self):
+         return len(self.get_packages_to_install()) == 0
+-
++    
+     def generate_package_install_command(self, default_yes = False, execute = True, display = True):
+         script = '!#/bin/bash\n#no script'
+         packages_to_install = self.get_packages_to_install()
+         if not packages_to_install:
+             script =  "#!/bin/bash\n#No Packages to install"
+-        script = "#!/bin/bash\n#Packages %s\nsudo port install "%packages_to_install + ' '.join(packages_to_install)        
+-
++        script = "#!/bin/bash\n#Packages %s\nsudo port install "%packages_to_install + ' '.join(packages_to_install)
++        
+         if execute:
+             return rosdep.core.create_tempfile_from_string_and_execute(script)
+         elif display:
+-            print "To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script)
++            print("To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script))
+         return False
+-
++    
+     def port_detect(self, pkgs):
+         """ 
+         Given a list of package, return the list of installed packages.
+@@ -382,3 +400,58 @@
+             if len(pkg_row) == 3 and pkg_row[0] in pkgs and pkg_row[2] =='(active)':
+                 ret_list.append( pkg_row[0])
+         return ret_list
++    
++
++class HomebrewInstaller(InstallerAPI):
++    """An implementation of the InstallerAPI for use on homebrew systems."""
++    def __init__(self, arg_dict):
++        packages = arg_dict.get("packages", "")
++        if type(packages) == type("string"):
++            packages = packages.split()
++        try:
++            pop = subprocess.Popen(['brew'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++        except OSError:
++            import traceback; traceback.print_exc()
++            print("There was an error running homebrew, make sure it is installed properly.", file=sys.stderr)
++            sys.exit(-1)
++        self.depends = arg_dict.get("depends", [])
++        self.args = arg_dict.get("args", [])
++        self.packages = packages
++    
++    def get_packages_to_install(self):
++        return list(set(self.packages) - set(self.port_detect(self.packages)))
++    
++    def check_presence(self):
++        return len(self.get_packages_to_install()) == 0
++    
++    def generate_package_install_command(self, default_yes = False, execute = True, display = True):
++        script = '!#/bin/bash\n#no script'
++        packages_to_install = self.get_packages_to_install()
++        if not packages_to_install:
++            script =  "#!/bin/bash\n#No Packages to install"
++        script = "#!/bin/bash\n#Packages %s\nbrew install "%packages_to_install + ' '.join(packages_to_install) + ' ' + ' '.join(self.args)
++        
++        if execute:
++            return rosdep.core.create_tempfile_from_string_and_execute(script)
++        elif display:
++            print(("To install packages: %s would have executed script\n{{{\n%s\n}}}"%(packages_to_install, script)))
++        return False
++    
++    def get_depends(self):
++        #todo verify type before returning
++        return self.depends
++    
++    def port_detect(self, pkgs):
++        """ 
++        Given a list of package, return the list of installed packages.
++        """
++        ret_list = []
++        cmd = ['brew', 'list']
++        pop = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++        (std_out, std_err) = pop.communicate()
++        pkg_list = std_out.split()
++        for pkg in pkg_list:
++            if pkg in pkg:
++                ret_list.append(pkg)
++        return ret_list
++    
+Index: core/rosbuild/rosbuild.cmake
+===================================================================
+--- core/rosbuild/rosbuild.cmake	(revision 14758)
++++ core/rosbuild/rosbuild.cmake	(working copy)
+@@ -15,6 +15,8 @@
+   endif(POLICY CMP0011)
+ endif(COMMAND cmake_policy)
+ 
++set(CMAKE_OSX_ARCHITECTURES "x86_64")
++
+ ##############################################################################
+ # First things first: we must have rospack.
+ find_program(ROSPACK_EXE NAMES rospack DOC "rospack executable")
+Index: rosdep.yaml
+===================================================================
+--- rosdep.yaml	(revision 14758)
++++ rosdep.yaml	(working copy)
+@@ -3,8 +3,8 @@
+   debian: libtinyxml-dev
+   osx:
+     source:
+-      uri: 'http://kforge.ros.org/rosrelease/viewvc/sourcedeps/tinyxml/tinyxml-2.6.2-1.rdmanifest'
+-      md5sum: 13760e61e08c9004493c302a16966c42
++      uri: 'http://www.ausparc.com/ros/sourcedeps/tinyxml-2.6.2.rdmanifest'
++      md5sum: 064782dcb5d9e056ae00484bd0cb87f5
+ python:
+   ubuntu: python-dev
+   debian: python-dev
+@@ -13,9 +13,22 @@
+   fedora: python-devel
+   rhel: python-devel
+   macports: python26 python_select
++  osx:
++    lion:
++      homebrew: 
++        # packages: python
++        packages: |
+   gentoo: python
+   cygwin: python
+   freebsd: python
++yaml:
++  ubuntu: libyaml-dev
++  fedora: libyaml-devel
++  osx:
++    lion:
++      homebrew:
++        packages: [ libyaml ]
++        args: [ --universal ]
+ python-yaml:
+   ubuntu: python-yaml
+   debian: python-yaml
+@@ -25,6 +38,11 @@
+   centos: PyYAML
+   arch: python-yaml
+   macports: py26-yaml
++  osx:
++      lion:
++          pip: 
++              packages: [ PyYAML ]
++              depends: [ yaml ]
+   gentoo: pyyaml
+   cygwin: |
+       if [ ! -d /usr/lib/python2.5/site-packages/yaml/ ] ; then
+@@ -40,11 +58,32 @@
+   arch: pygtk
+   debian: python-gtk2
+   macports: py26-gtk
++  osx:
++    lion:
++      pip:
++        # packages: [ PyGTK ]
++        packages: |
++  pip: pygtk
+   opensuse: python-gtk
+   fedora: pygtk2
+   rhel: pygtk2
+   gentoo: "=dev-python/pygtk-2*"
+   freebsd: py-gtk2
++gfortran:
++  ubuntu: |
++  debian: |
++  arch: |
++  opensuse: |
++  fedora: |
++  rhel: |
++  macports: |
++  osx:
++    lion:
++      homebrew: 
++        packages: [ gfortran ]
++  gentoo: |
++  cygwin: |
++  freebsd: |
+ python-scipy:
+   ubuntu: python-scipy
+   debian: python-scipy
+@@ -52,6 +91,13 @@
+   opensuse: python-scipy
+   fedora: scipy
+   macports: py26-scipy
++  osx:
++    lion:
++      pip:
++        packages: [ scipy ]
++        alt_install_cmd: '-e git+https://github.com/scipy/scipy#egg=scipy-dev'
++        depends: [ gfortran ]
++  pip: scipy
+   gentoo: dev-libs/scipy
+   freebsd: py-scipy
+ bzip2:
+@@ -62,6 +108,10 @@
+   rhel: bzip2-devel
+   arch: bzip2
+   macports: bzip2
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: app-arch/bzip2
+   cygwin: bzip2
+   freebsd: bzip2
+@@ -105,6 +155,10 @@
+   rhel: boost-devel
+   arch: boost
+   macports: boost
++  osx:
++    lion:
++      homebrew:
++        packages: [ boost ]
+   gentoo: dev-libs/boost
+   cygwin: libboost-devel libboost1.40
+   freebsd: boost-python-libs
+@@ -116,6 +170,10 @@
+   rhel: zlib-devel
+   arch: zlib
+   macports: zlib
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: sys-libs/zlib
+   cygwin: zlib
+   freebsd: builtin
+@@ -127,6 +185,11 @@
+   rhel: graphviz
+   arch: graphviz
+   macports: graphviz
++  osx:
++    lion:
++      homebrew:
++        packages: [ graphviz ]
++        args: [ --with-pdf ]
+   gentoo: media-gfx/graphviz
+   freebsd: graphviz
+ wxwidgets:
+@@ -136,6 +199,11 @@
+   fedora: wxGTK-devel
+   rhel: wxGTK-devel
+   macports: wxWidgets-python
++  osx:
++    lion:
++      source:
++        uri: http://127.0.0.1/~william/wxWidgets-2.9.2.rdmanifest
++        #md5sum: 7cf4e09a682460658017e38997f1132a
+   arch: wxgtk
+   gentoo: x11-libs/wxGTK
+   freebsd: wxgtk2
+@@ -148,6 +216,11 @@
+   centos: wxPython-devel
+   debian: python-wxgtk2.8
+   macports: py26-wxpython py26-gobject py26-gtk py26-cairo
++  osx:
++    lion:
++      source:
++        uri: http://www.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
++        md5sum: 2d63a0c9b89c42d97d0ccafcbbc38c65
+   gentoo: dev-python/wxpython
+   freebsd: py27-wxPython
+ gtk2:
+@@ -157,6 +230,10 @@
+   fedora: gtk2-devel
+   rhel: gtk2-devel
+   macports: gtk2
++  osx:
++    lion:
++      homebrew:
++        packages: [ gtk+ ]
+   arch: gtk2
+   gentoo: x11-libs/gtk+
+   freebsd: gtk20
+@@ -168,6 +245,10 @@
+   rhel: pkgconfig
+   arch: pkg-config
+   macports: pkgconfig
++  osx:
++    lion:
++      homebrew:
++        packages: [ pkg-config ]
+   gentoo: dev-util/pkgconfig
+   cygwin: pkg-config
+   freebsd: pkg-config
+@@ -178,6 +259,11 @@
+   opensuse: libqt4-devel 
+   fedora: qt-devel
+   macports: qt4-mac
++  osx:
++    lion:
++      homebrew:
++        packages: [ qt ]
++        args: [ --universal ]
+   gentoo: ">=x11-libs/qt-core-4"
+   freebsd: qt4-corelib
+ libstdc++5:
+@@ -199,6 +285,10 @@
+   fedora: unzip
+   rhel: unzip
+   macports: unzip
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: app-arch/unzip
+   freebsd: unzip
+ fltk:
+@@ -208,6 +298,10 @@
+   fedora: fltk-devel
+   arch: fltk
+   macports: fltk
++  osx:
++    lion:
++      homebrew:
++        packages: [ fltk ]
+   gentoo: "=x11-libs/fltk-1*"
+   freebsd: fltk
+ bazaar:
+@@ -216,6 +310,10 @@
+   opensuse: bzr 
+   fedora: bazaar
+   macports: bazaar
++  osx:
++    lion:
++      homebrew:
++        packages: [ bazaar ]
+   gentoo: dev-vcs/bzr
+   freebsd: bazaar
+ git: 
+@@ -224,6 +322,10 @@
+   opensuse: git-core
+   fedora: git
+   macports: git-core
++  osx:
++    lion:
++      homebrew:
++        packages: [ git ]
+   gentoo: dev-vcs/git
+   freebsd: git
+ subversion:
+@@ -232,6 +334,10 @@
+   opensuse: subversion
+   fedora: subversion
+   macports: subversion
++  osx:
++    lion:
++      homebrew:
++        packages: [ subversion ]
+   gentoo: dev-vcs/subversion
+   freebsd: subversion
+ mercurial:
+@@ -240,6 +346,10 @@
+   opensuse: mercurial 
+   fedora: mercurial
+   macports: mercurial
++  osx:
++    lion:
++      pip:
++        packages: [ Mercurial ]
+   gentoo: dev-vcs/mercurial
+   freebsd: mercurial
+ gtest:
+@@ -248,6 +358,13 @@
+   opensuse: gtest-devel 
+   fedora: gtest-devel
+   macports: google-test
++  osx:
++    lion:
++      # homebrew:
++      #   packages: gtest --universal
++      source:
++        uri: http://www.ausparc.com/ros/sourcedeps/gtest.rdmanifest
++        md5sum: 1e67258d04878c0b8b2c7557c66a2bed
+   gentoo: dev-util/gtest
+   freebsd: googletest
+ autoconf:
+@@ -258,6 +375,10 @@
+   rhel: autoconf
+   arch: autoconf
+   macports: autoconf
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: sys-devel/autoconf
+   freebsd: autoconf213 autoconf268
+ automake:
+@@ -268,6 +389,10 @@
+   rhel: automake
+   arch: automake
+   macports: automake
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   gentoo: sys-devel/automake
+   freebsd: automake14 automake111
+ libtool:
+@@ -281,6 +406,10 @@
+   fedora: libtool libtool-ltdl-devel
+   rhel: libtool libtool-ltdl-devel
+   macports: libtool
++  osx:
++    lion:
++      homebrew:
++        packages: |
+   arch: libtool
+   gentoo: sys-devel/libtool
+   freebsd: libtool
