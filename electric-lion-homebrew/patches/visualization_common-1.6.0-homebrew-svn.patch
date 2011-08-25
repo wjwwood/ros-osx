@@ -12,7 +12,7 @@ Index: ogre/Makefile
 +OGRE_VERSION = ogre_src_v1-7-3
  TARBALL = build/$(OGRE_VERSION).tar.bz2
 -TARBALL_URL = http://pr.willowgarage.com/downloads/$(OGRE_VERSION).tar.bz2
-+TARBALL_URL = http://www.ausparc.com/ros/sources/ogre_src_v1-7-3.tar.bz2
++TARBALL_URL = http://mirror.ausparc.com/ros/sources/ogre_src_v1-7-3.tar.bz2
  SOURCE_DIR = build/$(OGRE_VERSION)
  UNPACK_CMD = tar xf
 -MD5SUM_FILE = $(OGRE_VERSION).tar.bz2.md5sum
@@ -77,7 +77,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: 'http://www.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
++        uri: 'http://mirror.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
 +        md5sum: 5877923536b171586bab4e17b25e276f
  libxrandr:
    ubuntu: libxrandr-dev

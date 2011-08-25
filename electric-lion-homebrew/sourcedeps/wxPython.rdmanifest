@@ -1,4 +1,4 @@
-uri: 'http://www.ausparc.com/ros/sources/wxPython2.9-osx-2.9.2.1-cocoa-py2.7-1.dmg'
+uri: 'http://mirror.ausparc.com/ros/sources/wxPython2.9-osx-2.9.2.1-cocoa-py2.7-1.dmg'
 md5sum: df957f2b4173db8e394336fa1efff87b
 install-script: |
   #!/usr/bin/env bash
