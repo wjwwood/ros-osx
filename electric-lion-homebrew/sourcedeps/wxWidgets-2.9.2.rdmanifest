@@ -1,4 +1,4 @@
-uri: 'http://www.ausparc.com/ros/sources/wxWidgets-2.9.2.tar.bz2'
+uri: 'http://mirror.ausparc.com/ros/sources/wxWidgets-2.9.2.tar.bz2'
 md5sum: d6cec5bd331ba90b74c1e2fcb0563620
 install-script: |
   #!/usr/bin/env bash

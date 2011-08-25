@@ -32,7 +32,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: 'http://www.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
++        uri: 'http://mirror.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
 +        md5sum: 5877923536b171586bab4e17b25e276f
  libxrandr:
    ubuntu: libxrandr-dev

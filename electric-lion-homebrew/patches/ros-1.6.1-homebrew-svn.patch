@@ -396,7 +396,7 @@ Index: rosdep.yaml
      source:
 -      uri: 'http://kforge.ros.org/rosrelease/viewvc/sourcedeps/tinyxml/tinyxml-2.6.2-1.rdmanifest'
 -      md5sum: 13760e61e08c9004493c302a16966c42
-+      uri: 'http://www.ausparc.com/ros/sourcedeps/tinyxml-2.6.2.rdmanifest'
++      uri: 'http://mirror.ausparc.com/ros/sourcedeps/tinyxml-2.6.2.rdmanifest'
 +      md5sum: 064782dcb5d9e056ae00484bd0cb87f5
  python:
    ubuntu: python-dev
@@ -535,7 +535,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: http://www.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
++        uri: http://mirror.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
 +        md5sum: 7cf4e09a682460658017e38997f1132a
    arch: wxgtk
    gentoo: x11-libs/wxGTK
@@ -547,7 +547,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: http://www.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
++        uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
 +        md5sum: 2d63a0c9b89c42d97d0ccafcbbc38c65
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
@@ -661,7 +661,7 @@ Index: rosdep.yaml
 +      # homebrew:
 +      #   packages: gtest --universal
 +      source:
-+        uri: http://www.ausparc.com/ros/sourcedeps/gtest.rdmanifest
++        uri: http://mirror.ausparc.com/ros/sourcedeps/gtest.rdmanifest
 +        md5sum: 1e67258d04878c0b8b2c7557c66a2bed
    gentoo: dev-util/gtest
    freebsd: googletest
