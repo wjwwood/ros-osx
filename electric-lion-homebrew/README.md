@@ -55,7 +55,7 @@ Add remotes if they don't already exist and switch to my all_universal branch.
     git remote add wjwwood https://github.com/wjwwood/homebrew.git
     git fetch origin
     git fetch wjwwood
-    git checkout all_universal
+    git checkout --force all_universal
 
 Note: This is kind of work in progress, I would appreciate any tops on how to handle this better.
 
