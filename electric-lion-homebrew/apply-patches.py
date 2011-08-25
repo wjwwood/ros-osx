@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
+import roslib.stacks
 from copy import copy
 import optparse
 import logging; logger = logging.getLogger()
@@ -67,6 +68,11 @@ for patch in patches:
     
     stack_name = patch_info[0]
     stack_version = patch_info[1]
+    try:
+        stack_dir = roslib.stacks.get_stack_dir(stack_name)
+    except:
+        logger.warning("skipping patches for stack {0}: stack is not installed".format(stack_name))
+        continue
     if stack_version != generate_stack_version(stack_name):
         logger.warning("Patch for stack {0} is for version {1} but the stack is of version {2}".format(stack_name, stack_version, generate_stack_version(stack_name)))
     vcs_type = patch_info[3].split('.')[0]
