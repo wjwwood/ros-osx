@@ -1,6 +1,6 @@
 Index: ogre/Makefile
 ===================================================================
---- ogre/Makefile	(revision 37811)
+--- ogre/Makefile	(revision 37820)
 +++ ogre/Makefile	(working copy)
 @@ -22,6 +22,7 @@
  
@@ -12,7 +12,7 @@ Index: ogre/Makefile
  						 -D CMAKE_BUILD_TYPE="RelWithDebInfo" \
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37811)
+--- rosdep.yaml	(revision 37820)
 +++ rosdep.yaml	(working copy)
 @@ -1,6 +1,10 @@
  freeimage:

@@ -1,6 +1,6 @@
 diff -r 72f4d9d33097 colladadom/collada-dom.patch
 --- a/colladadom/collada-dom.patch	Wed Aug 10 14:00:49 2011 -0700
-+++ b/colladadom/collada-dom.patch	Thu Aug 18 13:01:16 2011 -0500
++++ b/colladadom/collada-dom.patch	Fri Aug 19 14:25:38 2011 -0500
 @@ -98,3 +98,19 @@
   		// SID resolution was successful.
   		return result;
@@ -23,7 +23,7 @@ diff -r 72f4d9d33097 colladadom/collada-dom.patch
 + 
 diff -r 72f4d9d33097 rosdep.yaml
 --- a/rosdep.yaml	Wed Aug 10 14:00:49 2011 -0700
-+++ b/rosdep.yaml	Thu Aug 18 13:01:16 2011 -0500
++++ b/rosdep.yaml	Fri Aug 19 14:25:38 2011 -0500
 @@ -2,3 +2,7 @@
    ubuntu: libpcre3-dev
    fedora: pcre-devel

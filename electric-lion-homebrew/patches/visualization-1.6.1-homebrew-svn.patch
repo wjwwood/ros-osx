@@ -1,6 +1,6 @@
 Index: wxpropgrid/Makefile
 ===================================================================
---- wxpropgrid/Makefile	(revision 37811)
+--- wxpropgrid/Makefile	(revision 37820)
 +++ wxpropgrid/Makefile	(working copy)
 @@ -13,9 +13,9 @@
  

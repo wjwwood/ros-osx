@@ -1,6 +1,6 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37811)
+--- rosdep.yaml	(revision 37820)
 +++ rosdep.yaml	(working copy)
 @@ -2,18 +2,31 @@
    ubuntu: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
