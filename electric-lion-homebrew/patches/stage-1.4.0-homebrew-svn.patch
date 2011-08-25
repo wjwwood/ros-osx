@@ -1,6 +1,6 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37820)
+--- rosdep.yaml	(revision 37811)
 +++ rosdep.yaml	(working copy)
 @@ -3,4 +3,8 @@
    debian: libjpeg62-dev

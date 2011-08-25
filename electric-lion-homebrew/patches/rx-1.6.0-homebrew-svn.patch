@@ -1,6 +1,6 @@
 Index: wxswig/Makefile
 ===================================================================
---- wxswig/Makefile	(revision 14758)
+--- wxswig/Makefile	(revision 14716)
 +++ wxswig/Makefile	(working copy)
 @@ -14,9 +14,9 @@
  
@@ -14,3 +14,31 @@ Index: wxswig/Makefile
  endif
  	mv bin/swig bin/swig-real
  	cp swig-wrap bin/swig
+Index: rxtools/src/rxtools/rosout_list_control.cpp
+===================================================================
+--- rxtools/src/rxtools/rosout_list_control.cpp	(revision 14716)
++++ rxtools/src/rxtools/rosout_list_control.cpp	(working copy)
+@@ -732,8 +732,8 @@
+   Thaw();
+ 
+   // This for some reason prevents the control from flickering: http://wiki.wxwidgets.org/Flicker-Free_Drawing#No-flickering_for_wxListCtrl_with_wxLC_REPORT_.7C_wxLC_VIRTUAL_style
+-  wxIdleEvent idle;
+-  wxTheApp->SendIdleEvents(this, idle);
++  // wxIdleEvent idle;
++  // wxTheApp->SendIdleEvents(this, idle);
+ }
+ 
+ void RosoutListControl::setSelection(const S_int32& sel)
+Index: rxtools/src/rxtools/rxplot_main.py
+===================================================================
+--- rxtools/src/rxtools/rxplot_main.py	(revision 14716)
++++ rxtools/src/rxtools/rxplot_main.py	(working copy)
+@@ -32,7 +32,7 @@
+ #
+ # Revision $Id$
+ 
+-WXVER = '2.8' 
++WXVER = ['2.8', '2.9']
+ import wxversion 
+ if wxversion.checkInstalled(WXVER): 
+     wxversion.select(WXVER) 

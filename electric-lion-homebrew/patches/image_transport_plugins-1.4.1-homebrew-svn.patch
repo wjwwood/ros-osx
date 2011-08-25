@@ -1,6 +1,6 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37820)
+--- rosdep.yaml	(revision 37811)
 +++ rosdep.yaml	(working copy)
 @@ -3,8 +3,16 @@
    debian: libogg-dev

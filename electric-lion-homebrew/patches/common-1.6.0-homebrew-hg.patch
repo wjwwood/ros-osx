@@ -1,6 +1,6 @@
 diff -r 6c39eaf0e0f0 rosdep.yaml
 --- a/rosdep.yaml	Wed Aug 10 14:28:01 2011 -0700
-+++ b/rosdep.yaml	Fri Aug 19 14:25:31 2011 -0500
++++ b/rosdep.yaml	Thu Aug 25 17:56:56 2011 -0500
 @@ -4,4 +4,8 @@
    fedora: SDL_image-devel
    arch: sdl_image
