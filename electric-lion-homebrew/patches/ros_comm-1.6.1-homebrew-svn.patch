@@ -1,3 +1,19 @@
+Index: tools/rosconsole/CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 14808)
++++ CMakeLists.txt	(working copy)
+@@ -11,6 +11,10 @@
+ 
+ rosbuild_init()
+ 
++IF(${CMAKE_SYSTEM} MATCHES "Darwin-11.*")
++  set(CMAKE_CXX_COMPILER /usr/bin/g++-4.2)
++ENDIF(${CMAKE_SYSTEM} MATCHES "Darwin-11.*")
++
+ include_directories(include/rosconsole)
+ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+ 
+
 Index: stack.xml
 ===================================================================
 --- stack.xml	(revision 14716)
