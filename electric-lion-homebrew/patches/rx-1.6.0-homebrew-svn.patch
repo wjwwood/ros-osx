@@ -1,7 +1,7 @@
 Index: wxswig/Makefile
 ===================================================================
---- Makefile	(revision 14808)
-+++ Makefile	(working copy)
+--- wxswig/Makefile	(revision 14808)
++++ wxswig/Makefile	(working copy)
 @@ -8,15 +8,22 @@
  MD5SUM_FILE = md5.checksum
  include $(shell rospack find mk)/download_unpack_build.mk

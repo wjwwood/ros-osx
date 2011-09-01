@@ -1,7 +1,7 @@
 Index: tools/rosconsole/CMakeLists.txt
 ===================================================================
---- CMakeLists.txt	(revision 14808)
-+++ CMakeLists.txt	(working copy)
+--- tools/rosconsole/CMakeLists.txt	(revision 14808)
++++ tools/rosconsole/CMakeLists.txt	(working copy)
 @@ -11,6 +11,10 @@
  
  rosbuild_init()
