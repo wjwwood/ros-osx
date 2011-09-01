@@ -397,7 +397,7 @@ Index: rosdep.yaml
 -      uri: 'http://kforge.ros.org/rosrelease/viewvc/sourcedeps/tinyxml/tinyxml-2.6.2-1.rdmanifest'
 -      md5sum: 13760e61e08c9004493c302a16966c42
 +      uri: 'http://mirror.ausparc.com/ros/sourcedeps/tinyxml-2.6.2.rdmanifest'
-+      md5sum: 064782dcb5d9e056ae00484bd0cb87f5
++      md5sum: 9640cd2b928aca91e824356f787e54ec
  python:
    ubuntu: python-dev
    debian: python-dev
@@ -536,7 +536,7 @@ Index: rosdep.yaml
 +    lion:
 +      source:
 +        uri: http://mirror.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
-+        md5sum: 7cf4e09a682460658017e38997f1132a
++        md5sum: c5f0397f440fac0a5bdf4221207bd696
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
@@ -548,7 +548,7 @@ Index: rosdep.yaml
 +    lion:
 +      source:
 +        uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
-+        md5sum: 2d63a0c9b89c42d97d0ccafcbbc38c65
++        md5sum: 3159953eb704d529aa486fb87b72460c
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:

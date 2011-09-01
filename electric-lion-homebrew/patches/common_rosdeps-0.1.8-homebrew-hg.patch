@@ -8,7 +8,7 @@ diff -r 6d4935c374bf rosdep.yaml
 +    lion:
 +      source:
 +        uri: 'http://mirror.ausparc.com/ros/sourcedeps/assimp-2.0.86.rdmanifest'
-+        md5sum: 5c8432d9e020ee711434407408606aa7
++        md5sum: e010ee3ae3f301dd02dd879d013aba51
  eigen:
    ubuntu:
      lucid:
