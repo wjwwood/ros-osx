@@ -21,19 +21,17 @@ index 8d9cc5f..8d368b8 100644
      MESSAGE(STATUS "-- Looking for Eigen3 - found")
      SET(KDL_CFLAGS "${KDL_CFLAGS} -I${EIGEN3_INCLUDE_DIR}" CACHE INTERNAL "")
 diff --git a/python_orocos_kdl/CMakeLists.txt b/python_orocos_kdl/CMakeLists.txt
-index eddac31..da2d98e 100644
+index eddac31..c481704 100644
 --- a/python_orocos_kdl/CMakeLists.txt
 +++ b/python_orocos_kdl/CMakeLists.txt
-@@ -21,16 +21,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+@@ -21,16 +21,13 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
  #uncomment if you have defined services
  #rosbuild_gensrv()
  
 -include(${CMAKE_SOURCE_DIR}/cmake/FindEigen2.cmake)
 -include_directories(${EIGEN2_INCLUDE_DIR})
 -
-+# include(${CMAKE_SOURCE_DIR}/cmake/FindEigen2.cmake)
-+# include_directories(${EIGEN2_INCLUDE_DIR})
- 
+-
  find_package(PythonInterp REQUIRED)
 +find_package(PythonLibs REQUIRED)
  list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)

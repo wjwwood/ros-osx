@@ -1,6 +1,6 @@
 diff -r 6a9f7479d9a4 rosdep.yaml
 --- a/rosdep.yaml	Tue Feb 08 09:47:21 2011 -0800
-+++ b/rosdep.yaml	Thu Aug 18 13:01:14 2011 -0500
++++ b/rosdep.yaml	Thu Aug 25 17:56:57 2011 -0500
 @@ -2,7 +2,15 @@
    ubuntu: bison
    debian: bison

@@ -1,16 +1,63 @@
 Index: wxswig/Makefile
 ===================================================================
---- wxswig/Makefile	(revision 14716)
-+++ wxswig/Makefile	(working copy)
-@@ -14,9 +14,9 @@
+--- Makefile	(revision 14808)
++++ Makefile	(working copy)
+@@ -8,15 +8,22 @@
+ MD5SUM_FILE = md5.checksum
+ include $(shell rospack find mk)/download_unpack_build.mk
+ 
++UNAME := $(shell uname)
++
++WXSWIG_CONFIGURE_PARAMS = --prefix=$(shell rospack find wxswig)
++ifeq ($(UNAME), Darwin)
++WXSWIG_CONFIGURE_PARAMS += --disable-dependency-tracking
++endif
++
+ $(VERSION)/Makefile: $(VERSION)/Makefile.in $(VERSION)/configure $(VERSION)/configure.in
+ 	cd $(VERSION) && \
+ 		./configure --prefix=$(WXSWIG_ROOT)
  
  wxswig: $(SOURCE_DIR)/unpacked
  ifneq ($(MAKE),)
 -	cd $(SOURCE_DIR) && ./configure --prefix=$(shell rospack find wxswig) && $(MAKE) $(ROS_PARALLEL_JOBS) && $(MAKE) install
-+	cd $(SOURCE_DIR) && ./configure --prefix=$(shell rospack find wxswig) --disable-dependency-tracking && $(MAKE) $(ROS_PARALLEL_JOBS) && $(MAKE) install
++	cd $(SOURCE_DIR) && ./configure $(WXSWIG_CONFIGURE_PARAMS) && $(MAKE) $(ROS_PARALLEL_JOBS) && $(MAKE) install
  else
 -	cd $(SOURCE_DIR) && ./configure --prefix=$(shell rospack find wxswig) && make $(ROS_PARALLEL_JOBS) && make install
-+	cd $(SOURCE_DIR) && ./configure --prefix=$(shell rospack find wxswig) --disable-dependency-tracking && make $(ROS_PARALLEL_JOBS) && make install
++	cd $(SOURCE_DIR) && ./configure $(WXSWIG_CONFIGURE_PARAMS) && make $(ROS_PARALLEL_JOBS) && make install
  endif
  	mv bin/swig bin/swig-real
  	cp swig-wrap bin/swig
+Index: rxtools/src/rxtools/rosout_list_control.cpp
+===================================================================
+--- rxtools/src/rxtools/rosout_list_control.cpp	(revision 14808)
++++ rxtools/src/rxtools/rosout_list_control.cpp	(working copy)
+@@ -732,8 +732,8 @@
+   Thaw();
+ 
+   // This for some reason prevents the control from flickering: http://wiki.wxwidgets.org/Flicker-Free_Drawing#No-flickering_for_wxListCtrl_with_wxLC_REPORT_.7C_wxLC_VIRTUAL_style
+-  wxIdleEvent idle;
+-  wxTheApp->SendIdleEvents(this, idle);
++  // wxIdleEvent idle;
++  // wxTheApp->SendIdleEvents(this, idle);
+ }
+ 
+ void RosoutListControl::setSelection(const S_int32& sel)
+Index: rxtools/src/rxtools/rxplot_main.py
+===================================================================
+--- rxtools/src/rxtools/rxplot_main.py	(revision 14808)
++++ rxtools/src/rxtools/rxplot_main.py	(working copy)
+@@ -32,11 +32,12 @@
+ #
+ # Revision $Id$
+ 
+-WXVER = '2.8' 
++WXVER = ['2.8', '2.9']
+ import wxversion 
+ if wxversion.checkInstalled(WXVER): 
+     wxversion.select(WXVER) 
+-else: 
++else:
++    import sys
+     print >> sys.stderr, "This application requires wxPython version %s"%(WXVER) 
+     sys.exit(1) 
+ import wx

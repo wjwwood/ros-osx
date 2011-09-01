@@ -1,6 +1,6 @@
 diff -r 79d22151d49e rosdep.yaml
 --- a/rosdep.yaml	Mon Aug 08 09:44:11 2011 -0700
-+++ b/rosdep.yaml	Thu Aug 18 13:01:12 2011 -0500
++++ b/rosdep.yaml	Thu Aug 25 17:56:55 2011 -0500
 @@ -3,3 +3,8 @@
    debian: uuid-dev
    fedora: libuuid-devel

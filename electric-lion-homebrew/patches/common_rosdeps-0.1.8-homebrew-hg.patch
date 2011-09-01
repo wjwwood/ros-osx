@@ -1,6 +1,6 @@
 diff -r 6d4935c374bf rosdep.yaml
 --- a/rosdep.yaml	Wed Jul 27 18:19:09 2011 -0700
-+++ b/rosdep.yaml	Thu Aug 18 13:01:12 2011 -0500
++++ b/rosdep.yaml	Thu Aug 25 17:56:56 2011 -0500
 @@ -10,6 +10,10 @@
      source:
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp-2.0.86-1.rdmanifest'

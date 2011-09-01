@@ -1,6 +1,33 @@
+diff -r 72f4d9d33097 collada_parser/CMakeLists.txt
+--- a/collada_parser/CMakeLists.txt	Wed Aug 10 14:00:49 2011 -0700
++++ b/collada_parser/CMakeLists.txt	Wed Aug 31 15:49:32 2011 -0500
+@@ -24,6 +24,11 @@
+ 
+ #common commands for building c++ executables and libraries
+ rosbuild_add_library(${PROJECT_NAME} src/collada_parser.cpp)
++
++if(APPLE)
++  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
++endif(APPLE)
++
+ #target_link_libraries(${PROJECT_NAME} another_library)
+ rosbuild_add_boost_directories()
+ #rosbuild_link_boost(${PROJECT_NAME} thread)
+diff -r 72f4d9d33097 colladadom/Makefile
+--- a/colladadom/Makefile	Wed Aug 10 14:00:49 2011 -0700
++++ b/colladadom/Makefile	Wed Aug 31 15:49:32 2011 -0500
+@@ -4,7 +4,7 @@
+ SOURCE_DIR = build/colladadom
+ INITIAL_DIR = build/collada-dom
+ UNPACK_CMD = unzip
+-TARBALL_PATCH = collada-dom.patch
++TARBALL_PATCH = collada-dom.patch mac-x86_64.patch
+ MD5SUM_FILE = collada-dom-2.2.zip.md5sum
+ 
+ include $(shell rospack find mk)/download_unpack_build.mk
 diff -r 72f4d9d33097 colladadom/collada-dom.patch
 --- a/colladadom/collada-dom.patch	Wed Aug 10 14:00:49 2011 -0700
-+++ b/colladadom/collada-dom.patch	Thu Aug 18 13:01:16 2011 -0500
++++ b/colladadom/collada-dom.patch	Wed Aug 31 15:49:32 2011 -0500
 @@ -98,3 +98,19 @@
   		// SID resolution was successful.
   		return result;
@@ -21,9 +48,105 @@ diff -r 72f4d9d33097 colladadom/collada-dom.patch
 + }
 + 
 + 
+diff -r 72f4d9d33097 colladadom/mac-x86_64.patch
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/colladadom/mac-x86_64.patch	Wed Aug 31 15:49:32 2011 -0500
+@@ -0,0 +1,92 @@
++--- dom/external-libs/boost/build/filesystem/Makefile	2008-04-23 19:21:32.000000000 -0500
+++++ dom/external-libs/boost/build/filesystem/Makefile	2011-08-19 17:10:32.000000000 -0500
++@@ -6,7 +6,7 @@
++ # Mac
++ compiler := g++
++ linker := ar
++-compilerFlags += -arch ppc -arch i386
+++compilerFlags += -arch i386 -arch x86_64
++ outPath := mac/
++ sources := operations.cpp path.cpp portability.cpp utf8_codecvt_facet.cpp
++ else
++--- dom/external-libs/boost/build/system/Makefile	2008-04-23 19:21:32.000000000 -0500
+++++ dom/external-libs/boost/build/system/Makefile	2011-08-19 17:11:12.000000000 -0500
++@@ -6,7 +6,7 @@
++ # Mac
++ compiler := g++
++ linker := ar
++-compilerFlags += -arch ppc -arch i386
+++compilerFlags += -arch x86_64 -arch i386
++ outPath := mac/
++ else
++ # PS3
++--- dom/external-libs/tinyxml/build/Makefile	2008-04-23 19:21:32.000000000 -0500
+++++ dom/external-libs/tinyxml/build/Makefile	2011-08-19 17:11:29.000000000 -0500
++@@ -19,7 +19,7 @@
++ 
++ compilerFlags += -Wall -c -O2
++ ifeq ($(platform),mac)
++-compilerFlags += -arch i386 -arch ppc
+++compilerFlags += -arch i386 -arch x86_64
++ endif
++ 
++ linkerFlags += rcs
++--- dom/make/common.mk	2011-08-19 17:57:41.000000000 -0500
+++++ dom/make/common.mk	2011-08-19 17:01:39.000000000 -0500
++@@ -21,7 +21,8 @@
++ 
++ ifeq ($(os),mac)
++ # Add the -arch flags to specify what architectures we're building for.
++-ccFlags += $(addprefix -arch ,$(subst x86,i386,$(archs)))
+++# ccFlags += $(addprefix -arch ,$(subst x86,i386,$(archs)))
+++ccFlags += $(addprefix -arch ,x86_64)
++ endif
++ 
++ libOpts :=
++--- dom/make/dom.mk	2008-10-09 13:01:48.000000000 -0500
+++++ dom/make/dom.mk	2011-08-19 17:46:27.000000000 -0500
++@@ -31,14 +31,18 @@
++ 
++ ifneq ($(findstring tinyxml,$(xmlparsers)),)
++ ccFlags += -DDOM_INCLUDE_TINYXML
+++ifeq ($(os),mac)
+++libOpts += -ltinyxml
+++else
++ includeOpts += -Iexternal-libs/tinyxml/
++ libOpts += external-libs/tinyxml/lib/$(buildID)/libtinyxml.a
++ endif
+++endif
++ 
++-ifeq ($(os),linux)
+++ifneq ($(findstring $(os),linux mac),)
++ libOpts += -lpcre -lpcrecpp
++ else 
++-# On Mac, Windows and PS3 we need to be told where to find pcre
+++# On Windows and PS3 we need to be told where to find pcre
++ ifeq ($(os),windows)
++ ccFlags += -DPCRE_STATIC
++ endif
++@@ -52,9 +56,8 @@
++ libOpts += external-libs/boost/lib/$(buildID)/libboost_system.a
++ libOpts += external-libs/boost/lib/$(buildID)/libboost_filesystem.a
++ else ifeq ($(os),mac)
++-includeOpts += -Iexternal-libs/boost
++-libOpts += external-libs/boost/lib/$(buildID)/libboost_system.a
++-libOpts += external-libs/boost/lib/$(buildID)/libboost_filesystem.a
+++libOpts += $(shell rosboost-cfg --libs system)
+++libOpts += /usr/local/lib/libboost_filesystem-mt.dylib
++ endif
++ 
++ # minizip
++--- rt/make/common.mk	2008-09-04 17:50:38.000000000 -0500
+++++ rt/make/common.mk	2011-08-19 17:12:43.000000000 -0500
++@@ -19,7 +19,8 @@
++ 
++ ifeq ($(os),mac)
++ # Add the -arch flags to specify what architectures we're building for.
++-ccFlags += $(addprefix -arch ,$(subst x86,i386,$(archs)))
+++# ccFlags += $(addprefix -arch ,$(subst x86,i386,$(archs)))
+++ccFlags += $(addprefix -arch ,x86_64)
++ endif
++ 
++ libOpts :=
 diff -r 72f4d9d33097 rosdep.yaml
 --- a/rosdep.yaml	Wed Aug 10 14:00:49 2011 -0700
-+++ b/rosdep.yaml	Thu Aug 18 13:01:16 2011 -0500
++++ b/rosdep.yaml	Wed Aug 31 15:49:32 2011 -0500
 @@ -2,3 +2,7 @@
    ubuntu: libpcre3-dev
    fedora: pcre-devel
@@ -32,3 +155,17 @@ diff -r 72f4d9d33097 rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: |
+diff -r 72f4d9d33097 urdf/CMakeLists.txt
+--- a/urdf/CMakeLists.txt	Wed Aug 10 14:00:49 2011 -0700
++++ b/urdf/CMakeLists.txt	Wed Aug 31 15:49:32 2011 -0500
+@@ -23,6 +23,10 @@
+ 
+ rosbuild_add_library(${PROJECT_NAME} src/model.cpp)
+ 
++if(APPLE)
++  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
++endif(APPLE)
++
+ rosbuild_add_executable(check_urdf src/check_urdf.cpp)
+ target_link_libraries(check_urdf ${PROJECT_NAME})
+ 

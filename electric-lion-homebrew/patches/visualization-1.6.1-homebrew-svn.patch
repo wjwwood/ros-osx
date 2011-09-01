@@ -1,3 +1,26 @@
+Index: wxpropgrid/find_lib
+===================================================================
+--- wxpropgrid/find_lib	(revision 37811)
++++ wxpropgrid/find_lib	(working copy)
+@@ -12,11 +12,12 @@
+ lib_suffix = "so"
+ if (sys.platform == "darwin"):
+   lib_suffix = "dylib"
++  # os.system("wx-config --libs propgrid")
++else:
++  pkg_dir = roslib.packages.get_pkg_dir('wxpropgrid')
++  glob_str = os.path.join(pkg_dir, "propgrid_install/lib/*.%s"%(lib_suffix))
+ 
+-pkg_dir = roslib.packages.get_pkg_dir('wxpropgrid')
+-glob_str = os.path.join(pkg_dir, "propgrid_install/lib/*.%s"%(lib_suffix))
++  libs = glob(glob_str)
++  lib = os.path.basename(libs[0])[3:-(len(lib_suffix) + 1)]
+ 
+-libs = glob(glob_str)
+-lib = os.path.basename(libs[0])[3:-(len(lib_suffix) + 1)]
+-
+-print lib
++  print lib
 Index: wxpropgrid/Makefile
 ===================================================================
 --- wxpropgrid/Makefile	(revision 37811)
@@ -15,3 +38,395 @@ Index: wxpropgrid/Makefile
  		make && \
  		make install
  	touch installed
+Index: rviz/src/rviz/render_panel.h
+===================================================================
+--- rviz/src/rviz/render_panel.h	(revision 37849)
++++ rviz/src/rviz/render_panel.h	(working copy)
+@@ -95,6 +95,7 @@
+ 
+   void setContextMenu( boost::shared_ptr<wxMenu> menu );
+   void onContextMenu( wxContextMenuEvent& event );
++  void addPendingEvent(const wxEvent&);
+ 
+ protected:
+   // wx Callbacks
+Index: rviz/src/rviz/ros_topic_property.h
+===================================================================
+--- rviz/src/rviz/ros_topic_property.h	(revision 37849)
++++ rviz/src/rviz/ros_topic_property.h	(working copy)
+@@ -32,7 +32,7 @@
+ 
+ #include <wx/wx.h>
+ #include <wx/propgrid/propgrid.h>
+-#include <wx/propgrid/propdev.h>
++// #include <wx/propgrid/propdev.h>
+ 
+ #include <string>
+ 
+Index: rviz/src/rviz/selection_panel.cpp
+===================================================================
+--- rviz/src/rviz/selection_panel.cpp	(revision 37849)
++++ rviz/src/rviz/selection_panel.cpp	(working copy)
+@@ -55,7 +55,7 @@
+ 
+   property_grid_->SetExtraStyle(wxPG_EX_DISABLE_TLP_TRACKING);
+   property_grid_->SetCaptionBackgroundColour( wxColour( 4, 89, 127 ) );
+-  property_grid_->SetCaptionForegroundColour( *wxWHITE );
++  // property_grid_->SetCaptionForegroundColour( *wxWHITE );
+ 
+   property_grid_->Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( SelectionPanel::onPropertyChanging ), NULL, this );
+   property_grid_->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( SelectionPanel::onPropertyChanged ), NULL, this );
+@@ -171,7 +171,7 @@
+     handler->createProperties(picked, property_manager_);
+   }
+ 
+-  property_grid_->Sort(property_grid_->GetRoot());
++  property_grid_->Sort();
+ 
+   property_grid_->Thaw();
+ }
+Index: rviz/src/rviz/ros_topic_property.cpp
+===================================================================
+--- rviz/src/rviz/ros_topic_property.cpp	(revision 37849)
++++ rviz/src/rviz/ros_topic_property.cpp	(working copy)
+@@ -76,24 +76,24 @@
+ {
+   wxString str = m_value.GetString();
+ 
+-  wxPGCell* cell = GetCell(1);
+-  if (!cell)
+-  {
+-    cell = new wxPGCell(str, wxNullBitmap, wxNullColour, wxNullColour);
+-    SetCell(1, cell);
+-  }
++  wxPGCell cell = GetCell(1);
++  // if (!cell)
++  // {
++  //   cell = new wxPGCell(str, wxNullBitmap, wxNullColour, wxNullColour);
++  //   SetCell(1, cell);
++  // }
+ 
+   if (str.IsEmpty())
+   {
+-    cell->SetBgCol(wxNullColour);
+-    cell->SetFgCol(wxNullColour);
+-    cell->SetText(wxT("Fill in topic here..."));
++    cell.SetBgCol(wxNullColour);
++    cell.SetFgCol(wxNullColour);
++    cell.SetText(wxT("Fill in topic here..."));
+   }
+   else
+   {
+-    cell->SetBgCol(wxNullColour);
+-    cell->SetFgCol(wxNullColour);
+-    cell->SetText(str);
++    cell.SetBgCol(wxNullColour);
++    cell.SetFgCol(wxNullColour);
++    cell.SetText(str);
+   }
+ }
+ 
+Index: rviz/src/rviz/splash_screen.cpp
+===================================================================
+--- rviz/src/rviz/splash_screen.cpp	(revision 37849)
++++ rviz/src/rviz/splash_screen.cpp	(working copy)
+@@ -60,7 +60,7 @@
+   state_ = state;
+   Refresh();
+ 
+-  wxSafeYield(this, true);
++  // wxSafeYield(this, true);
+ }
+ 
+ void SplashScreen::onPaint(wxPaintEvent& evt)
+Index: rviz/src/rviz/tf_frame_property.h
+===================================================================
+--- rviz/src/rviz/tf_frame_property.h	(revision 37849)
++++ rviz/src/rviz/tf_frame_property.h	(working copy)
+@@ -32,7 +32,7 @@
+ 
+ #include <wx/wx.h>
+ #include <wx/propgrid/propgrid.h>
+-#include <wx/propgrid/propdev.h>
++// #include <wx/propgrid/propdev.h>
+ #include <wx/propgrid/editors.h>
+ 
+ #include <string>
+Index: rviz/src/rviz/tf_frame_property.cpp
+===================================================================
+--- rviz/src/rviz/tf_frame_property.cpp	(revision 37849)
++++ rviz/src/rviz/tf_frame_property.cpp	(working copy)
+@@ -48,8 +48,8 @@
+ 
+ wxPGWindowList TFFramePGEditor::CreateControls(wxPropertyGrid *propgrid, wxPGProperty *property, const wxPoint &pos, const wxSize &size) const
+ {
+-  property->GetChoices().Clear();
+-  property->GetChoices().Add(wxT(FIXED_FRAME_STRING));
++  property->GetChoices().Copy().Clear();
++  property->GetChoices().Copy().Add(wxT(FIXED_FRAME_STRING));
+ 
+   typedef std::vector<std::string> V_string;
+   V_string frames;
+@@ -66,7 +66,7 @@
+       continue;
+     }
+ 
+-    property->GetChoices().Add(wxString::FromAscii(frame.c_str()));
++    property->GetChoices().Copy().Add(wxString::FromAscii(frame.c_str()));
+   }
+ 
+   return wxPGComboBoxEditor::CreateControls(propgrid, property, pos, size);
+Index: rviz/src/rviz/CMakeLists.txt
+===================================================================
+--- rviz/src/rviz/CMakeLists.txt	(revision 37849)
++++ rviz/src/rviz/CMakeLists.txt	(working copy)
+@@ -97,6 +97,10 @@
+ target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${OGRE_LIBRARIES})
+ rosbuild_link_boost(${PROJECT_NAME} thread signals filesystem system program_options)
+ 
++if(APPLE)
++  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
++endif(APPLE)
++
+ find_package(PythonLibs REQUIRED)
+ include_directories(${PYTHON_INCLUDE_PATH})
+ 
+Index: rviz/src/rviz/render_panel.cpp
+===================================================================
+--- rviz/src/rviz/render_panel.cpp	(revision 37849)
++++ rviz/src/rviz/render_panel.cpp	(working copy)
+@@ -180,4 +180,8 @@
+   }
+ }
+ 
++void RenderPanel::addPendingEvent(const wxEvent& event) {
++  this->AddPendingEvent(event);
++}
++
+ } // namespace rviz
+Index: rviz/src/rviz/displays_panel.cpp
+===================================================================
+--- rviz/src/rviz/displays_panel.cpp	(revision 37849)
++++ rviz/src/rviz/displays_panel.cpp	(working copy)
+@@ -202,7 +202,7 @@
+   property_grid_->Connect( wxEVT_PG_HIGHLIGHTED, wxPropertyGridEventHandler( DisplaysPanel::onPropertyHighlighted ), NULL, this );
+ 
+   property_grid_->SetCaptionBackgroundColour( wxColour( 4, 89, 127 ) );
+-  property_grid_->SetCaptionForegroundColour( *wxWHITE );
++  // property_grid_->SetCaptionForegroundColour( *wxWHITE );
+ 
+   help_html_->Connect(wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler(DisplaysPanel::onLinkClicked), NULL, this);
+ 
+@@ -238,7 +238,7 @@
+ void DisplaysPanel::sortDisplays()
+ {
+   property_grid_->Freeze();
+-  property_grid_->Sort(property_grid_->GetRoot());
++  property_grid_->Sort();
+   property_grid_->Refresh();
+   property_grid_->Thaw();
+ }
+@@ -436,12 +436,12 @@
+   CategoryPropertyPtr cat = wrapper->getCategory().lock();
+   wxPGProperty* property = wrapper->getCategory().lock()->getPGProperty();
+ 
+-  wxPGCell* cell = property->GetCell( 0 );
+-  if ( !cell )
+-  {
+-    cell = new wxPGCell(*(wxString*)0, wxNullBitmap, wxNullColour, wxNullColour);
+-    property->SetCell( 0, cell );
+-  }
++  wxPGCell cell = property->GetCell( 0 );
++  // if ( !cell )
++  // {
++  //   cell = new wxPGCell(*(wxString*)0, wxNullBitmap, wxNullColour, wxNullColour);
++  //   property->SetCell( 0, cell );
++  // }
+ 
+   if (!wrapper->isLoaded())
+   {
+Index: rviz/src/rviz/tool_properties_panel.cpp
+===================================================================
+--- rviz/src/rviz/tool_properties_panel.cpp	(revision 37849)
++++ rviz/src/rviz/tool_properties_panel.cpp	(working copy)
+@@ -64,7 +64,7 @@
+ 
+   property_grid_->SetExtraStyle(wxPG_EX_DISABLE_TLP_TRACKING);
+   property_grid_->SetCaptionBackgroundColour( wxColour( 4, 89, 127 ) );
+-  property_grid_->SetCaptionForegroundColour( *wxWHITE );
++  // property_grid_->SetCaptionForegroundColour( *wxWHITE );
+ 
+   property_grid_->Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( ToolPropertiesPanel::onPropertyChanging ), NULL, this );
+   property_grid_->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( ToolPropertiesPanel::onPropertyChanged ), NULL, this );
+Index: rviz/src/rviz/properties/edit_enum_property.h
+===================================================================
+--- rviz/src/rviz/properties/edit_enum_property.h	(revision 37849)
++++ rviz/src/rviz/properties/edit_enum_property.h	(working copy)
+@@ -32,7 +32,7 @@
+ 
+ #include <wx/wx.h>
+ #include <wx/propgrid/propgrid.h>
+-#include <wx/propgrid/propdev.h>
++// #include <wx/propgrid/propdev.h>
+ #include <wx/propgrid/editors.h>
+ 
+ #include <string>
+Index: rviz/src/rviz/properties/property.cpp
+===================================================================
+--- rviz/src/rviz/properties/property.cpp	(revision 37849)
++++ rviz/src/rviz/properties/property.cpp	(working copy)
+@@ -70,15 +70,15 @@
+     return;
+   }
+ 
+-  wxPGCell* cell = property->GetCell( column );
+-  if ( !cell )
+-  {
+-    cell = new wxPGCell( *(wxString*)0, wxNullBitmap, *wxLIGHT_GREY, *wxGREEN );
+-    property->SetCell( column, cell );
+-  }
++  wxPGCell cell = property->GetCell( column );
++  // if ( !cell )
++  //   {
++  //     cell = new wxPGCell( *(wxString*)0, wxNullBitmap, *wxLIGHT_GREY, *wxGREEN );
++  //     property->SetCell( column, cell );
++  //   }
+ 
+-  cell->SetFgCol(fg_color);
+-  cell->SetBgCol(bg_color);
++  cell.SetFgCol(fg_color);
++  cell.SetBgCol(bg_color);
+ }
+ 
+ void setPropertyToError(wxPGProperty* property, uint32_t column)
+@@ -439,13 +439,13 @@
+   }
+ 
+   grid_->SetPropertyLabel(top_property_, label);
+-  wxPGCell* cell = top_property_->GetCell( 0 );
+-  if ( cell )
+-  {
+-    //cell->SetText(label);
+-  }
++  wxPGCell cell = top_property_->GetCell( 0 );
++  // if ( cell )
++  // {
++  //   //cell->SetText(label);
++  // }
+ 
+-  grid_->Sort(top_property_);
++  grid_->Sort();
+ }
+ 
+ StatusLevel StatusProperty::getTopLevelStatus()
+@@ -888,7 +888,7 @@
+   {
+     property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxEnumProperty( name_, prefix_ + name_ ) );
+     wxPGChoices choices = choices_->Copy();
+-    grid_->SetPropertyChoices(property_, choices);
++    property_->SetChoices(choices);
+ 
+     if ( !hasSetter() )
+     {
+@@ -898,7 +898,7 @@
+   else
+   {
+     wxPGChoices choices = choices_->Copy();
+-    grid_->SetPropertyChoices(property_, choices);
++    property_->SetChoices(choices);
+     grid_->SetPropertyValue(property_, (long)get());
+   }
+ 
+@@ -983,7 +983,7 @@
+     ee_property_ = new EditEnumPGProperty(name_, prefix_ + name_);
+     property_ = grid_->AppendIn( getCategoryPGProperty(parent_), ee_property_ );
+     wxPGChoices choices = choices_->Copy();
+-    grid_->SetPropertyChoices(property_, choices);
++    property_->SetChoices(choices);
+ 
+     if ( !hasSetter() )
+     {
+@@ -993,7 +993,7 @@
+   else
+   {
+     wxPGChoices choices = choices_->Copy();
+-    grid_->SetPropertyChoices(property_, choices);
++    property_->SetChoices(choices);
+     grid_->SetPropertyValue(property_, wxString::FromAscii( get().c_str() ));
+   }
+ 
+@@ -1002,7 +1002,7 @@
+ 
+ void EditEnumProperty::readFromGrid()
+ {
+-  wxString str = property_->GetValueString();
++  wxString str = property_->GetValueAsString();
+   set( (const char*)str.mb_str() );
+ }
+ 
+@@ -1058,11 +1058,11 @@
+   {
+     grid_->SetPropertyLabel( property_, wxString::FromAscii( label.c_str() ) );
+ 
+-    wxPGCell* cell = property_->GetCell( 0 );
+-    if ( cell )
+-    {
+-      //cell->SetText( wxString::FromAscii( label.c_str() ) );
+-    }
++    // wxPGCell cell = property_->GetCell( 0 );
++    // if ( cell )
++    // {
++    //   //cell->SetText( wxString::FromAscii( label.c_str() ) );
++    // }
+   }
+ }
+ 
+@@ -1186,10 +1186,10 @@
+   if (grid_)
+   {
+     setPropertyToColors(property_, grid_->GetCaptionForegroundColour(), grid_->GetCaptionBackgroundColour(), 0);
+-    wxPGCell* cell = property_->GetCell(0);
++    wxPGCell cell = property_->GetCell(0);
+     wxFont font = grid_->GetFont();
+     font.SetWeight(wxBOLD);
+-    cell->SetFont(font);
++    cell.SetFont(font);
+     //setPropertyToColors(property_, grid_->GetCaptionForegroundColour(), grid_->GetCaptionBackgroundColour(), 1);
+   }
+ }
+Index: rviz/src/rviz/properties/edit_enum_property.cpp
+===================================================================
+--- rviz/src/rviz/properties/edit_enum_property.cpp	(revision 37849)
++++ rviz/src/rviz/properties/edit_enum_property.cpp	(working copy)
+@@ -56,7 +56,7 @@
+ {
+   if (option_cb_)
+   {
+-    property->GetChoices().Clear();
++    property->GetChoices().Copy().Clear();
+ 
+     V_string choices;
+     option_cb_(choices);
+@@ -70,7 +70,7 @@
+         continue;
+       }
+ 
+-      property->GetChoices().Add(wxString::FromAscii(choice.c_str()));
++      property->GetChoices().Copy().Add(wxString::FromAscii(choice.c_str()));
+     }
+   }
+ 
+Index: rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp
+===================================================================
+--- rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp	(revision 37849)
++++ rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp	(working copy)
+@@ -458,7 +458,8 @@
+ 
+       event.panel->setContextMenu( menu_ );
+       wxContextMenuEvent context_event( wxEVT_CONTEXT_MENU, 0, event.event.GetPosition() );
+-      event.panel->AddPendingEvent( context_event );
++      // event.panel->AddPendingEvent( context_event );
++      event.panel->addPendingEvent(context_event);
+       last_control_name_ = control_name;
+       return true;
+     }
