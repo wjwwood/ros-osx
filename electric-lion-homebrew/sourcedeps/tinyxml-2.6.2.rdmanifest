@@ -8,8 +8,8 @@ install-script: |
     if [ -f /usr/local/share/ros/tinyxml-version.installed ]; then
       echo "Found an older version of TinyXML that got installed by rosdep"
       echo "Deleting old version of TinyXML before installing new version"
-      sudo rm -f /usr/local/lib/libtinyxml.a /usr/local/lib/libtinyxml.so* /usr/local/lib/libtinyxml*dylib
-      sudo rm -f /usr/local/include/tinyxml.h
+      rm -f /usr/local/lib/libtinyxml.a /usr/local/lib/libtinyxml.so* /usr/local/lib/libtinyxml*dylib
+      rm -f /usr/local/include/tinyxml.h
     else
       echo "A version of TinyXML that is not managed by rosdep is already installed in /usr/local/include"
       export install='false'
@@ -21,10 +21,10 @@ install-script: |
     cd build
     cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_OSX_ARCHITECTURES="i386;x86_64"
     make
-    sudo make install
-
-    sudo mkdir -p /usr/local/share/ros
-    sudo bash -c "echo 35efe59f25b7980a6f3ec0118908cc11 > /usr/local/share/ros/tinyxml-version.installed"
+    make install
+    
+    mkdir -p /usr/local/share/ros
+    bash -c "echo 35efe59f25b7980a6f3ec0118908cc11 > /usr/local/share/ros/tinyxml-version.installed"
   else
     echo "Failed to install TinyXML"
     false

@@ -9,9 +9,9 @@ install-script: |
     if [ -f $PREFIX/share/ros/assimp-version.installed ]; then
       echo "Found an older version of Assimp2 that got installed by rosdep"
       echo "Deleting old version of Assimp2 before installing new version"
-      sudo rm -rf $PREFIX/include/assimp
-      sudo rm -f $PREFIX/lib/libassimp.so* $PREFIX/lib/libassimp*dylib
-      sudo rm -f $PREFIX/bin/assimp
+      rm -rf $PREFIX/include/assimp
+      rm -f $PREFIX/lib/libassimp.so* $PREFIX/lib/libassimp*dylib
+      rm -f $PREFIX/bin/assimp
     else
       echo "A version of Assimp2 that is not managed by rosdep is already installed in $PREFIX/include/assimp"
       export install='false'
