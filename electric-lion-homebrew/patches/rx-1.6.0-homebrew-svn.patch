@@ -29,18 +29,18 @@ Index: wxswig/Makefile
  	cp swig-wrap bin/swig
 Index: rxtools/src/rxtools/rosout_list_control.cpp
 ===================================================================
---- rxtools/src/rxtools/rosout_list_control.cpp	(revision 14808)
+--- rxtools/src/rxtools/rosout_list_control.cpp	(revision 14830)
 +++ rxtools/src/rxtools/rosout_list_control.cpp	(working copy)
-@@ -732,8 +732,8 @@
+@@ -732,8 +732,10 @@
    Thaw();
- 
+
    // This for some reason prevents the control from flickering: http://wiki.wxwidgets.org/Flicker-Free_Drawing#No-flickering_for_wxListCtrl_with_wxLC_REPORT_.7C_wxLC_VIRTUAL_style
--  wxIdleEvent idle;
--  wxTheApp->SendIdleEvents(this, idle);
-+  // wxIdleEvent idle;
-+  // wxTheApp->SendIdleEvents(this, idle);
++#if wxMAJOR_VERSION == 2 and wxMINOR_VERSION == 8 // If wxWidgets 2.8.x
+   wxIdleEvent idle;
+   wxTheApp->SendIdleEvents(this, idle);
++#endif
  }
- 
+
  void RosoutListControl::setSelection(const S_int32& sel)
 Index: rxtools/src/rxtools/rxplot_main.py
 ===================================================================
