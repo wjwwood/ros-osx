@@ -1,28 +1,31 @@
+Index: ogre/ogre_src_v1-7-3.tar.bz2.md5sum
+===================================================================
+--- ogre/ogre_src_v1-7-3.tar.bz2.md5sum	(revision 0)
++++ ogre/ogre_src_v1-7-3.tar.bz2.md5sum	(revision 0)
+@@ -0,0 +1 @@
++7a85d3b8f0d64debd186e48ebe9556aa  build/ogre_src_v1-7-3.tar.bz2
+\ No newline at end of file
 Index: ogre/Makefile
 ===================================================================
---- ogre/Makefile	(revision 37811)
+--- ogre/Makefile	(revision 37849)
 +++ ogre/Makefile	(working copy)
-@@ -1,12 +1,15 @@
+@@ -1,13 +1,10 @@
  all: ogre
- 
+-
 -OGRE_VERSION = ogre_src_v1-7-1
-+# OGRE_VERSION = ogre_src_v1-7-1
-+# TARBALL = build/$(OGRE_VERSION).tar.bz2
-+# TARBALL_URL = http://pr.willowgarage.com/downloads/$(OGRE_VERSION).tar.bz2
 +OGRE_VERSION = ogre_src_v1-7-3
  TARBALL = build/$(OGRE_VERSION).tar.bz2
 -TARBALL_URL = http://pr.willowgarage.com/downloads/$(OGRE_VERSION).tar.bz2
 +TARBALL_URL = http://mirror.ausparc.com/ros/sources/ogre_src_v1-7-3.tar.bz2
  SOURCE_DIR = build/$(OGRE_VERSION)
  UNPACK_CMD = tar xf
--MD5SUM_FILE = $(OGRE_VERSION).tar.bz2.md5sum
+ MD5SUM_FILE = $(OGRE_VERSION).tar.bz2.md5sum
 -TARBALL_PATCH = hidden_window.patch hidden_window_glx_fix.patch multi_scene_manager.patch
-+# MD5SUM_FILE = $(OGRE_VERSION).tar.bz2.md5sum
-+# TARBALL_PATCH = hidden_window.patch hidden_window_glx_fix.patch multi_scene_manager.patch
- #INITIAL_DIR = build/ogre
+-#INITIAL_DIR = build/ogre
  include $(shell rospack find mk)/download_unpack_build.mk
  
-@@ -22,6 +25,8 @@
+ ROOT = $(shell rospack find ogre)
+@@ -22,6 +19,8 @@
  
  CMAKE = cmake
  CMAKE_ARGS = -D CMAKE_INSTALL_PREFIX=$(OGREROOT)\
@@ -31,7 +34,7 @@ Index: ogre/Makefile
  						 -D OGRE_BUILD_SAMPLES="off"\
  						 -D OGRE_BUILD_TESTS="off"\
  						 -D CMAKE_BUILD_TYPE="RelWithDebInfo" \
-@@ -71,11 +76,19 @@
+@@ -71,11 +70,19 @@
  	else \
  	  make ogre/lib/pkgconfig/OGRE.pc; \
  	fi
@@ -57,7 +60,7 @@ Index: ogre/Makefile
  	mkdir -p $(ROOT)/$(SOURCE_DIR)/build;
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37811)
+--- rosdep.yaml	(revision 37849)
 +++ rosdep.yaml	(working copy)
 @@ -1,6 +1,10 @@
  freeimage:
@@ -77,7 +80,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      source:
-+        uri: 'http://mirror.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
++        uri: 'http://www.ausparc.com/ros/sourcedeps/nvidia-cg.rdmanifest'
 +        md5sum: 5877923536b171586bab4e17b25e276f
  libxrandr:
    ubuntu: libxrandr-dev
