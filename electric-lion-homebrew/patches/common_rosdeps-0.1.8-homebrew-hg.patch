@@ -40,7 +40,7 @@ diff -r 6d4935c374bf rosdep.yaml
 +  osx:
 +    lion:
 +      homebrew:
-+        packages: [ yaml-cpp ]
++        packages: |
  curl:
    ubuntu: libcurl4-openssl-dev
    debian: libcurl4-openssl-dev
