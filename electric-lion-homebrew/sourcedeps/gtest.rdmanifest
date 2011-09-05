@@ -26,6 +26,7 @@ install-script: |
     export LDFLAGS=" -arch i386 -arch x86_64 "
     ./configure --disable-debug --disable-dependency-tracking
     make install
+    mkdir -p $PREFIX/share/ros/
     bash -c "echo 7e27f5f3b79dd1ce9092e159cdbd0635 > $PREFIX/share/ros/gtest-version.installed"
   else
     echo "Failed to install gtest"
@@ -43,4 +44,3 @@ check-presence-script: |
   fi
 
 exec-path: gtest-1.5.0
-# depends: [checkinstall ]
