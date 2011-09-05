@@ -13,6 +13,7 @@ install-script: |
       cd build
       ./configure --prefix=$PREFIX
       make uninstall
+      rm $PREFIX/share/ros/gtest-version.installed
     else
       echo "A version of gtest that is not managed by rosdep is already installed in $PREFIX/include/gtest"
       export install='false'
