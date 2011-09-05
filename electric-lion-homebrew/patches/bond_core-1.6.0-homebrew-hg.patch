@@ -9,4 +9,4 @@ diff -r 79d22151d49e rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ ossp-uuid ]
-+        args: [ --universal ]
++        options: [ --universal ]

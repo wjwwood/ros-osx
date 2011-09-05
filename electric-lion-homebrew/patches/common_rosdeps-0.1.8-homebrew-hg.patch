@@ -74,7 +74,7 @@ diff -r 6d4935c374bf rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ cppunit ]
-+        args: [ --universal ]
++        options: [ --universal ]
    gentoo: dev-util/cppunit
    freebsd: cppunit
  scons:

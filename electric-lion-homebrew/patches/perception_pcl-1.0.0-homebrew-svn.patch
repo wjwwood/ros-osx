@@ -19,7 +19,7 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ vtk ]
-+        args: [ --python ]
++        options: [ --python ]
  unzip:
    ubuntu: unzip
    debian: unzip

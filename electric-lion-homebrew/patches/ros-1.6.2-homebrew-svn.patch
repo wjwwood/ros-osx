@@ -1,6 +1,6 @@
 Index: tools/rospack/CMakeLists.txt
 ===================================================================
---- tools/rospack/CMakeLists.txt	(revision 14716)
+--- tools/rospack/CMakeLists.txt	(revision 14926)
 +++ tools/rospack/CMakeLists.txt	(working copy)
 @@ -7,6 +7,8 @@
  cmake_minimum_required(VERSION 2.4.6)
@@ -13,7 +13,7 @@ Index: tools/rospack/CMakeLists.txt
  #set(CMAKE_SKIP_BUILD_RPATH true)
 Index: tools/rosdep/src/rosdep/core.py
 ===================================================================
---- tools/rosdep/src/rosdep/core.py	(revision 14716)
+--- tools/rosdep/src/rosdep/core.py	(revision 14926)
 +++ tools/rosdep/src/rosdep/core.py	(working copy)
 @@ -107,7 +107,7 @@
          """ Get the rosdeps for the active os"""
@@ -52,7 +52,7 @@ Index: tools/rosdep/src/rosdep/core.py
          if type(os_specific) == type("String"): # It's just a single string 
              return os_specific
          if self.os_version in os_specific: # if it is a version key, just return it
-@@ -346,13 +345,11 @@
+@@ -345,13 +344,11 @@
          rp = roslib.packages.ROSPackages()
          self.rosdeps = rp.rosdeps(packages)
          self.robust = robust
@@ -68,7 +68,7 @@ Index: tools/rosdep/src/rosdep/core.py
      def get_rosdeps(self, packages):
          """
          @return: dictionary mapping rosdep names to list of packages
-@@ -448,7 +445,7 @@
+@@ -447,7 +444,7 @@
                  rdlp = RosdepLookupPackage(self.osi.get_name(), self.osi.get_version(), p, self.yc)
                  rdlp_cache[p] = rdlp
              if not self.install_rosdep(r, rdlp, default_yes=False, execute=False, display=display):
@@ -79,18 +79,13 @@ Index: tools/rosdep/src/rosdep/core.py
  
 Index: tools/rosdep/src/rosdep/osx.py
 ===================================================================
---- tools/rosdep/src/rosdep/osx.py	(revision 14716)
+--- tools/rosdep/src/rosdep/osx.py	(revision 14926)
 +++ tools/rosdep/src/rosdep/osx.py	(working copy)
-@@ -46,16 +46,19 @@
-     def __init__(self):
-         self.installers = {}
+@@ -48,14 +48,16 @@
          self.installers['pip'] = rosdep.installers.PipInstaller
--        self.installers['macports'] = rosdep.installers.MacportsInstaller
--        self.installers['default'] = rosdep.installers.MacportsInstaller
-+        # self.installers['macports'] = rosdep.installers.MacportsInstaller
-+        # self.installers['default'] = rosdep.installers.MacportsInstaller
+         self.installers['macports'] = rosdep.installers.MacportsInstaller
+         self.installers['default'] = rosdep.installers.MacportsInstaller
 +        self.installers['homebrew'] = rosdep.installers.HomebrewInstaller
-+        self.installers['default'] = rosdep.installers.HomebrewInstaller
          self.installers['source'] = rosdep.installers.SourceInstaller
 -
 +    
@@ -108,7 +103,7 @@ Index: tools/rosdep/src/rosdep/osx.py
  ###### END Osx SPECIALIZATION ########################
 Index: tools/rosdep/src/rosdep/installers.py
 ===================================================================
---- tools/rosdep/src/rosdep/installers.py	(revision 14716)
+--- tools/rosdep/src/rosdep/installers.py	(revision 14926)
 +++ tools/rosdep/src/rosdep/installers.py	(working copy)
 @@ -28,6 +28,8 @@
  
@@ -314,7 +309,7 @@ Index: tools/rosdep/src/rosdep/installers.py
      def port_detect(self, pkgs):
          """ 
          Given a list of package, return the list of installed packages.
-@@ -382,3 +400,58 @@
+@@ -382,3 +400,65 @@
              if len(pkg_row) == 3 and pkg_row[0] in pkgs and pkg_row[2] =='(active)':
                  ret_list.append( pkg_row[0])
          return ret_list
@@ -333,7 +328,11 @@ Index: tools/rosdep/src/rosdep/installers.py
 +            print("There was an error running homebrew, make sure it is installed properly.", file=sys.stderr)
 +            sys.exit(-1)
 +        self.depends = arg_dict.get("depends", [])
++        self.formula_uri = arg_dict.get("formula_uri", [])
++        if type(self.formula_uri) == type("string"):
++            self.formula_uri = self.formula_uri.split()
 +        self.args = arg_dict.get("args", [])
++        self.args += arg_dict.get("options", [])
 +        self.packages = packages
 +    
 +    def get_packages_to_install(self):
@@ -347,7 +346,10 @@ Index: tools/rosdep/src/rosdep/installers.py
 +        packages_to_install = self.get_packages_to_install()
 +        if not packages_to_install:
 +            script =  "#!/bin/bash\n#No Packages to install"
-+        script = "#!/bin/bash\n#Packages %s\nbrew install "%packages_to_install + ' '.join(packages_to_install) + ' ' + ' '.join(self.args)
++        if self.formula_uri == []:
++            script = "#!/bin/bash\n#Packages %s\nbrew install "%packages_to_install + ' '.join(packages_to_install) + ' ' + ' '.join(self.args)
++        else:
++            script = "#!/bin/bash\n#Packages %s\nbrew install "%packages_to_install + ' '.join(self.formula_uri) + ' ' + ' '.join(self.args)
 +        
 +        if execute:
 +            return rosdep.core.create_tempfile_from_string_and_execute(script)
@@ -375,7 +377,7 @@ Index: tools/rosdep/src/rosdep/installers.py
 +    
 Index: core/rosbuild/rosbuild.cmake
 ===================================================================
---- core/rosbuild/rosbuild.cmake	(revision 14716)
+--- core/rosbuild/rosbuild.cmake	(revision 14926)
 +++ core/rosbuild/rosbuild.cmake	(working copy)
 @@ -15,6 +15,8 @@
    endif(POLICY CMP0011)
@@ -388,7 +390,7 @@ Index: core/rosbuild/rosbuild.cmake
  find_program(ROSPACK_EXE NAMES rospack DOC "rospack executable")
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 14716)
+--- rosdep.yaml	(revision 14926)
 +++ rosdep.yaml	(working copy)
 @@ -3,8 +3,8 @@
    debian: libtinyxml-dev
@@ -420,7 +422,7 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ libyaml ]
-+        args: [ --universal ]
++        options: [ --universal ]
  python-yaml:
    ubuntu: python-yaml
    debian: python-yaml
@@ -524,23 +526,21 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ graphviz ]
-+        args: [ --with-pdf ]
++        options: [ --with-pdf ]
    gentoo: media-gfx/graphviz
    freebsd: graphviz
  wxwidgets:
-@@ -136,6 +199,11 @@
+@@ -136,6 +199,9 @@
    fedora: wxGTK-devel
    rhel: wxGTK-devel
    macports: wxWidgets-python
 +  osx:
 +    lion:
-+      source:
-+        uri: http://mirror.ausparc.com/ros/sourcedeps/wxWidgets-2.9.2.rdmanifest
-+        md5sum: c5f0397f440fac0a5bdf4221207bd696
++      source: |
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
-@@ -148,6 +216,11 @@
+@@ -148,6 +214,11 @@
    centos: wxPython-devel
    debian: python-wxgtk2.8
    macports: py26-wxpython py26-gobject py26-gtk py26-cairo
@@ -552,7 +552,7 @@ Index: rosdep.yaml
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
-@@ -157,6 +230,10 @@
+@@ -157,6 +228,10 @@
    fedora: gtk2-devel
    rhel: gtk2-devel
    macports: gtk2
@@ -563,7 +563,7 @@ Index: rosdep.yaml
    arch: gtk2
    gentoo: x11-libs/gtk+
    freebsd: gtk20
-@@ -168,6 +245,10 @@
+@@ -168,6 +243,10 @@
    rhel: pkgconfig
    arch: pkg-config
    macports: pkgconfig
@@ -574,7 +574,7 @@ Index: rosdep.yaml
    gentoo: dev-util/pkgconfig
    cygwin: pkg-config
    freebsd: pkg-config
-@@ -178,6 +259,11 @@
+@@ -178,6 +257,11 @@
    opensuse: libqt4-devel 
    fedora: qt-devel
    macports: qt4-mac
@@ -582,11 +582,11 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ qt ]
-+        args: [ --universal ]
++        options: [ --universal ]
    gentoo: ">=x11-libs/qt-core-4"
    freebsd: qt4-corelib
  libstdc++5:
-@@ -199,6 +285,10 @@
+@@ -199,6 +283,10 @@
    fedora: unzip
    rhel: unzip
    macports: unzip
@@ -597,7 +597,7 @@ Index: rosdep.yaml
    gentoo: app-arch/unzip
    freebsd: unzip
  fltk:
-@@ -208,6 +298,10 @@
+@@ -208,6 +296,10 @@
    fedora: fltk-devel
    arch: fltk
    macports: fltk
@@ -608,7 +608,7 @@ Index: rosdep.yaml
    gentoo: "=x11-libs/fltk-1*"
    freebsd: fltk
  bazaar:
-@@ -216,6 +310,10 @@
+@@ -216,6 +308,10 @@
    opensuse: bzr 
    fedora: bazaar
    macports: bazaar
@@ -619,7 +619,7 @@ Index: rosdep.yaml
    gentoo: dev-vcs/bzr
    freebsd: bazaar
  git: 
-@@ -224,6 +322,10 @@
+@@ -224,6 +320,10 @@
    opensuse: git-core
    fedora: git
    macports: git-core
@@ -630,7 +630,7 @@ Index: rosdep.yaml
    gentoo: dev-vcs/git
    freebsd: git
  subversion:
-@@ -232,6 +334,10 @@
+@@ -232,6 +332,10 @@
    opensuse: subversion
    fedora: subversion
    macports: subversion
@@ -641,7 +641,7 @@ Index: rosdep.yaml
    gentoo: dev-vcs/subversion
    freebsd: subversion
  mercurial:
-@@ -240,6 +346,10 @@
+@@ -240,6 +344,10 @@
    opensuse: mercurial 
    fedora: mercurial
    macports: mercurial
@@ -652,21 +652,20 @@ Index: rosdep.yaml
    gentoo: dev-vcs/mercurial
    freebsd: mercurial
  gtest:
-@@ -248,6 +358,13 @@
+@@ -248,6 +356,12 @@
    opensuse: gtest-devel 
    fedora: gtest-devel
    macports: google-test
 +  osx:
 +    lion:
-+      # homebrew:
-+      #   packages: gtest --universal
-+      source:
-+        uri: http://mirror.ausparc.com/ros/sourcedeps/gtest.rdmanifest
-+        md5sum: 1e67258d04878c0b8b2c7557c66a2bed
++      homebrew:
++        packages: [ gtest ]
++        formula_uri: https://github.com/wjwwood/homebrew/raw/0d2300fd45e53995a76bec8b94b8effaa4b46585/Library/Formula/gtest.rb
++        options: [ --universal ]
    gentoo: dev-util/gtest
    freebsd: googletest
  autoconf:
-@@ -258,6 +375,10 @@
+@@ -258,6 +372,10 @@
    rhel: autoconf
    arch: autoconf
    macports: autoconf
@@ -677,7 +676,7 @@ Index: rosdep.yaml
    gentoo: sys-devel/autoconf
    freebsd: autoconf213 autoconf268
  automake:
-@@ -268,6 +389,10 @@
+@@ -268,6 +386,10 @@
    rhel: automake
    arch: automake
    macports: automake
@@ -688,7 +687,7 @@ Index: rosdep.yaml
    gentoo: sys-devel/automake
    freebsd: automake14 automake111
  libtool:
-@@ -281,6 +406,10 @@
+@@ -281,6 +403,10 @@
    fedora: libtool libtool-ltdl-devel
    rhel: libtool libtool-ltdl-devel
    macports: libtool
