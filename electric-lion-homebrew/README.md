@@ -63,7 +63,7 @@ Note: This is kind of work in progress, I would appreciate any tops on how to ha
 
 Install some necessary tools.
 
-    brew install git wget cmake subversion
+    brew install wget cmake
 
 Update you environment to use Homebrew kegs (packages) as the default by adding these lines to your ~/.bashrc
 
