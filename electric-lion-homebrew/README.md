@@ -28,48 +28,19 @@ Install Homebrew
 
     /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
 
-Make /Library directories writable in Lion (optional but recommended. Prevents you from needing sudo in the future):
+Make /Library directories writable in Lion (optional but highly recommended. Prevents you from needing sudo when you run pip in the future):
 
     sudo chown -R $USER /Library/Ruby /Library/Perl /Library/Python
 
-Make Ruby gems install executables to /usr/local/bin:
-
-    ruby -C$HOME -ryaml -e "
-    gemrc = YAML::load_file('.gemrc') rescue {}
-    gemrc['gem'] = '-n/usr/local/bin'
-    YAML::dump(gemrc, File.new('.gemrc', 'w'))"
-
-## Patch Homebrew (Temporary)
-
-Because I have several homebrew patches waiting to be merged up stream, you will need to checkout my fork's updated Formulas.
-
-    cd `brew --prefix`
-
-If you don't already have a git repo here.
-
-    git init
-
-Add remotes if they don't already exist and switch to my all_universal branch.
-
-    git remote add origin https://github.com/mxcl/homebrew.git
-    git remote add wjwwood https://github.com/wjwwood/homebrew.git
-    git fetch origin
-    git fetch wjwwood
-    git checkout --force all_universal
-
-Note: This is kind of work in progress, I would appreciate any tops on how to handle this better.
-
 ## Pre-ROS Setup
 
-Install some necessary tools.
+Install some necessary tools. (git and svn are included by default with Xcode!)
 
     brew install wget cmake
 
 Update you environment to use Homebrew kegs (packages) as the default by adding these lines to your ~/.bashrc
 
-    export PATH="/usr/local/bin:$PATH"
-    export PKG_CONFIG_PATH="/usr/local/share/pkgconfig:$PKG_CONFIG_PATH"
-    export PYTHONPATH="/usr/local/lib/python:/usr/local/lib/python2.7/site-packages/:$PYTHONPATH"
+    export CPLUS_INCLUDE_PATH="/usr/local/include:$CPLUS_INCLUDE_PATH"
 
 And make it so by closing and opening your terminal or with this line
 
@@ -156,78 +127,63 @@ The following stacks are known to build:
 * common_rosdeps
 * common_tutorials
 * diagnostics
+* diagnostics_monitors
 * driver_common
     * dynamic_reconfigure has been tested and works (after patch)
 * eigen
 * executive_smach
+* executive\_smach_visualization
 * filters
 * geometry
 * geometry_experimental
 * image_common
+* image_pipeline
+* image\_transport_plugins
 * laser_pipeline
 * nodelet_core
-* orocos kinematics dynamics
+* orocos\_kinematics_dynamics
+* robot_model
+* perception_pcl
+    * This requires a patch that breaks the visualizers ability to take keyboard presses, so this is arguably not working, but I am going to take a stab this later.
 * pluginlib
 * ros
 * ros_comm
 * ros_tutorials
+* vision_opencv
 * xacro
 
 The following are known not to build, and why:
 
-* diagnostics_monitors
-    * rxtools fails
-* executive\_smach_visualization
-    * rxtools
-* image_pipeline
-    * rosdep opencv2.3 not satisfied (brew has opencv2.2, need to patch for 2.3)
-* image transport plugins
-    * rosdep opencv2.3 not satisfied
 * navigation
-    * rosdep's failed to install: netpbm and fltk
-* perception_pcl
-    * Errors with PCL (I will report these asap)
+    * rosdep's failed to install: the netpbm build fails
 * physics_ode
-    * opende fails with `/usr/bin/gm4:configure.in:373: bad expression in eval (bad input): 30 > libccd@:>@`
-* robot_model
-    * collada_parser fails with linking error, more details asap
-* rx
-    * rosdeps wxwidgets, python-gtk not satisfied
+    * opende fails with:
+
+    Please make sure that you use automake 1.10 or later
+    Warnings about underquoted definitions are harmless
+    Running aclocal
+    /usr/bin/gm4:configure.in:373: bad expression in eval (bad input): 30 > libccd@:>@ 
+    autom4te: /usr/bin/gm4 failed with exit status: 1
+    aclocal: /usr/bin/autom4te failed with exit status: 1
+    make[1]: *** [installed] Error 1
+
 * simulator_gazebo
-    * fltk
+    * opende fails
 * simulator_stage
-    * fltk
+    * stage fails
 * slam_gmapping
-    * netpbm and fltk
+    * netpbm
 * stage
-    * fltk
-* vision_opencv
-    * opencv2.3 rosdep
+    * stage fails with:
+
+    patch -d build/Stage-3.2.2-Source -p0 < Stage-3.2.2-Source.patch;
+    patch: **** rejecting file name with ".." component: ../Stage-3.2.2-Source/libstage/CMakeLists.txt
+    make[1]: *** [build/Stage-3.2.2-Source/unpacked] Error 2
 
 Other known dependency issues:
 
-* libxml2
-    * is not built universal, not a problem yet, but may need to be patched
-* libogg
-    * is not built universal
-* theora
-    * is not built universal
-* vtk
-    * is not built universal
-* tbb
-    * is not built universal
-* hdf5
-    * is not built universal
-* qhull
-    * is not built universal
-* graphviz
-    * is not built universal
-* fltk
+* netpbm
     * doesn't build
-* ffmpeg
-    * is not built universal
-* graphicsmagick
+* graphicsmagick  (is this needed?  it is on vision_opencv)
     * Fails
-
-
 
