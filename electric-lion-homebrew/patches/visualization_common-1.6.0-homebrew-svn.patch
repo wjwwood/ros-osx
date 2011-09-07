@@ -58,9 +58,39 @@ Index: ogre/Makefile
  ogre/lib/pkgconfig/OGRE.pc: $(SOURCE_DIR)/CMakeLists.txt $(SOURCE_DIR)
          # building OGRE
  	mkdir -p $(ROOT)/$(SOURCE_DIR)/build;
+Index: ogre_tools/src/ogre_tools/wx_ogre_render_window.cpp
+===================================================================
+--- ogre_tools/src/ogre_tools/wx_ogre_render_window.cpp	(revision 37882)
++++ ogre_tools/src/ogre_tools/wx_ogre_render_window.cpp	(working copy)
+@@ -196,8 +196,6 @@
+   {
+ 
+   }
+-
+-  ROS_INFO("move");
+ }
+ 
+ //------------------------------------------------------------------------------
+@@ -214,7 +212,15 @@
+ #else
+   params["parentWindowHandle"] = getOgreHandle();
+ #endif
+-
++  
++// Set the macAPI for Ogre based on the WX implementation
++#ifdef __WXOSX_COCOA__
++  params["macAPI"] = "cocoa";
++  params["macAPICocoaUseNSView"] = "true";
++#else
++  params["macAPI"] = "carbon";
++#endif
++  
+   // Get wx control window size
+   int width;
+   int height;
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37849)
+--- rosdep.yaml	(revision 37882)
 +++ rosdep.yaml	(working copy)
 @@ -1,6 +1,10 @@
  freeimage:
