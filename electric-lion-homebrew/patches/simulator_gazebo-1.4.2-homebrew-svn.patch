@@ -10,4 +10,4 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ libyaml ]
-+        args: [ --universal ]
++        options: [ --universal ]
