@@ -38,9 +38,22 @@ Index: wxpropgrid/Makefile
  		make && \
  		make install
  	touch installed
+Index: rviz/scripts/frame_test.py
+===================================================================
+--- rviz/scripts/frame_test.py	(revision 37882)
++++ rviz/scripts/frame_test.py	(working copy)
+@@ -3,7 +3,7 @@
+ import os
+ import sys
+ 
+-WXVER = '2.8'
++WXVER = ['2.8', '2.9']
+ import wxversion
+ if wxversion.checkInstalled(WXVER):
+   wxversion.select(WXVER)
 Index: rviz/src/rviz/render_panel.h
 ===================================================================
---- rviz/src/rviz/render_panel.h	(revision 37849)
+--- rviz/src/rviz/render_panel.h	(revision 37882)
 +++ rviz/src/rviz/render_panel.h	(working copy)
 @@ -95,6 +95,7 @@
  
