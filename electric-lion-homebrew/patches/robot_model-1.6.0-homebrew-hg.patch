@@ -13,9 +13,20 @@ diff -r 72f4d9d33097 collada_parser/CMakeLists.txt
  #target_link_libraries(${PROJECT_NAME} another_library)
  rosbuild_add_boost_directories()
  #rosbuild_link_boost(${PROJECT_NAME} thread)
+diff -r 72f4d9d33097 collada_urdf/manifest.xml
+--- a/collada_urdf/manifest.xml	Wed Aug 10 14:00:49 2011 -0700
++++ b/collada_urdf/manifest.xml	Wed Sep 07 16:20:40 2011 -0500
+@@ -16,6 +16,7 @@
+   <depend package="resource_retriever" />
+   <depend package="angles" />
+   <depend package="assimp"/>
++  <depend package="tinyxml"/>
+ 
+   <platform os="ubuntu" version="9.04"/>
+   <platform os="ubuntu" version="9.10"/>
 diff -r 72f4d9d33097 colladadom/Makefile
 --- a/colladadom/Makefile	Wed Aug 10 14:00:49 2011 -0700
-+++ b/colladadom/Makefile	Tue Sep 06 21:55:38 2011 -0500
++++ b/colladadom/Makefile	Wed Sep 07 16:20:40 2011 -0500
 @@ -4,7 +4,7 @@
  SOURCE_DIR = build/colladadom
  INITIAL_DIR = build/collada-dom
@@ -144,9 +155,20 @@ diff -r 72f4d9d33097 colladadom/mac-x86_64.patch
 + endif
 + 
 + libOpts :=
+diff -r 72f4d9d33097 kdl_parser/manifest.xml
+--- a/kdl_parser/manifest.xml	Wed Aug 10 14:00:49 2011 -0700
++++ b/kdl_parser/manifest.xml	Wed Sep 07 16:20:40 2011 -0500
+@@ -16,6 +16,7 @@
+   <depend package="kdl" />
+   <depend package="urdf" />
+   <depend package="roscpp" />
++  <depend package="tinyxml" />
+   
+ <export>
+   <cpp cflags="-I${prefix}/include" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lkdl_parser"/>
 diff -r 72f4d9d33097 rosdep.yaml
 --- a/rosdep.yaml	Wed Aug 10 14:00:49 2011 -0700
-+++ b/rosdep.yaml	Tue Sep 06 21:55:38 2011 -0500
++++ b/rosdep.yaml	Wed Sep 07 16:20:40 2011 -0500
 @@ -2,3 +2,7 @@
    ubuntu: libpcre3-dev
    fedora: pcre-devel
@@ -154,10 +176,10 @@ diff -r 72f4d9d33097 rosdep.yaml
 +  osx:
 +    lion:
 +      homebrew:
-+        packages: |
++        packages: [ pcre++]
 diff -r 72f4d9d33097 urdf/CMakeLists.txt
 --- a/urdf/CMakeLists.txt	Wed Aug 10 14:00:49 2011 -0700
-+++ b/urdf/CMakeLists.txt	Tue Sep 06 21:55:38 2011 -0500
++++ b/urdf/CMakeLists.txt	Wed Sep 07 16:20:40 2011 -0500
 @@ -23,6 +23,10 @@
  
  rosbuild_add_library(${PROJECT_NAME} src/model.cpp)
