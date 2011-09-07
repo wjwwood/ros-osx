@@ -10,6 +10,9 @@ install-script: |
   fi
   sudo installer -pkg /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7/wxPython2.9-osx-cocoa-py2.7.pkg -target / -lang en
   hdiutil unmount /Volumes/wxPython2.9-osx-2.9.2.1-cocoa-py2.7
+  ln -s $PREFIX/lib/wxPython-2.9.2.1/bin/wx-config $PREFIX/bin/wx-config
+  ln -s $PREFIX/lib/wxPython-2.9.2.1/bin/wxrc $PREFIX/bin/wxrc
+  ln -s $PREFIX/lib/wxPython-2.9.2.1/bin/wxrc-2.9 $PREFIX/bin/wxrc-2.9
   mkdir -p $PREFIX/share/ros
   bash -c "echo df957f2b4173db8e394336fa1efff87b > $PREFIX/share/ros/wxpython-version.installed"
 
@@ -24,5 +27,3 @@ check-presence-script: |
   fi
 
 dmg_file_name: wxPython2.9-osx-2.9.2.1-cocoa-py2.7.dmg
-# exec-path: wxpython
-# depends: [ wxwidgets ]
