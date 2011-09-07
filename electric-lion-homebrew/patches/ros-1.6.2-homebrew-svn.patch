@@ -549,7 +549,7 @@ Index: rosdep.yaml
 +    lion:
 +      source:
 +        uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
-+        md5sum: 3159953eb704d529aa486fb87b72460c
++        md5sum: 4fdb30e1abfb4a36a4c5d9efc48049c4
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
