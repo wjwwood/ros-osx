@@ -1,6 +1,6 @@
-diff -r 1e86bffa8193 rosdep.yaml
---- a/rosdep.yaml	Thu Aug 11 15:18:49 2011 -0700
-+++ b/rosdep.yaml	Thu Aug 25 17:56:59 2011 -0500
+diff -r a2f44891ef00 rosdep.yaml
+--- a/rosdep.yaml	Wed Aug 31 15:52:13 2011 -0700
++++ b/rosdep.yaml	Tue Sep 06 21:55:36 2011 -0500
 @@ -3,5 +3,9 @@
    debian: libnetpbm10-dev
    arch: netpbm

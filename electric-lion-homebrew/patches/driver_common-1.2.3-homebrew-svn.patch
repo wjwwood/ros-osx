@@ -1,6 +1,6 @@
 Index: dynamic_reconfigure/scripts/reconfigure_gui
 ===================================================================
---- dynamic_reconfigure/scripts/reconfigure_gui	(revision 37811)
+--- dynamic_reconfigure/scripts/reconfigure_gui	(revision 37882)
 +++ dynamic_reconfigure/scripts/reconfigure_gui	(working copy)
 @@ -39,11 +39,12 @@
  import roslib; roslib.load_manifest('dynamic_reconfigure')

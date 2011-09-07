@@ -1,6 +1,6 @@
 Index: wxpropgrid/find_lib
 ===================================================================
---- wxpropgrid/find_lib	(revision 37811)
+--- wxpropgrid/find_lib	(revision 37882)
 +++ wxpropgrid/find_lib	(working copy)
 @@ -12,11 +12,12 @@
  lib_suffix = "so"
@@ -23,7 +23,7 @@ Index: wxpropgrid/find_lib
 +  print lib
 Index: wxpropgrid/Makefile
 ===================================================================
---- wxpropgrid/Makefile	(revision 37811)
+--- wxpropgrid/Makefile	(revision 37882)
 +++ wxpropgrid/Makefile	(working copy)
 @@ -13,9 +13,9 @@
  
@@ -65,7 +65,7 @@ Index: rviz/src/rviz/render_panel.h
    // wx Callbacks
 Index: rviz/src/rviz/ros_topic_property.h
 ===================================================================
---- rviz/src/rviz/ros_topic_property.h	(revision 37849)
+--- rviz/src/rviz/ros_topic_property.h	(revision 37882)
 +++ rviz/src/rviz/ros_topic_property.h	(working copy)
 @@ -32,7 +32,7 @@
  
@@ -78,7 +78,7 @@ Index: rviz/src/rviz/ros_topic_property.h
  
 Index: rviz/src/rviz/selection_panel.cpp
 ===================================================================
---- rviz/src/rviz/selection_panel.cpp	(revision 37849)
+--- rviz/src/rviz/selection_panel.cpp	(revision 37882)
 +++ rviz/src/rviz/selection_panel.cpp	(working copy)
 @@ -55,7 +55,7 @@
  
@@ -100,7 +100,7 @@ Index: rviz/src/rviz/selection_panel.cpp
  }
 Index: rviz/src/rviz/ros_topic_property.cpp
 ===================================================================
---- rviz/src/rviz/ros_topic_property.cpp	(revision 37849)
+--- rviz/src/rviz/ros_topic_property.cpp	(revision 37882)
 +++ rviz/src/rviz/ros_topic_property.cpp	(working copy)
 @@ -76,24 +76,24 @@
  {
@@ -141,7 +141,7 @@ Index: rviz/src/rviz/ros_topic_property.cpp
  
 Index: rviz/src/rviz/splash_screen.cpp
 ===================================================================
---- rviz/src/rviz/splash_screen.cpp	(revision 37849)
+--- rviz/src/rviz/splash_screen.cpp	(revision 37882)
 +++ rviz/src/rviz/splash_screen.cpp	(working copy)
 @@ -60,7 +60,7 @@
    state_ = state;
@@ -154,7 +154,7 @@ Index: rviz/src/rviz/splash_screen.cpp
  void SplashScreen::onPaint(wxPaintEvent& evt)
 Index: rviz/src/rviz/tf_frame_property.h
 ===================================================================
---- rviz/src/rviz/tf_frame_property.h	(revision 37849)
+--- rviz/src/rviz/tf_frame_property.h	(revision 37882)
 +++ rviz/src/rviz/tf_frame_property.h	(working copy)
 @@ -32,7 +32,7 @@
  
@@ -208,7 +208,7 @@ Index: rviz/src/rviz/tf_frame_property.cpp
    return wxPGComboBoxEditor::CreateControls(propgrid, property, pos, size);
 Index: rviz/src/rviz/CMakeLists.txt
 ===================================================================
---- rviz/src/rviz/CMakeLists.txt	(revision 37849)
+--- rviz/src/rviz/CMakeLists.txt	(revision 37882)
 +++ rviz/src/rviz/CMakeLists.txt	(working copy)
 @@ -97,6 +97,10 @@
  target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${OGRE_LIBRARIES})
@@ -223,7 +223,7 @@ Index: rviz/src/rviz/CMakeLists.txt
  
 Index: rviz/src/rviz/render_panel.cpp
 ===================================================================
---- rviz/src/rviz/render_panel.cpp	(revision 37849)
+--- rviz/src/rviz/render_panel.cpp	(revision 37882)
 +++ rviz/src/rviz/render_panel.cpp	(working copy)
 @@ -180,4 +180,8 @@
    }
@@ -236,7 +236,7 @@ Index: rviz/src/rviz/render_panel.cpp
  } // namespace rviz
 Index: rviz/src/rviz/displays_panel.cpp
 ===================================================================
---- rviz/src/rviz/displays_panel.cpp	(revision 37849)
+--- rviz/src/rviz/displays_panel.cpp	(revision 37882)
 +++ rviz/src/rviz/displays_panel.cpp	(working copy)
 @@ -202,7 +202,7 @@
    property_grid_->Connect( wxEVT_PG_HIGHLIGHTED, wxPropertyGridEventHandler( DisplaysPanel::onPropertyHighlighted ), NULL, this );
@@ -277,7 +277,7 @@ Index: rviz/src/rviz/displays_panel.cpp
    {
 Index: rviz/src/rviz/tool_properties_panel.cpp
 ===================================================================
---- rviz/src/rviz/tool_properties_panel.cpp	(revision 37849)
+--- rviz/src/rviz/tool_properties_panel.cpp	(revision 37882)
 +++ rviz/src/rviz/tool_properties_panel.cpp	(working copy)
 @@ -64,7 +64,7 @@
  
@@ -290,7 +290,7 @@ Index: rviz/src/rviz/tool_properties_panel.cpp
    property_grid_->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( ToolPropertiesPanel::onPropertyChanged ), NULL, this );
 Index: rviz/src/rviz/properties/edit_enum_property.h
 ===================================================================
---- rviz/src/rviz/properties/edit_enum_property.h	(revision 37849)
+--- rviz/src/rviz/properties/edit_enum_property.h	(revision 37882)
 +++ rviz/src/rviz/properties/edit_enum_property.h	(working copy)
 @@ -32,7 +32,7 @@
  
@@ -303,7 +303,7 @@ Index: rviz/src/rviz/properties/edit_enum_property.h
  #include <string>
 Index: rviz/src/rviz/properties/property.cpp
 ===================================================================
---- rviz/src/rviz/properties/property.cpp	(revision 37849)
+--- rviz/src/rviz/properties/property.cpp	(revision 37882)
 +++ rviz/src/rviz/properties/property.cpp	(working copy)
 @@ -70,15 +70,15 @@
      return;
@@ -426,7 +426,7 @@ Index: rviz/src/rviz/properties/property.cpp
  }
 Index: rviz/src/rviz/properties/edit_enum_property.cpp
 ===================================================================
---- rviz/src/rviz/properties/edit_enum_property.cpp	(revision 37849)
+--- rviz/src/rviz/properties/edit_enum_property.cpp	(revision 37882)
 +++ rviz/src/rviz/properties/edit_enum_property.cpp	(working copy)
 @@ -56,7 +56,7 @@
  {
@@ -448,7 +448,7 @@ Index: rviz/src/rviz/properties/edit_enum_property.cpp
  
 Index: rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp
 ===================================================================
---- rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp	(revision 37849)
+--- rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp	(revision 37882)
 +++ rviz/src/rviz/default_plugin/interactive_markers/interactive_marker.cpp	(working copy)
 @@ -458,7 +458,8 @@
  

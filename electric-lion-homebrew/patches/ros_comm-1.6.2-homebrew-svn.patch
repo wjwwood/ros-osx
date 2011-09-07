@@ -1,6 +1,6 @@
 Index: tools/rosconsole/CMakeLists.txt
 ===================================================================
---- tools/rosconsole/CMakeLists.txt	(revision 14808)
+--- tools/rosconsole/CMakeLists.txt	(revision 14926)
 +++ tools/rosconsole/CMakeLists.txt	(working copy)
 @@ -11,6 +11,10 @@
  
@@ -27,7 +27,7 @@ Index: stack.xml
  </stack>
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 14716)
+--- rosdep.yaml	(revision 14926)
 +++ rosdep.yaml	(working copy)
 @@ -6,6 +6,10 @@
    fedora: apr-devel apr-util

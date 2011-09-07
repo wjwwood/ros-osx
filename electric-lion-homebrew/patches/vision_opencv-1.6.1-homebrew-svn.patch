@@ -1,6 +1,6 @@
 Index: opencv2/manifest.xml
 ===================================================================
---- opencv2/manifest.xml	(revision 37849)
+--- opencv2/manifest.xml	(revision 37882)
 +++ opencv2/manifest.xml	(working copy)
 @@ -21,6 +21,8 @@
  <url>http://opencv.willowgarage.com</url>
@@ -13,7 +13,7 @@ Index: opencv2/manifest.xml
  
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37811)
+--- rosdep.yaml	(revision 37882)
 +++ rosdep.yaml	(working copy)
 @@ -2,18 +2,31 @@
    ubuntu: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev

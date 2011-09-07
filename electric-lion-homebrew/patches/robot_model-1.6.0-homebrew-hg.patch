@@ -1,6 +1,6 @@
 diff -r 72f4d9d33097 collada_parser/CMakeLists.txt
 --- a/collada_parser/CMakeLists.txt	Wed Aug 10 14:00:49 2011 -0700
-+++ b/collada_parser/CMakeLists.txt	Wed Aug 31 15:49:32 2011 -0500
++++ b/collada_parser/CMakeLists.txt	Tue Sep 06 21:55:38 2011 -0500
 @@ -24,6 +24,11 @@
  
  #common commands for building c++ executables and libraries
@@ -15,7 +15,7 @@ diff -r 72f4d9d33097 collada_parser/CMakeLists.txt
  #rosbuild_link_boost(${PROJECT_NAME} thread)
 diff -r 72f4d9d33097 colladadom/Makefile
 --- a/colladadom/Makefile	Wed Aug 10 14:00:49 2011 -0700
-+++ b/colladadom/Makefile	Wed Aug 31 15:49:32 2011 -0500
++++ b/colladadom/Makefile	Tue Sep 06 21:55:38 2011 -0500
 @@ -4,7 +4,7 @@
  SOURCE_DIR = build/colladadom
  INITIAL_DIR = build/collada-dom
@@ -27,7 +27,7 @@ diff -r 72f4d9d33097 colladadom/Makefile
  include $(shell rospack find mk)/download_unpack_build.mk
 diff -r 72f4d9d33097 colladadom/collada-dom.patch
 --- a/colladadom/collada-dom.patch	Wed Aug 10 14:00:49 2011 -0700
-+++ b/colladadom/collada-dom.patch	Wed Aug 31 15:49:32 2011 -0500
++++ b/colladadom/collada-dom.patch	Tue Sep 06 21:55:38 2011 -0500
 @@ -98,3 +98,19 @@
   		// SID resolution was successful.
   		return result;
@@ -50,7 +50,7 @@ diff -r 72f4d9d33097 colladadom/collada-dom.patch
 + 
 diff -r 72f4d9d33097 colladadom/mac-x86_64.patch
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/colladadom/mac-x86_64.patch	Wed Aug 31 15:49:32 2011 -0500
++++ b/colladadom/mac-x86_64.patch	Tue Sep 06 21:55:38 2011 -0500
 @@ -0,0 +1,92 @@
 +--- dom/external-libs/boost/build/filesystem/Makefile	2008-04-23 19:21:32.000000000 -0500
 ++++ dom/external-libs/boost/build/filesystem/Makefile	2011-08-19 17:10:32.000000000 -0500
@@ -146,7 +146,7 @@ diff -r 72f4d9d33097 colladadom/mac-x86_64.patch
 + libOpts :=
 diff -r 72f4d9d33097 rosdep.yaml
 --- a/rosdep.yaml	Wed Aug 10 14:00:49 2011 -0700
-+++ b/rosdep.yaml	Wed Aug 31 15:49:32 2011 -0500
++++ b/rosdep.yaml	Tue Sep 06 21:55:38 2011 -0500
 @@ -2,3 +2,7 @@
    ubuntu: libpcre3-dev
    fedora: pcre-devel
@@ -157,7 +157,7 @@ diff -r 72f4d9d33097 rosdep.yaml
 +        packages: |
 diff -r 72f4d9d33097 urdf/CMakeLists.txt
 --- a/urdf/CMakeLists.txt	Wed Aug 10 14:00:49 2011 -0700
-+++ b/urdf/CMakeLists.txt	Wed Aug 31 15:49:32 2011 -0500
++++ b/urdf/CMakeLists.txt	Tue Sep 06 21:55:38 2011 -0500
 @@ -23,6 +23,10 @@
  
  rosbuild_add_library(${PROJECT_NAME} src/model.cpp)

@@ -1,6 +1,6 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 14716)
+--- rosdep.yaml	(revision 14926)
 +++ rosdep.yaml	(working copy)
 @@ -5,6 +5,10 @@
    arch: doxygen
@@ -13,7 +13,7 @@ Index: rosdep.yaml
    gentoo: app-doc/doxygen
    freebsd: doxygen
  epydoc:
-@@ -12,9 +16,17 @@
+@@ -12,10 +16,18 @@
    debian: python-epydoc
    fedora: epydoc
    macports: py26-epydoc

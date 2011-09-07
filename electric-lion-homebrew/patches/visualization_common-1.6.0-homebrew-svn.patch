@@ -7,7 +7,7 @@ Index: ogre/ogre_src_v1-7-3.tar.bz2.md5sum
 \ No newline at end of file
 Index: ogre/Makefile
 ===================================================================
---- ogre/Makefile	(revision 37849)
+--- ogre/Makefile	(revision 37882)
 +++ ogre/Makefile	(working copy)
 @@ -1,13 +1,10 @@
  all: ogre
