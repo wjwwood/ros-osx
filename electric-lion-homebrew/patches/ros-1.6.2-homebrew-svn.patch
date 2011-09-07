@@ -537,7 +537,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      homebrew:
-+        packages: |
++        depends: [ wxpython ]
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
