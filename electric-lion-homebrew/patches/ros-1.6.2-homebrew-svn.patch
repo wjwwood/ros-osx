@@ -649,7 +649,7 @@ Index: rosdep.yaml
 +  osx:
 +    lion:
 +      pip:
-+        packages: [ Mercurial ]
++        packages: [ mercurial ]
    gentoo: dev-vcs/mercurial
    freebsd: mercurial
  gtest:
