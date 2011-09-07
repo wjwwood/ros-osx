@@ -43,7 +43,7 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ jasper ]
-+        options: [ --universal ]
++        args: [ --universal ]
    arch: jasper
    gentoo: jasper
  opencv2.3:

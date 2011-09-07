@@ -48,7 +48,7 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ log4cxx ]
-+        options: [ --universal ]
++        args: [ --universal ]
    gentoo: dev-libs/log4cxx
    cygwin: liblog4cxx-devel
    freebsd: log4cxx

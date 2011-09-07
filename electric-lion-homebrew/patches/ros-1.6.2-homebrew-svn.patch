@@ -530,17 +530,18 @@ Index: rosdep.yaml
    gentoo: media-gfx/graphviz
    freebsd: graphviz
  wxwidgets:
-@@ -136,6 +199,9 @@
+@@ -136,6 +199,10 @@
    fedora: wxGTK-devel
    rhel: wxGTK-devel
    macports: wxWidgets-python
 +  osx:
 +    lion:
-+      source: |
++      homebrew:
++        packages: |
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
-@@ -148,6 +214,11 @@
+@@ -148,6 +215,11 @@
    centos: wxPython-devel
    debian: python-wxgtk2.8
    macports: py26-wxpython py26-gobject py26-gtk py26-cairo
