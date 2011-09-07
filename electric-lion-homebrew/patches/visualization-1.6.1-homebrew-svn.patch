@@ -165,9 +165,26 @@ Index: rviz/src/rviz/tf_frame_property.h
  #include <wx/propgrid/editors.h>
  
  #include <string>
+Index: rviz/src/rviz/visualization_frame.cpp
+===================================================================
+--- rviz/src/rviz/visualization_frame.cpp	(revision 37882)
++++ rviz/src/rviz/visualization_frame.cpp	(working copy)
+@@ -167,9 +167,9 @@
+     final_splash_path = (fs::path(package_path_) / "images/splash.png").file_string();
+ #endif
+   }
+-  wxBitmap splash;
+-  splash.LoadFile(wxString::FromAscii(final_splash_path.c_str()));
+-  splash_ = new SplashScreen(this, splash);
++  wxImage splash_image;
++  splash_image.LoadFile(wxString::FromAscii(final_splash_path.c_str()));
++  splash_ = new SplashScreen(this, wxBitmap(splash_image));
+   splash_->Show();
+   splash_->setState("Initializing");
+ 
 Index: rviz/src/rviz/tf_frame_property.cpp
 ===================================================================
---- rviz/src/rviz/tf_frame_property.cpp	(revision 37849)
+--- rviz/src/rviz/tf_frame_property.cpp	(revision 37882)
 +++ rviz/src/rviz/tf_frame_property.cpp	(working copy)
 @@ -48,8 +48,8 @@
  
