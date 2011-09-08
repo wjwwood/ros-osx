@@ -56,6 +56,52 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ cmake ]
+Index: pcl/osx_interactor_workaround.patch
+===================================================================
+--- pcl/osx_interactor_workaround.patch	(revision 0)
++++ pcl/osx_interactor_workaround.patch	(revision 0)
+@@ -0,0 +1,29 @@
++--- visualization/src/interactor.cpp	2011-07-14 17:58:55.000000000 -0500
+++++ visualization/src/interactor.cpp	2011-09-05 23:38:09.000000000 -0500
++@@ -55,12 +55,16 @@
++     void 
++     PCLVisualizerInteractor::stopLoop ()
++     {
++-#if defined _WIN32 || defined VTK_USE_CARBON || defined VTK_USE_CARBON
+++#if defined _WIN32 
++       BreakLoopFlagOn ();
++       // Send a VTK_BreakWin32Loop ClientMessage event to be sure we pop out of the
++       // event loop.  This "wakes up" the event loop.  Otherwise, it might sit idle
++       // waiting for an event before realizing an exit was requested.
+++#if defined _WIN32
++       SendMessage (this->WindowId, RegisterWindowMessage (TEXT ("VTK_BreakWin32Loop")), 0, 0);
+++#endif
+++#elif defined VTK_USE_COCOA || defined VTK_USE_CARBON
+++// Do nothing
++ #else
++       BreakLoopFlagOn ();
++       XClientMessageEvent client;
++@@ -75,7 +79,7 @@
++ #endif
++     }
++ 
++-#if defined _WIN32 || defined VTK_USE_CARBON || defined VTK_USE_CARBON
+++#if defined _WIN32 || defined VTK_USE_COCOA || defined VTK_USE_CARBON
++     //////////////////////////////////////////////////////////////////////////
++     void 
++     PCLVisualizerInteractor::Start ()
+Index: pcl/Makefile
+===================================================================
+--- pcl/Makefile	(revision 135)
++++ pcl/Makefile	(working copy)
+@@ -4,6 +4,7 @@
+ TARBALL_URL = https://code.ros.org/svn/release/download/thirdparty/pcl/pcl-1.1.0.tar.gz
+ SOURCE_DIR = build/pcl
+ UNPACK_CMD = tar xzf
++TARBALL_PATCH = osx_interactor_workaround.patch
+ include $(shell rospack find mk)/download_unpack_build.mk
+ 
+ #SVN_DIR = build/pcl_trunk
 Index: pcl/Makefile
 ===================================================================
 --- pcl/Makefile	(revision 135)
