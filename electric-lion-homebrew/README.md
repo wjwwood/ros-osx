@@ -129,7 +129,6 @@ The following stacks are known to build:
 * diagnostics
 * diagnostics_monitors
 * driver_common
-    * dynamic_reconfigure has been tested and works (after patch)
 * eigen
 * executive_smach
 * executive\_smach_visualization
