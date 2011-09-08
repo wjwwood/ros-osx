@@ -13,7 +13,7 @@ Index: opencv2/manifest.xml
  
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37882)
+--- rosdep.yaml	(revision 37890)
 +++ rosdep.yaml	(working copy)
 @@ -2,18 +2,31 @@
    ubuntu: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
@@ -47,7 +47,7 @@ Index: rosdep.yaml
    arch: jasper
    gentoo: jasper
  opencv2.3:
-@@ -28,4 +41,8 @@
+@@ -28,4 +41,9 @@
      natty:
        apt:
          packages: [libopencv2.3-dev=2.3.1+svn6514+branch23-1~natty]
@@ -55,4 +55,5 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ opencv ]
- 
++        formula_uri: https://github.com/wjwwood/homebrew/raw/opencv-2.3.1/Library/Formula/opencv.rb
+
