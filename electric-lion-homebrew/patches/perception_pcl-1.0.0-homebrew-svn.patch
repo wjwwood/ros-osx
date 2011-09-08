@@ -86,7 +86,7 @@ Index: pcl/osx_interactor_workaround.patch
 +     }
 + 
 +-#if defined _WIN32 || defined VTK_USE_CARBON || defined VTK_USE_CARBON
-++#if defined _WIN32 || defined VTK_USE_COCOA || defined VTK_USE_CARBON
+++#if defined _WIN32
 +     //////////////////////////////////////////////////////////////////////////
 +     void 
 +     PCLVisualizerInteractor::Start ()
