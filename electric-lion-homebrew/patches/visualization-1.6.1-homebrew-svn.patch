@@ -1,3 +1,5 @@
+Index: wxpropgrid/ROS_NOBUILD
+===================================================================
 Index: wxpropgrid/find_lib
 ===================================================================
 --- wxpropgrid/find_lib	(revision 37882)
@@ -21,23 +23,6 @@ Index: wxpropgrid/find_lib
 -
 -print lib
 +  print lib
-Index: wxpropgrid/Makefile
-===================================================================
---- wxpropgrid/Makefile	(revision 37882)
-+++ wxpropgrid/Makefile	(working copy)
-@@ -13,9 +13,9 @@
- 
- installed: $(SOURCE_DIR)/unpacked
- 	cd $(SOURCE_DIR) && \
--		export CFLAGS='-g -D__NOTWXPYTHON__ -g' && \
--		export CXXFLAGS='-g -D__NOTWXPYTHON__ -g' && \
--		./configure --prefix=$(WXPROPGRID_ROOT)/propgrid_install && \
-+		export CFLAGS='-g -D__NOTWXPYTHON__ -g -arch i386 -arch x86_64' && \
-+		export CXXFLAGS='-g -D__NOTWXPYTHON__ -g -arch i386 -arch x86_64' && \
-+		./configure --prefix=$(WXPROPGRID_ROOT)/propgrid_install --disable-dependency-tracking && \
- 		make && \
- 		make install
- 	touch installed
 Index: rviz/scripts/frame_test.py
 ===================================================================
 --- rviz/scripts/frame_test.py	(revision 37882)
