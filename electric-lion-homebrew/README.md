@@ -52,7 +52,7 @@ Install pip
 
 Install Mercurial
 
-    pip install Mercurial
+    pip install mercurial
 
 Install libyaml
 
