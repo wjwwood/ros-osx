@@ -526,7 +526,7 @@ Index: rosdep.yaml
 +    lion:
 +      homebrew:
 +        packages: [ graphviz ]
-+        options: [ --with-pdf ]
++        options: [  ]
    gentoo: media-gfx/graphviz
    freebsd: graphviz
  wxwidgets:
