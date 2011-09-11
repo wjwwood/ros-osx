@@ -149,6 +149,8 @@ The following stacks are known to build:
 * ros_comm
 * ros_tutorials
 * vision_opencv
+* visualization
+* visualization_common
 * xacro
 
 The following are known not to build, and why:
