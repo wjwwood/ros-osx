@@ -1,13 +1,125 @@
-Index: rosdep.yaml
+Index: src/stageros.cpp
 ===================================================================
---- rosdep.yaml	(revision 37882)
-+++ rosdep.yaml	(working copy)
-@@ -3,4 +3,8 @@
-   debian: libjpeg62-dev
-   fedora: libjpeg-devel
-   macports: jpeg
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
-   arch: libjpeg
+--- src/stageros.cpp	(revision 37954)
++++ src/stageros.cpp	(working copy)
+@@ -71,7 +71,7 @@
+     boost::mutex msg_lock;
+ 
+     // The models that we're interested in
+-    std::vector<Stg::ModelLaser *> lasermodels;
++    std::vector<Stg::ModelRanger *> lasermodels;
+     std::vector<Stg::ModelPosition *> positionmodels;
+     std::vector<ros::Publisher> laser_pubs_;
+     std::vector<ros::Publisher> odom_pubs_;
+@@ -146,8 +146,8 @@
+ void
+ StageNode::ghfunc(Stg::Model* mod, StageNode* node)
+ {
+-  if (dynamic_cast<Stg::ModelLaser *>(mod))
+-    node->lasermodels.push_back(dynamic_cast<Stg::ModelLaser *>(mod));
++  if (dynamic_cast<Stg::ModelRanger *>(mod))
++    node->lasermodels.push_back(dynamic_cast<Stg::ModelRanger *>(mod));
+   if (dynamic_cast<Stg::ModelPosition *>(mod))
+     node->positionmodels.push_back(dynamic_cast<Stg::ModelPosition *>(mod));
+ }
+@@ -192,18 +192,18 @@
+ 
+   // Apparently an Update is needed before the Load to avoid crashes on
+   // startup on some systems.
+-  this->UpdateWorld();
++  // this->UpdateWorld();
+   this->world->Load(fname);
+ 
+   // We add our callback here, after the Update, so avoid our callback
+   // being invoked before we're ready.
+-  this->world->AddUpdateCallback((Stg::stg_world_callback_t)s_update, this);
++  this->world->AddUpdateCallback((Stg::world_callback_t)s_update, this);
+ 
+-  this->world->ForEachDescendant((Stg::stg_model_callback_t)ghfunc, this);
++  this->world->ForEachDescendant((Stg::model_callback_t)ghfunc, this);
+   if (lasermodels.size() != positionmodels.size())
+   {
+     ROS_FATAL("number of position models and laser models must be equal in "
+-              "the world file.");
++              "the world file.  There were %lu position models and %lu laser models.", lasermodels.size(), positionmodels.size());
+     ROS_BREAK();
+   }
+   size_t numRobots = positionmodels.size();
+@@ -294,22 +294,22 @@
+   // Get latest laser data
+   for (size_t r = 0; r < this->lasermodels.size(); r++)
+   {
+-    std::vector<Stg::ModelLaser::Sample> samples = this->lasermodels[r]->GetSamples();
++    const std::vector<Stg::ModelRanger::Sensor>& samples = this->lasermodels[r]->GetSensors();
++    Stg::ModelRanger::Sensor sample(samples[0]);
+     if(samples.size())
+     {
+       // Translate into ROS message format and publish
+-      Stg::ModelLaser::Config cfg = this->lasermodels[r]->GetConfig();
+-      this->laserMsgs[r].angle_min = -cfg.fov/2.0;
+-      this->laserMsgs[r].angle_max = +cfg.fov/2.0;
+-      this->laserMsgs[r].angle_increment = cfg.fov/(double)(cfg.sample_count-1);
++      this->laserMsgs[r].angle_min = -sample.fov/2.0;
++      this->laserMsgs[r].angle_max = +sample.fov/2.0;
++      this->laserMsgs[r].angle_increment = sample.fov/(double)(sample.sample_count-1);
+       this->laserMsgs[r].range_min = 0.0;
+-      this->laserMsgs[r].range_max = cfg.range_bounds.max;
+-      this->laserMsgs[r].ranges.resize(cfg.sample_count);
+-      this->laserMsgs[r].intensities.resize(cfg.sample_count);
+-      for(unsigned int i=0;i<cfg.sample_count;i++)
++      this->laserMsgs[r].range_max = sample.range.max;
++      this->laserMsgs[r].ranges.resize(sample.sample_count);
++      this->laserMsgs[r].intensities.resize(sample.sample_count);
++      for(unsigned int i=0;i<sample.sample_count;i++)
+       {
+-        this->laserMsgs[r].ranges[i] = samples[i].range;
+-        this->laserMsgs[r].intensities[i] = (uint8_t)samples[i].reflectance;
++        this->laserMsgs[r].ranges[i] = sample.ranges[i];
++        this->laserMsgs[r].intensities[i] = (uint8_t)sample.intensities[i];
+       }
+ 
+       this->laserMsgs[r].header.frame_id = mapName("base_laser_link", r);
+Index: world/willow-erratic.world
+===================================================================
+--- world/willow-erratic.world	(revision 37954)
++++ world/willow-erratic.world	(working copy)
+@@ -4,12 +4,14 @@
+   gui_nose 0
+ )
+ 
+-define topurg laser
++define topurg ranger
+ (
++	sensor( 			
++    range [ 0.0  30.0 ]
++    fov 270.25
++   samples 1081
++  )
+ 
+-  range_max 30.0
+-  fov 270.25
+-  samples 1081
+   # generic model properties
+   color "black"
+   size [ 0.05 0.05 0.1 ]
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 37954)
++++ CMakeLists.txt	(working copy)
+@@ -7,11 +7,11 @@
+ rosbuild_add_boost_directories()
+ 
+ # Build Stage
+-execute_process(COMMAND cmake -E chdir ${PROJECT_SOURCE_DIR} make -f Makefile.stage
+-                RESULT_VARIABLE _make_failed)
+-if(_make_failed)
+-  message(FATAL_ERROR "Build of Stage failed")
+-endif(_make_failed)
++# execute_process(COMMAND cmake -E chdir ${PROJECT_SOURCE_DIR} make -f Makefile.stage
++#                 RESULT_VARIABLE _make_failed)
++# if(_make_failed)
++#   message(FATAL_ERROR "Build of Stage failed")
++# endif(_make_failed)
+ 
+ # Find the build flags for Stage
+ set(ENV{PKG_CONFIG_PATH} "${PROJECT_SOURCE_DIR}/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}")
