@@ -371,7 +371,7 @@ Index: tools/rosdep/src/rosdep/installers.py
 +        (std_out, std_err) = pop.communicate()
 +        pkg_list = std_out.split()
 +        for pkg in pkg_list:
-+            if pkg in pkg:
++            if pkg in pkgs:
 +                ret_list.append(pkg)
 +        return ret_list
 +    
