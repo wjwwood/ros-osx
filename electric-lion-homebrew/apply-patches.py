@@ -39,7 +39,9 @@ for item in copy(patches):
 def generate_stack_version(name):
     """docstring for generate_stack_version"""
     import subprocess
-    temp = subprocess.check_output([os.path.join(path_to_ros, "ros/bin/rosversion"), name]).strip()
+    # This first method doesn't work on Python 2.6
+    #temp = subprocess.check_output([os.path.join(path_to_ros, "ros/bin/rosversion"), name]).strip()
+    temp = subprocess.Popen([os.path.join(path_to_ros, "ros/bin/rosversion"), name], stdout=subprocess.PIPE).communicate()[0]
     return temp
 
 def svn_apply_patch(patch):
