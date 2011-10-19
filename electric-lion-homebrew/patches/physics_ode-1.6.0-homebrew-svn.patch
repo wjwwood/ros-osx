@@ -1,12 +1,11 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37882)
+--- rosdep.yaml	(revision 38006)
 +++ rosdep.yaml	(working copy)
-@@ -3,3 +3,7 @@
+@@ -3,3 +3,6 @@
    debian: libx11-dev
    fedora: libX11-devel
    macports: xorg-libX11
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |

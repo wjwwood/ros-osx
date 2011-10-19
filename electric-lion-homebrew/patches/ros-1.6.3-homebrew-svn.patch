@@ -1,6 +1,6 @@
 Index: tools/rospack/CMakeLists.txt
 ===================================================================
---- tools/rospack/CMakeLists.txt	(revision 14926)
+--- tools/rospack/CMakeLists.txt	(revision 15206)
 +++ tools/rospack/CMakeLists.txt	(working copy)
 @@ -7,6 +7,8 @@
  cmake_minimum_required(VERSION 2.4.6)
@@ -13,7 +13,7 @@ Index: tools/rospack/CMakeLists.txt
  #set(CMAKE_SKIP_BUILD_RPATH true)
 Index: tools/rosdep/src/rosdep/core.py
 ===================================================================
---- tools/rosdep/src/rosdep/core.py	(revision 14926)
+--- tools/rosdep/src/rosdep/core.py	(revision 15206)
 +++ tools/rosdep/src/rosdep/core.py	(working copy)
 @@ -107,7 +107,7 @@
          """ Get the rosdeps for the active os"""
@@ -79,7 +79,7 @@ Index: tools/rosdep/src/rosdep/core.py
  
 Index: tools/rosdep/src/rosdep/osx.py
 ===================================================================
---- tools/rosdep/src/rosdep/osx.py	(revision 14926)
+--- tools/rosdep/src/rosdep/osx.py	(revision 15206)
 +++ tools/rosdep/src/rosdep/osx.py	(working copy)
 @@ -48,14 +48,16 @@
          self.installers['pip'] = rosdep.installers.PipInstaller
@@ -103,7 +103,7 @@ Index: tools/rosdep/src/rosdep/osx.py
  ###### END Osx SPECIALIZATION ########################
 Index: tools/rosdep/src/rosdep/installers.py
 ===================================================================
---- tools/rosdep/src/rosdep/installers.py	(revision 14926)
+--- tools/rosdep/src/rosdep/installers.py	(revision 15206)
 +++ tools/rosdep/src/rosdep/installers.py	(working copy)
 @@ -28,6 +28,8 @@
  
@@ -222,7 +222,7 @@ Index: tools/rosdep/src/rosdep/installers.py
          return False
  
  
-@@ -293,6 +302,7 @@
+@@ -350,6 +359,7 @@
              packages = packages.split()
  
          self.depends = arg_dict.get("depends", [])
@@ -230,7 +230,7 @@ Index: tools/rosdep/src/rosdep/installers.py
          self.packages = packages
  
      def get_packages_to_install(self):
-@@ -310,15 +320,15 @@
+@@ -367,15 +377,15 @@
          script = '!#/bin/bash\n#no script'
          if not packages_to_install:
              script =  "#!/bin/bash\n#No PIP Packages to install"
@@ -251,7 +251,7 @@ Index: tools/rosdep/src/rosdep/installers.py
          return False
  
      def pip_detect(self, pkgs):
-@@ -332,10 +342,11 @@
+@@ -389,10 +399,11 @@
          pkg_list = std_out.split('\n')
          for pkg in pkg_list:
              pkg_row = pkg.split("==")
@@ -264,7 +264,7 @@ Index: tools/rosdep/src/rosdep/installers.py
  
  class MacportsInstaller(InstallerAPI):
      """ 
-@@ -345,28 +356,35 @@
+@@ -402,28 +413,35 @@
          packages = arg_dict.get("packages", "")
          if type(packages) == type("string"):
              packages = packages.split()
@@ -309,12 +309,10 @@ Index: tools/rosdep/src/rosdep/installers.py
      def port_detect(self, pkgs):
          """ 
          Given a list of package, return the list of installed packages.
-@@ -382,3 +400,65 @@
-             if len(pkg_row) == 3 and pkg_row[0] in pkgs and pkg_row[2] =='(active)':
+@@ -440,6 +458,67 @@
                  ret_list.append( pkg_row[0])
          return ret_list
-+    
-+
+ 
 +class HomebrewInstaller(InstallerAPI):
 +    """An implementation of the InstallerAPI for use on homebrew systems."""
 +    def __init__(self, arg_dict):
@@ -375,9 +373,13 @@ Index: tools/rosdep/src/rosdep/installers.py
 +                ret_list.append(pkg)
 +        return ret_list
 +    
++
+ class GentooPortageInstaller(InstallerAPI):
+     """
+     An implementation of the InstallerAPI for portage-based Gentoo systems
 Index: core/rosbuild/rosbuild.cmake
 ===================================================================
---- core/rosbuild/rosbuild.cmake	(revision 14926)
+--- core/rosbuild/rosbuild.cmake	(revision 15206)
 +++ core/rosbuild/rosbuild.cmake	(working copy)
 @@ -15,6 +15,8 @@
    endif(POLICY CMP0011)
@@ -390,63 +392,60 @@ Index: core/rosbuild/rosbuild.cmake
  find_program(ROSPACK_EXE NAMES rospack DOC "rospack executable")
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 14926)
+--- rosdep.yaml	(revision 15206)
 +++ rosdep.yaml	(working copy)
-@@ -3,8 +3,8 @@
+@@ -1,10 +1,10 @@
+ tinyxml:
+   ubuntu: libtinyxml-dev
    debian: libtinyxml-dev
-   osx:
+-  osx:
++  osxbrew:
      source:
 -      uri: 'http://kforge.ros.org/rosrelease/viewvc/sourcedeps/tinyxml/tinyxml-2.6.2-1.rdmanifest'
 -      md5sum: 13760e61e08c9004493c302a16966c42
 +      uri: 'http://mirror.ausparc.com/ros/sourcedeps/tinyxml-2.6.2.rdmanifest'
 +      md5sum: 9640cd2b928aca91e824356f787e54ec
+   fedora: tinyxml-devel
  python:
    ubuntu: python-dev
-   debian: python-dev
-@@ -13,9 +13,22 @@
+@@ -14,9 +14,19 @@
    fedora: python-devel
    rhel: python-devel
    macports: python26 python_select
-+  osx:
-+    lion:
-+      homebrew: 
-+        # packages: python
-+        packages: |
++  osxbrew:
++    homebrew: 
++      packages: |
    gentoo: python
    cygwin: python
    freebsd: python
 +yaml:
 +  ubuntu: libyaml-dev
 +  fedora: libyaml-devel
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ libyaml ]
-+        options: [ --universal ]
++  osxbrew:
++    homebrew:
++      packages: [ libyaml ]
++      options: [ --universal ]
  python-yaml:
    ubuntu: python-yaml
    debian: python-yaml
-@@ -25,6 +38,11 @@
+@@ -26,6 +36,10 @@
    centos: PyYAML
    arch: python-yaml
    macports: py26-yaml
-+  osx:
-+      lion:
-+          pip: 
-+              packages: [ PyYAML ]
-+              depends: [ yaml ]
++  osxbrew:
++    pip: 
++      packages: [ PyYAML ]
++      depends: [ yaml ]
    gentoo: pyyaml
    cygwin: |
        if [ ! -d /usr/lib/python2.5/site-packages/yaml/ ] ; then
-@@ -40,11 +58,32 @@
+@@ -41,11 +55,29 @@
    arch: pygtk
    debian: python-gtk2
    macports: py26-gtk
-+  osx:
-+    lion:
-+      pip:
-+        # packages: [ PyGTK ]
-+        packages: |
++  osxbrew:
++    pip:
++      packages: pygtk
 +  pip: pygtk
    opensuse: python-gtk
    fedora: pygtk2
@@ -461,241 +460,220 @@ Index: rosdep.yaml
 +  fedora: |
 +  rhel: |
 +  macports: |
-+  osx:
-+    lion:
-+      homebrew: 
-+        packages: [ gfortran ]
++  osxbrew:
++    homebrew: 
++      packages: [ gfortran ]
 +  gentoo: |
 +  cygwin: |
 +  freebsd: |
  python-scipy:
    ubuntu: python-scipy
    debian: python-scipy
-@@ -52,6 +91,13 @@
+@@ -53,6 +85,12 @@
    opensuse: python-scipy
    fedora: scipy
    macports: py26-scipy
-+  osx:
-+    lion:
-+      pip:
-+        packages: [ scipy ]
-+        alt_install_cmd: '-e git+https://github.com/scipy/scipy#egg=scipy-dev'
-+        depends: [ gfortran ]
++  osxbrew:
++    pip:
++      packages: [ scipy ]
++      alt_install_cmd: '-e git+https://github.com/scipy/scipy#egg=scipy-dev'
++      depends: [ gfortran ]
 +  pip: scipy
    gentoo: dev-libs/scipy
    freebsd: py-scipy
  bzip2:
-@@ -62,6 +108,10 @@
+@@ -63,6 +101,9 @@
    rhel: bzip2-devel
    arch: bzip2
    macports: bzip2
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: app-arch/bzip2
    cygwin: bzip2
    freebsd: bzip2
-@@ -105,6 +155,10 @@
+@@ -109,6 +150,9 @@
    rhel: boost-devel
    arch: boost
    macports: boost
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ boost ]
++  osxbrew:
++    homebrew:
++      packages: [ boost ]
    gentoo: dev-libs/boost
    cygwin: libboost-devel libboost1.40
    freebsd: boost-python-libs
-@@ -116,6 +170,10 @@
+@@ -120,6 +164,9 @@
    rhel: zlib-devel
    arch: zlib
    macports: zlib
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: sys-libs/zlib
    cygwin: zlib
    freebsd: builtin
-@@ -127,6 +185,11 @@
+@@ -131,6 +178,10 @@
    rhel: graphviz
    arch: graphviz
    macports: graphviz
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ graphviz ]
-+        options: [  ]
++  osxbrew:
++    homebrew:
++      packages: [ graphviz ]
++      options: [ --use-pdf ]
    gentoo: media-gfx/graphviz
    freebsd: graphviz
  wxwidgets:
-@@ -136,6 +199,10 @@
+@@ -140,6 +191,9 @@
    fedora: wxGTK-devel
    rhel: wxGTK-devel
    macports: wxWidgets-python
-+  osx:
-+    lion:
-+      homebrew:
-+        depends: [ wxpython ]
++  osxbrew:
++    homebrew:
++      depends: [ wxpython ]
    arch: wxgtk
    gentoo: x11-libs/wxGTK
    freebsd: wxgtk2
-@@ -148,6 +215,11 @@
+@@ -152,6 +206,10 @@
    centos: wxPython-devel
    debian: python-wxgtk2.8
    macports: py26-wxpython py26-gobject py26-gtk py26-cairo
-+  osx:
-+    lion:
-+      source:
-+        uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
-+        md5sum: 4fdb30e1abfb4a36a4c5d9efc48049c4
++  osxbrew:
++    source:
++      uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
++      md5sum: 4fdb30e1abfb4a36a4c5d9efc48049c4
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
-@@ -157,6 +229,10 @@
+@@ -161,6 +219,9 @@
    fedora: gtk2-devel
    rhel: gtk2-devel
    macports: gtk2
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ gtk+ ]
++  osxbrew:
++    homebrew:
++      packages: [ gtk+ ]
    arch: gtk2
    gentoo: x11-libs/gtk+
    freebsd: gtk20
-@@ -168,6 +244,10 @@
+@@ -172,6 +233,9 @@
    rhel: pkgconfig
    arch: pkg-config
    macports: pkgconfig
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ pkg-config ]
++  osxbrew:
++    homebrew:
++      packages: [ pkg-config ]
    gentoo: dev-util/pkgconfig
    cygwin: pkg-config
    freebsd: pkg-config
-@@ -178,6 +258,11 @@
+@@ -182,6 +246,10 @@
    opensuse: libqt4-devel 
    fedora: qt-devel
    macports: qt4-mac
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ qt ]
-+        options: [ --universal ]
++  osxbrew:
++    homebrew:
++      packages: [ qt ]
++      options: [ --universal ]
    gentoo: ">=x11-libs/qt-core-4"
    freebsd: qt4-corelib
  libstdc++5:
-@@ -199,6 +284,10 @@
+@@ -203,6 +271,9 @@
    fedora: unzip
    rhel: unzip
    macports: unzip
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: app-arch/unzip
    freebsd: unzip
  fltk:
-@@ -208,6 +297,10 @@
+@@ -212,6 +283,9 @@
    fedora: fltk-devel
    arch: fltk
    macports: fltk
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ fltk ]
++  osxbrew:
++    homebrew:
++      packages: [ fltk ]
    gentoo: "=x11-libs/fltk-1*"
    freebsd: fltk
  bazaar:
-@@ -216,6 +309,10 @@
+@@ -220,6 +294,9 @@
    opensuse: bzr 
    fedora: bazaar
    macports: bazaar
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ bazaar ]
++  osxbrew:
++    homebrew:
++      packages: [ bazaar ]
    gentoo: dev-vcs/bzr
    freebsd: bazaar
  git: 
-@@ -224,6 +321,10 @@
+@@ -228,6 +305,9 @@
    opensuse: git-core
    fedora: git
    macports: git-core
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ git ]
++  osxbrew:
++    homebrew:
++      packages: [ git ]
    gentoo: dev-vcs/git
    freebsd: git
  subversion:
-@@ -232,6 +333,10 @@
+@@ -236,6 +316,9 @@
    opensuse: subversion
    fedora: subversion
    macports: subversion
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ subversion ]
++  osxbrew:
++    homebrew:
++      packages: [ subversion ]
    gentoo: dev-vcs/subversion
    freebsd: subversion
  mercurial:
-@@ -240,6 +345,10 @@
+@@ -244,6 +327,9 @@
    opensuse: mercurial 
    fedora: mercurial
    macports: mercurial
-+  osx:
-+    lion:
-+      pip:
-+        packages: [ mercurial ]
++  osxbrew:
++    pip:
++      packages: [ mercurial ]
    gentoo: dev-vcs/mercurial
    freebsd: mercurial
  gtest:
-@@ -248,6 +357,12 @@
+@@ -252,6 +338,10 @@
    opensuse: gtest-devel 
    fedora: gtest-devel
    macports: google-test
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ gtest ]
-+        formula_uri: https://github.com/wjwwood/homebrew/raw/0d2300fd45e53995a76bec8b94b8effaa4b46585/Library/Formula/gtest.rb
-+        options: [ --universal ]
++  osxbrew:
++    homebrew:
++      packages: [ gtest ]
++      options: [ --universal ]
    gentoo: dev-util/gtest
    freebsd: googletest
  autoconf:
-@@ -258,6 +373,10 @@
+@@ -262,6 +352,9 @@
    rhel: autoconf
    arch: autoconf
    macports: autoconf
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: sys-devel/autoconf
    freebsd: autoconf213 autoconf268
  automake:
-@@ -268,6 +387,10 @@
+@@ -272,6 +365,9 @@
    rhel: automake
    arch: automake
    macports: automake
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: sys-devel/automake
    freebsd: automake14 automake111
  libtool:
-@@ -281,6 +404,10 @@
+@@ -285,6 +381,10 @@
    fedora: libtool libtool-ltdl-devel
    rhel: libtool libtool-ltdl-devel
    macports: libtool
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    arch: libtool
    gentoo: sys-devel/libtool
    freebsd: libtool
++

@@ -1,112 +1,69 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 135)
+--- rosdep.yaml	(revision 140)
 +++ rosdep.yaml	(working copy)
-@@ -3,28 +3,53 @@
+@@ -3,28 +3,48 @@
    debian: libtbb-dev
    fedora: tbb
    macports: tbb
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ tbb ]
++  osxbrew:
++    homebrew:
++      packages: [ tbb ]
  libvtk:
    ubuntu: libvtk5-dev
    debian: libvtk5-dev
    fedora: vtk-devel
    macports: vtk-devel
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ vtk ]
-+        args: [ --python ]
++  osxbrew:
++    homebrew:
++      packages: [ vtk ]
++      args: [ --python ]
  unzip:
    ubuntu: unzip
    debian: unzip
    fedora: unzip
    macports: unzip
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
  hdf5:
    ubuntu: libhdf5-serial-dev
    debian: libhdf5-serial-dev
    fedora: hdf5-devel
    macports: hdf5-18
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ hdf5 ]
++  osxbrew:
++    homebrew:
++      packages: [ hdf5 ]
  libqhull:
    ubuntu: libqhull-dev
    debian: libqhull-dev
    fedora: qhull-devel
    macports: qhull
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ qhull ]
++  osxbrew:
++    homebrew:
++      packages: [ qhull ]
  cmake:
    ubuntu: cmake
    debian: cmake
    fedora: cmake
    macports: cmake
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ cmake ]
-Index: pcl/osx_interactor_workaround.patch
-===================================================================
---- pcl/osx_interactor_workaround.patch	(revision 0)
-+++ pcl/osx_interactor_workaround.patch	(revision 0)
-@@ -0,0 +1,29 @@
-+--- visualization/src/interactor.cpp	2011-07-14 17:58:55.000000000 -0500
-++++ visualization/src/interactor.cpp	2011-09-05 23:38:09.000000000 -0500
-+@@ -55,12 +55,16 @@
-+     void 
-+     PCLVisualizerInteractor::stopLoop ()
-+     {
-+-#if defined _WIN32 || defined VTK_USE_CARBON || defined VTK_USE_CARBON
-++#if defined _WIN32 
-+       BreakLoopFlagOn ();
-+       // Send a VTK_BreakWin32Loop ClientMessage event to be sure we pop out of the
-+       // event loop.  This "wakes up" the event loop.  Otherwise, it might sit idle
-+       // waiting for an event before realizing an exit was requested.
-++#if defined _WIN32
-+       SendMessage (this->WindowId, RegisterWindowMessage (TEXT ("VTK_BreakWin32Loop")), 0, 0);
-++#endif
-++#elif defined VTK_USE_COCOA || defined VTK_USE_CARBON
-++// Do nothing
-+ #else
-+       BreakLoopFlagOn ();
-+       XClientMessageEvent client;
-+@@ -75,7 +79,7 @@
-+ #endif
-+     }
-+ 
-+-#if defined _WIN32 || defined VTK_USE_CARBON || defined VTK_USE_CARBON
-++#if defined _WIN32
-+     //////////////////////////////////////////////////////////////////////////
-+     void 
-+     PCLVisualizerInteractor::Start ()
++  osxbrew:
++    homebrew:
++      packages: [ cmake ]
++
 Index: pcl/Makefile
 ===================================================================
---- pcl/Makefile	(revision 135)
+--- pcl/Makefile	(revision 140)
 +++ pcl/Makefile	(working copy)
 @@ -4,6 +4,7 @@
- TARBALL_URL = https://code.ros.org/svn/release/download/thirdparty/pcl/pcl-1.1.0.tar.gz
+ TARBALL_URL = https://code.ros.org/svn/release/download/thirdparty/pcl/pcl-1.1.1.tar.gz
  SOURCE_DIR = build/pcl
  UNPACK_CMD = tar xzf
 +TARBALL_PATCH = osx_interactor_workaround.patch
  include $(shell rospack find mk)/download_unpack_build.mk
  
  #SVN_DIR = build/pcl_trunk
-Index: pcl/Makefile
-===================================================================
---- pcl/Makefile	(revision 135)
-+++ pcl/Makefile	(working copy)
-@@ -22,31 +22,32 @@
+@@ -22,31 +23,32 @@
  	export LD_LIBRARY_PATH=`rospack find std_msgs`/lib:`rospack find sensor_msgs`/lib:`rospack find roscpp_serialization`/lib:`rospack find cpp_common`/lib:`rospack find rostime`/lib:`rospack find roscpp_traits`/lib:`rospack find roscpp`/lib:`rospack find rosconsole`/lib:`rospack find std_msgs`/lib:`rospack find sensor_msgs`/lib:$$LD_LIBRARY_PATH && \
  	cmake -DCMAKE_INSTALL_PREFIX=`pwd`/../../.. \
  				-DCMAKE_BUILD_TYPE=Release \

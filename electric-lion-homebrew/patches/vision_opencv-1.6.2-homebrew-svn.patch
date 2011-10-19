@@ -1,6 +1,6 @@
 Index: opencv2/manifest.xml
 ===================================================================
---- opencv2/manifest.xml	(revision 37882)
+--- opencv2/manifest.xml	(revision 38006)
 +++ opencv2/manifest.xml	(working copy)
 @@ -21,6 +21,8 @@
  <url>http://opencv.willowgarage.com</url>
@@ -13,7 +13,7 @@ Index: opencv2/manifest.xml
  
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37890)
+--- rosdep.yaml	(revision 38006)
 +++ rosdep.yaml	(working copy)
 @@ -2,18 +2,31 @@
    ubuntu: libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
@@ -47,13 +47,11 @@ Index: rosdep.yaml
    arch: jasper
    gentoo: jasper
  opencv2.3:
-@@ -28,4 +41,9 @@
-     natty:
+@@ -31,3 +44,7 @@
+     oneiric:
        apt:
-         packages: [libopencv2.3-dev=2.3.1+svn6514+branch23-1~natty]
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ opencv ]
-+        formula_uri: https://github.com/wjwwood/homebrew/raw/opencv-2.3.1/Library/Formula/opencv.rb
-
+         packages: [libopencv2.3-dev=2.3.1+svn6514+branch23-2~oneiric]
++  osxbrew:
++    homebrew:
++      packages: [ opencv ]
++

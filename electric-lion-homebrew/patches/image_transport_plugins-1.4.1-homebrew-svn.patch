@@ -1,21 +1,19 @@
 Index: rosdep.yaml
 ===================================================================
---- rosdep.yaml	(revision 37882)
+--- rosdep.yaml	(revision 38006)
 +++ rosdep.yaml	(working copy)
-@@ -3,8 +3,16 @@
+@@ -3,8 +3,14 @@
    debian: libogg-dev
    fedora: libogg-devel
    macports: libogg
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ libogg ]
++  osxbrew:
++    homebrew:
++      packages: [ libogg ]
  libtheora:
    ubuntu: libtheora-dev
    debian: libtheora-dev
    fedora: libtheora-devel
    macports: libtheora
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ theora ]
++  osxbrew:
++    homebrew:
++      packages: [ theora ]

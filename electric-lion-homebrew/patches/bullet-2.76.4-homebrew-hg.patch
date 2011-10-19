@@ -1,0 +1,12 @@
+diff -r 8694fa7710a9 rosdep.yaml
+--- a/rosdep.yaml	Mon Oct 17 21:02:54 2011 -0700
++++ b/rosdep.yaml	Tue Oct 18 22:33:05 2011 -0500
+@@ -16,4 +16,7 @@
+   fedora: freeglut-devel
+   arch: freeglut
+   gentoo: freeglut
+-  osx: mesa
++  macports: mesa
++  osxbrew:
++    homebrew:
++        packages: |

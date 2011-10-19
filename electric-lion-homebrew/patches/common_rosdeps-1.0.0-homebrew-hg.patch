@@ -1,166 +1,165 @@
-diff -r 6d4935c374bf rosdep.yaml
---- a/rosdep.yaml	Wed Jul 27 18:19:09 2011 -0700
-+++ b/rosdep.yaml	Tue Sep 06 21:55:33 2011 -0500
-@@ -10,6 +10,10 @@
+diff -r 93fc4a9f7175 rosdep.yaml
+--- a/rosdep.yaml	Fri Oct 14 12:45:28 2011 -0700
++++ b/rosdep.yaml	Tue Oct 18 22:33:05 2011 -0500
+@@ -6,10 +6,10 @@
      source:
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp-2.0.86-1.rdmanifest'
        md5sum: d5137302d8f00241ee10e623b97f9d22
-+    lion:
-+      source:
-+        uri: 'http://mirror.ausparc.com/ros/sourcedeps/assimp-2.0.86.rdmanifest'
-+        md5sum: e010ee3ae3f301dd02dd879d013aba51
+-  osx:
++  osxbrew:
+     source:
+-      uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp-2.0.86-1.rdmanifest'
+-      md5sum: d5137302d8f00241ee10e623b97f9d22
++      uri: 'http://mirror.ausparc.com/ros/sourcedeps/assimp-2.0.86.rdmanifest'
++      md5sum: e010ee3ae3f301dd02dd879d013aba51
  eigen:
    ubuntu:
      lucid:
-@@ -29,6 +33,9 @@
-     source:
+@@ -29,10 +29,9 @@
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/eigen/eigen-3.0.1-1.rdmanifest'
        md5sum: 941db2fbb09d80c28426d335022fad95
-+    lion:
-+      homebrew:
-+        packages: [ eigen ]
+   gentoo: ">=dev-cpp/eigen-3" 
+-  osx:
+-    source:
+-      uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/eigen/eigen-3.0.1-1.rdmanifest'
+-      md5sum: 941db2fbb09d80c28426d335022fad95
++  osxbrew:
++    homebrew:
++      packages: [ eigen ]
  yaml-cpp:
    ubuntu: 
      apt: 
-@@ -38,6 +45,10 @@
+@@ -41,10 +40,10 @@
+     source:
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/yaml-cpp/yaml-cpp-0.2.5.rdmanifest'
        md5sum: f7fb81fd4a2fbd5022daa7686e816359
-   osx:
-+    lion:
-+      homebrew:
-+        packages: [ yaml-cpp ]
-+        depends: [ yaml ]
-     source:
-       uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/yaml-cpp/yaml-cpp-cmake-0.2.5.rdmanifest'
-       md5sum: 863fb3b7e5b5f1e22ff1365de6e66b34
-@@ -48,6 +59,10 @@
+-  osx:
+-    source:
+-      uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/yaml-cpp/yaml-cpp-cmake-0.2.5.rdmanifest'
+-      md5sum: 863fb3b7e5b5f1e22ff1365de6e66b34
++  osxbrew:
++    homebrew:
++      packages: [ yaml-cpp ]
++      depends: [ yaml ]
+ checkinstall:
+   ubuntu: 
+     apt: 
+@@ -52,6 +51,9 @@
    debian:
      apt: 
        packages: [checkinstall]
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
  curl:
    ubuntu: libcurl4-openssl-dev
    debian: libcurl4-openssl-dev
-@@ -55,6 +70,10 @@
+@@ -59,6 +61,9 @@
    fedora: libcurl-devel
    arch: curl
    macports: curl
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: net-misc/curl
    freebsd: curl
  libxml2:
-@@ -64,6 +83,10 @@
+@@ -68,6 +73,9 @@
    opensuse: libxml2-devel
    fedora: libxml2-devel
    macports: libxml2
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ libxml2 ]
++  osxbrew:
++    homebrew:
++      packages: [ libxml2 ]
    gentoo: dev-libs/libxml2
    freebsd: libxml2
-   fedora: libxml2
-@@ -75,6 +98,11 @@
+   fedora: libxml2-devel
+@@ -79,6 +87,10 @@
    rhel: cppunit-devel
    arch: cppunit
    macports: cppunit
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ cppunit ]
-+        args: [ --universal ]
++  osxbrew:
++    homebrew:
++      packages: [ cppunit ]
++      options: [ --universal ]
    gentoo: dev-util/cppunit
    freebsd: cppunit
  scons:
-@@ -84,6 +112,10 @@
+@@ -88,6 +100,9 @@
    opensuse: scons
    fedora: scons
    macports: scons
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: dev-util/scons
    freebsd: scons
  libxext:
-@@ -93,6 +125,10 @@
+@@ -97,6 +112,9 @@
    fedora: libXext-devel
    rhel: libXext-devel
    macports: xorg-libXext
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    arch: libxext
    gentoo: x11-libs/libXext
    freebsd: libXext
-@@ -103,6 +139,10 @@
+@@ -107,6 +125,9 @@
    fedora: zziplib-devel
    rhel: zziplib-devel
    macports: libzzip
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [ libzzip ]
++  osxbrew:
++    homebrew:
++      packages: [ libzzip ]
    arch: zziplib
    gentoo: dev-libs/zziplib
    freebsd: zziplib
-@@ -113,6 +153,10 @@
+@@ -117,6 +138,9 @@
    fedora: libXaw-devel
    rhel: libXaw-devel
    macports: xorg-libXaw
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    arch: libxaw
    gentoo: x11-libs/libXaw
    freebsd: libXaw
-@@ -123,6 +167,10 @@
+@@ -127,6 +151,9 @@
    fedora: mesa-libGL-devel mesa-libGLU-devel
    rhel: mesa-libGL-devel mesa-libGLU-devel
    macports: mesa
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    arch: mesa
    gentoo: media-libs/mesa
    freebsd: mesagl-mangled
-@@ -133,6 +181,10 @@
+@@ -137,6 +164,9 @@
    fedora: libXxf86vm-devel
    rhel: libXxf86vm-devel
    macports: xorg-libXxf86vm
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    arch: libxxf86vm
    gentoo: x11-libs/libXxf86vm
    freebsd: libXxf86vm
-@@ -142,11 +194,19 @@
+@@ -146,11 +176,17 @@
    fedora: atlas-devel
    arch: |
    macports: atlas
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: |
++  osxbrew:
++    homebrew:
++      packages: |
    gentoo: atlas
  python-sip4:
    ubuntu: python-sip4-dev sip4
    debian: python-sip4-dev sip4
    macports: py25-sip
-+  osx:
-+    lion:
-+      homebrew:
-+        packages: [sip]
++  osxbrew:
++    homebrew:
++      packages: [sip]
    gentoo: dev-python/sip
    arch: sip
  festival:

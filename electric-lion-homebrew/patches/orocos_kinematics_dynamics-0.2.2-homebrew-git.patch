@@ -1,0 +1,26 @@
+diff --git a/orocos_kdl/Makefile b/orocos_kdl/Makefile
+index 078e724..0ef3886 100644
+--- a/orocos_kdl/Makefile
++++ b/orocos_kdl/Makefile
+@@ -2,6 +2,7 @@ ifdef ROS_ROOT
+ INSTALL_PREFIX=${PWD}/install_dir
+ EXTRA_CMAKE_FLAGS=-DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+ 		-DBUILD_MODELS=ON \
++		-DCMAKE_OSX_ARCHITECTURES="i386;x86_64" \
+ 		-DCMAKE_BUILD_TYPE="Release"\
+ 		-DENABLE_TESTS=ON
+ 
+diff --git a/rosdep.yaml b/rosdep.yaml
+index 2258de0..cabe137 100644
+--- a/rosdep.yaml
++++ b/rosdep.yaml
+@@ -3,6 +3,9 @@ python-sip:
+   debian: python-sip4-dev sip4
+   fedora: sip-devel
+   macports: py26-sip
++  osxbrew:
++    homebrew:
++      packages: [ sip ]
+   gentoo: dev-python/sip
+   arch: sip
+   freebsd: py26-sip
