@@ -539,8 +539,8 @@ Index: rosdep.yaml
    macports: py26-wxpython py26-gobject py26-gtk py26-cairo
 +  osxbrew:
 +    source:
-+      uri: http://mirror.ausparc.com/ros/sourcedeps/wxPython.rdmanifest
-+      md5sum: 4fdb30e1abfb4a36a4c5d9efc48049c4
++      uri: https://kforge.ros.org/rosrelease/viewvc/sourcedeps/wxpython/wxPython2.9-osx-2.9.2.4-cocoa-py2.7.rdmanifest
++      md5sum: 64fe273ef0ea170c2bf3fbf7eb37e62e
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
