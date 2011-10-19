@@ -1,21 +1,21 @@
 diff -r 93fc4a9f7175 rosdep.yaml
 --- a/rosdep.yaml	Fri Oct 14 12:45:28 2011 -0700
-+++ b/rosdep.yaml	Tue Oct 18 22:33:05 2011 -0500
-@@ -6,10 +6,10 @@
++++ b/rosdep.yaml	Wed Oct 19 01:42:01 2011 -0500
+@@ -6,10 +6,9 @@
      source:
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp-2.0.86-1.rdmanifest'
        md5sum: d5137302d8f00241ee10e623b97f9d22
 -  osx:
-+  osxbrew:
-     source:
+-    source:
 -      uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/assimp/assimp-2.0.86-1.rdmanifest'
 -      md5sum: d5137302d8f00241ee10e623b97f9d22
-+      uri: 'http://mirror.ausparc.com/ros/sourcedeps/assimp-2.0.86.rdmanifest'
-+      md5sum: e010ee3ae3f301dd02dd879d013aba51
++  osxbrew:
++    homebrew:
++      packages: [ assimp ]
  eigen:
    ubuntu:
      lucid:
-@@ -29,10 +29,9 @@
+@@ -29,10 +28,9 @@
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/eigen/eigen-3.0.1-1.rdmanifest'
        md5sum: 941db2fbb09d80c28426d335022fad95
    gentoo: ">=dev-cpp/eigen-3" 
@@ -29,7 +29,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
  yaml-cpp:
    ubuntu: 
      apt: 
-@@ -41,10 +40,10 @@
+@@ -41,10 +39,10 @@
      source:
        uri: 'https://kforge.ros.org/rosrelease/viewvc/sourcedeps/yaml-cpp/yaml-cpp-0.2.5.rdmanifest'
        md5sum: f7fb81fd4a2fbd5022daa7686e816359
@@ -44,7 +44,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
  checkinstall:
    ubuntu: 
      apt: 
-@@ -52,6 +51,9 @@
+@@ -52,6 +50,9 @@
    debian:
      apt: 
        packages: [checkinstall]
@@ -54,7 +54,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
  curl:
    ubuntu: libcurl4-openssl-dev
    debian: libcurl4-openssl-dev
-@@ -59,6 +61,9 @@
+@@ -59,6 +60,9 @@
    fedora: libcurl-devel
    arch: curl
    macports: curl
@@ -64,17 +64,17 @@ diff -r 93fc4a9f7175 rosdep.yaml
    gentoo: net-misc/curl
    freebsd: curl
  libxml2:
-@@ -68,6 +73,9 @@
+@@ -68,6 +72,9 @@
    opensuse: libxml2-devel
    fedora: libxml2-devel
    macports: libxml2
 +  osxbrew:
 +    homebrew:
-+      packages: [ libxml2 ]
++      packages: |
    gentoo: dev-libs/libxml2
    freebsd: libxml2
    fedora: libxml2-devel
-@@ -79,6 +87,10 @@
+@@ -79,6 +86,10 @@
    rhel: cppunit-devel
    arch: cppunit
    macports: cppunit
@@ -85,7 +85,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    gentoo: dev-util/cppunit
    freebsd: cppunit
  scons:
-@@ -88,6 +100,9 @@
+@@ -88,6 +99,9 @@
    opensuse: scons
    fedora: scons
    macports: scons
@@ -95,7 +95,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    gentoo: dev-util/scons
    freebsd: scons
  libxext:
-@@ -97,6 +112,9 @@
+@@ -97,6 +111,9 @@
    fedora: libXext-devel
    rhel: libXext-devel
    macports: xorg-libXext
@@ -105,7 +105,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    arch: libxext
    gentoo: x11-libs/libXext
    freebsd: libXext
-@@ -107,6 +125,9 @@
+@@ -107,6 +124,9 @@
    fedora: zziplib-devel
    rhel: zziplib-devel
    macports: libzzip
@@ -115,7 +115,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    arch: zziplib
    gentoo: dev-libs/zziplib
    freebsd: zziplib
-@@ -117,6 +138,9 @@
+@@ -117,6 +137,9 @@
    fedora: libXaw-devel
    rhel: libXaw-devel
    macports: xorg-libXaw
@@ -125,7 +125,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    arch: libxaw
    gentoo: x11-libs/libXaw
    freebsd: libXaw
-@@ -127,6 +151,9 @@
+@@ -127,6 +150,9 @@
    fedora: mesa-libGL-devel mesa-libGLU-devel
    rhel: mesa-libGL-devel mesa-libGLU-devel
    macports: mesa
@@ -135,7 +135,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    arch: mesa
    gentoo: media-libs/mesa
    freebsd: mesagl-mangled
-@@ -137,6 +164,9 @@
+@@ -137,6 +163,9 @@
    fedora: libXxf86vm-devel
    rhel: libXxf86vm-devel
    macports: xorg-libXxf86vm
@@ -145,7 +145,7 @@ diff -r 93fc4a9f7175 rosdep.yaml
    arch: libxxf86vm
    gentoo: x11-libs/libXxf86vm
    freebsd: libXxf86vm
-@@ -146,11 +176,17 @@
+@@ -146,11 +175,17 @@
    fedora: atlas-devel
    arch: |
    macports: atlas
