@@ -12,7 +12,7 @@ class Tinyxml < Formula
 
   def install
     ENV.universal_binary
-    system "cmake . #{std_cmake_parameters} #{extra_ops}"
+    system "cmake . #{std_cmake_parameters}"
     system "make install"
   end
 end
