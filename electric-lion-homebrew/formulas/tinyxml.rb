@@ -11,7 +11,7 @@ class Tinyxml < Formula
   depends_on 'cmake'
 
   def install
-    ENV.build_universal
+    ENV.universal_binary
     system "cmake . #{std_cmake_parameters} #{extra_ops}"
     system "make install"
   end
