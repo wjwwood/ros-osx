@@ -540,7 +540,7 @@ Index: rosdep.yaml
 +  osxbrew:
 +    source:
 +      uri: https://kforge.ros.org/rosrelease/viewvc/sourcedeps/wxpython/wxPython2.9-osx-2.9.2.4-cocoa-py2.7.rdmanifest
-+      md5sum: 11dfefa537c86a2f73a7ce48a36a6bca
++      md5sum: 64fe273ef0ea170c2bf3fbf7eb37e62e
    gentoo: dev-python/wxpython
    freebsd: py27-wxPython
  gtk2:
