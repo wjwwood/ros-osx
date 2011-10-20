@@ -51,6 +51,42 @@ Index: rosdep.yaml
 +    homebrew:
 +      packages: [ cmake ]
 +
+Index: pcl/osx_interactor_workaround.patch
+===================================================================
+--- pcl/osx_interactor_workaround.patch	(revision 0)
++++ pcl/osx_interactor_workaround.patch	(revision 0)
+@@ -0,0 +1,31 @@
++--- visualization/src/interactor.cpp	2011-08-31 15:56:15.000000000 -0500
+++++ visualization/src/interactor.cpp	2011-10-19 14:46:33.000000000 -0500
++@@ -55,14 +55,16 @@
++     void 
++     PCLVisualizerInteractor::stopLoop ()
++     {
++-#if defined _WIN32 || defined VTK_USE_COCOA || defined VTK_USE_CARBON
+++#if defined _WIN32
++       BreakLoopFlagOn ();
++       // Send a VTK_BreakWin32Loop ClientMessage event to be sure we pop out of the
++       // event loop.  This "wakes up" the event loop.  Otherwise, it might sit idle
++       // waiting for an event before realizing an exit was requested.
++-#if defined _WIN32
+++#  if defined _WIN32
++       SendMessage (this->WindowId, RegisterWindowMessage (TEXT ("VTK_BreakWin32Loop")), 0, 0);
++-#endif
+++#  endif
+++#elif defined VTK_USE_COCOA || defined VTK_USE_CARBON
+++      // Do Nothing for now
++ #else
++       BreakLoopFlagOn ();
++       XClientMessageEvent client;
++@@ -77,7 +79,7 @@
++ #endif
++     }
++ 
++-#if defined _WIN32 || defined VTK_USE_COCOA || defined VTK_USE_CARBON
+++#if defined _WIN32
++     //////////////////////////////////////////////////////////////////////////
++     void 
++     PCLVisualizerInteractor::Start ()
 Index: pcl/Makefile
 ===================================================================
 --- pcl/Makefile	(revision 140)
