@@ -64,7 +64,7 @@ except OSError as err:
 for patch in patches:
     os.chdir(path_to_ros)
     patch_info = patch.split('-')
-    if len(patch_info) != 4 and patch_info[2] != "homebrew" and patch_info[3].split('.')[0] not in ["svn", "git", "hg"]:
+    if len(patch_info) != 4 or patch_info[2] != "homebrew" or patch_info[3].split('.')[0] not in ["svn", "git", "hg"]:
         logger.error("Patch {0} is malformed, must conform to: <stack name>-<stack version>-homebrew-<vcs name>.patch".format(patch))
         continue
     
