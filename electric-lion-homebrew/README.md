@@ -1,5 +1,16 @@
 # Homebrew ROS Electric Install
 
+### UPDATE ###
+
+As of 10-31-11.
+
+Hopefully in the near future (a week or so) none of these patches will be needed.  Willowgrage is in the process of integrating all of my patches.  You can view the progress here: 
+
+http://www.ros.org/wiki/fuerte/Planning/OSX
+
+There are still some patches that will be useful, but I hope to move all of them to tickets on ros's trackers located at: code.ros.org
+
+
 ## Prerequisites
 
 First, this guide assumes you have a clean lion install, meaning no macports or homebrew previously setup.  In fact best results would come from a fresh format and install.  If you have macports (for something else) then make sure any macports specific references are commented out in your bashrc or bash_profile.  Then for good measure I recommend `sudo mv /opt /_opt` to make sure there is no cross talk.
